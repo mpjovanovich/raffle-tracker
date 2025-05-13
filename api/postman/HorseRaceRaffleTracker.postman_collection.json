@@ -1,0 +1,29 @@
+{
+	"info": {
+		"_postman_id": "8419ed30-8b61-4114-94f3-8e8fa601741f",
+		"name": "HorseRaceRaffleTracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44884013",
+		"_collection_link": "https://mikejovanovich.postman.co/workspace/Mike-Jovanovich's-Workspace~c8107b7d-c156-4d42-8385-3a7ec9f5e17d/collection/44884013-8419ed30-8b61-4114-94f3-8e8fa601741f?action=share&source=collection_link&creator=44884013"
+	},
+	"item": [
+		{
+			"name": "HealthCheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/health",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
