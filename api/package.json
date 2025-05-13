@@ -10,14 +10,17 @@
     "dev": "NODE_ENV=development node --loader ts-node/esm src/app.ts",
     "start": "node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:create": "sqlite3 data/database.db < scripts/create-schema.sql",
     "db:seed-test": "sqlite3 data/database.db < scripts/create-test-data.sql",
-    "db:reset": "rm -f data/database.db && npm run db:create && npm run db:seed-test"
+    "db:reset": "rm -f data/database.db && npm run prisma:generate && npm run prisma:push && npm run db:seed-test",
+    "prisma:generate": "npx prisma generate",
+    "prisma:push": "npx prisma db push",
+    "prisma:studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.7.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "sqlite": "^5.1.1"
@@ -25,6 +28,7 @@
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.17",
+    "prisma": "^6.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

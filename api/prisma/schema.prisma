@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model event {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  location   String
+  start_date String
+  end_date   String
+  race       race[]
+  ticket     ticket[]
+}
+
+model race {
+  id          Int      @id @default(autoincrement())
+  event_id    Int
+  race_number Int
+  closed      Int      @default(0) // 0 or 1
+  event       event    @relation(fields: [event_id], references: [id])
+  horse       horse[]
+  ticket      ticket[]
+
+  @@unique([event_id, race_number])
+}
+
+model horse {
+  id        Int      @id @default(autoincrement())
+  race_id   Int
+  number    Int
+  winner    Int      @default(0) // 0 or 1
+  scratched Int      @default(0) // 0 or 1
+  race      race     @relation(fields: [race_id], references: [id])
+  ticket    ticket[]
+
+  @@unique([race_id, number])
+}
+
+model ticket {
+  id            Int     @id @default(autoincrement())
+  event_id      Int
+  race_id       Int
+  horse_id      Int
+  created_dttm  DateTime  @default(now())
+  redeemed_dttm String?
+  refunded_dttm String?
+  status        Int     @default(0) // 0: Issued/Valid, 1: Redeemed, 2: Refunded
+  horse         horse   @relation(fields: [horse_id], references: [id])
+  race          race    @relation(fields: [race_id], references: [id])
+  event         event   @relation(fields: [event_id], references: [id])
+
+  @@index([event_id], map: "idx_ticket_event")
+}
