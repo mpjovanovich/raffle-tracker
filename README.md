@@ -6,7 +6,7 @@ Documentation has been provided within each module to explain architectural choi
 
 ## Project Structure
 
-The project is organized into the following modules:
+This project folows a **monorepo** structure, where all source code for the various parts of the application are in a single repository. The project is organized into the following modules:
 
 ### API
 
