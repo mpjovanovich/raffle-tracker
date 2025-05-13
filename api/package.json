@@ -1,5 +1,6 @@
 {
-  "name": "api",
+  "name": "@horse-race-raffle-tracker/api",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "dist/app.js",
@@ -20,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@horse-race-raffle-tracker/common": "file:../common",
     "@prisma/client": "^6.7.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

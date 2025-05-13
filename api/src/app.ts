@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import "dotenv/config";
+import eventsRouter from "./routes/events.js";
 
 const app = express();
 
@@ -8,9 +9,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get("/health", (req: Request, res: Response) => {
+app.get("/api/health", (req: Request, res: Response) => {
   res.status(200).json({ status: "ok" });
 });
+
+// Routes
+app.use("/api/events", eventsRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
