@@ -1,12 +1,32 @@
 import express, { Request, Response, NextFunction } from "express";
+import morgan from "morgan";
 import "dotenv/config";
+import logger from "./utility/logger.js";
 import eventsRouter from "./routes/events.js";
 
-const app = express();
+const logFormat = ":remote-addr :method :url :status :response-time ms";
 
-// Middleware
+// App and middleware
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  morgan(logFormat, {
+    stream: {
+      write: (message: string) => {
+        const parts = message.split(" ");
+        const logObject = {
+          ip: parts[0],
+          method: parts[1],
+          url: parts[2],
+          status: parts[3],
+          responseTime: parts[4],
+        };
+        logger.info(JSON.stringify(logObject));
+      },
+    },
+  })
+);
 
 // Health check endpoint
 app.get("/api/health", (req: Request, res: Response) => {
