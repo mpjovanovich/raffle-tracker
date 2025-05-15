@@ -2,8 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
 import logger from './utility/logger.js';
-// import eventsRouter from './routes/events.js';
-// import { containerMiddleware } from './middleware/containerMiddleware.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
@@ -12,7 +10,6 @@ const app = express();
 // TODO: CORS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(containerMiddleware);
 app.use(
   morgan(logFormat, {
     stream: {
@@ -32,11 +29,12 @@ app.use(
 );
 
 // Routes (import)
-// app.use('/api/events', eventsRouter);
 import healthcheckRouter from './routes/healthcheck.js';
+import eventsRouter from './routes/events.js';
 
 // Routes (implement)
 app.use('/api/healthcheck', healthcheckRouter);
+app.use('/api/events', eventsRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
