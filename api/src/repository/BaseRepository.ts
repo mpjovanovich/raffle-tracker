@@ -6,7 +6,7 @@ export abstract class BaseRepository<PrismaType, DTO> {
     protected modelName: string
   ) {}
 
-  async fetchAll(): Promise<DTO[]> {
+  async getAll(): Promise<DTO[]> {
     const items = await (
       this.prisma[this.modelName as keyof PrismaClient] as any
     ).findMany();

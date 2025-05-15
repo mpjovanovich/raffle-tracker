@@ -22,7 +22,7 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
   // RepositoryTypes<Repo>["dto"] = The DTO type from this object
   // RepositoryTypes<Repo>["dto"][] = an array of these.
   // E.g. - Event[]
-  async fetchAll(): Promise<RepositoryTypes<Repo>['dto'][]> {
-    return this.repo.fetchAll();
+  async getAll(): Promise<RepositoryTypes<Repo>['dto'][]> {
+    return this.repo.getAll();
   }
 }
