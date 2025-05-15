@@ -25,4 +25,11 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
   async getAll(): Promise<RepositoryTypes<Repo>['dto'][]> {
     return this.repo.getAll();
   }
+
+  async upsert(
+    id: number,
+    item: Partial<RepositoryTypes<Repo>['dto']>
+  ): Promise<RepositoryTypes<Repo>['dto']> {
+    return this.repo.upsert(id, item);
+  }
 }
