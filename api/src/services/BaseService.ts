@@ -1,4 +1,4 @@
-import { BaseRepository } from "../repository/BaseRepository.js";
+import { BaseRepository } from '../repository/BaseRepository.js';
 
 // This makes it easier to access the types on the BaseRepository.
 // It will create a "type object", which is just like any other object,
@@ -22,7 +22,7 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
   // RepositoryTypes<Repo>["dto"] = The DTO type from this object
   // RepositoryTypes<Repo>["dto"][] = an array of these.
   // E.g. - Event[]
-  async fetchAll(): Promise<RepositoryTypes<Repo>["dto"][]> {
+  async fetchAll(): Promise<RepositoryTypes<Repo>['dto'][]> {
     return this.repo.fetchAll();
   }
 }

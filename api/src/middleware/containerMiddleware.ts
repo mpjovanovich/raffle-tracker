@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { container } from "../container.js";
+import { Request, Response, NextFunction } from 'express';
+import { container } from '../container.js';
 
 // Extends the Express Request type.
 // TODO: I don't fully understand this bit. Need to read more on it.

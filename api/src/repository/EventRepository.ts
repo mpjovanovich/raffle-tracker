@@ -1,11 +1,11 @@
-import { BaseRepository } from "./BaseRepository.js";
-import { event } from "../generated/prisma/index.js";
-import { Event } from "@horse-race-raffle-tracker/dto";
-import { PrismaClient } from "@prisma/client";
+import { BaseRepository } from './BaseRepository.js';
+import { event } from '../generated/prisma/index.js';
+import { Event } from '@horse-race-raffle-tracker/dto';
+import { PrismaClient } from '@prisma/client';
 
 export class EventRepository extends BaseRepository<event, Event> {
   constructor(prisma: PrismaClient) {
-    super(prisma, "event");
+    super(prisma, 'event');
   }
 
   protected toDTO(eventModel: event): Event {

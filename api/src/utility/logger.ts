@@ -1,10 +1,10 @@
-import { createLogger, format, transports } from "winston";
-import dotenv from "dotenv";
-import { mkdir } from "fs/promises";
+import { createLogger, format, transports } from 'winston';
+import dotenv from 'dotenv';
+import { mkdir } from 'fs/promises';
 
 // Set up the log directory
 dotenv.config();
-const logDir = process.env.LOG_DIR || "./logs";
+const logDir = process.env.LOG_DIR || './logs';
 await mkdir(logDir, { recursive: true });
 
 // These are all tools that winston provides
@@ -19,7 +19,7 @@ const consoleLogFormat = format.combine(
 );
 
 const logger = createLogger({
-  level: "info",
+  level: 'info',
   format: combine(timestamp(), json()),
   transports: [
     new transports.Console({

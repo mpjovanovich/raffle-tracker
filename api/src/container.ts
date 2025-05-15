@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { EventRepository } from "./repository/EventRepository.js";
-import { EventService } from "./services/EventService.js";
+import { PrismaClient } from '@prisma/client';
+import { EventRepository } from './repository/EventRepository.js';
+import { EventService } from './services/EventService.js';
 
 // Single Prisma client instance for the whole app
 const prisma = new PrismaClient();

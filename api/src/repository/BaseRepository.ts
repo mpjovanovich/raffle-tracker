@@ -1,7 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 export abstract class BaseRepository<PrismaType, DTO> {
-  constructor(protected prisma: PrismaClient, protected modelName: string) {}
+  constructor(
+    protected prisma: PrismaClient,
+    protected modelName: string
+  ) {}
 
   async fetchAll(): Promise<DTO[]> {
     const items = await this.prisma[this.modelName].findMany();

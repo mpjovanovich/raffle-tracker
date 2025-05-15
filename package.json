@@ -1,0 +1,17 @@
+{
+  "name": "horse-race-raffle-tracker",
+  "private": true,
+  "workspaces": [
+    "api",
+    "web",
+    "dto"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}

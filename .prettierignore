@@ -1,0 +1,15 @@
+# Build and dependencies
+**/dist
+**/node_modules
+
+# Generated files
+**/.next
+**/generated
+
+# Others
+**/.vscode
+**/.env
+**/*.log
+**/*.md
+**/*.json
+**/*.prisma
