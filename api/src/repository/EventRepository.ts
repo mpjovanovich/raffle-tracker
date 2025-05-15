@@ -1,30 +1,29 @@
 import { BaseRepository } from './BaseRepository.js';
-import { event } from '../generated/prisma/index.js';
-import { Event } from '@horse-race-raffle-tracker/dto';
-import { PrismaClient } from '@prisma/client';
+import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import { PrismaClient, Event } from '.prisma/client';
 
-export class EventRepository extends BaseRepository<event, Event> {
+export class EventRepository extends BaseRepository<Event, EventDTO> {
   constructor(prisma: PrismaClient) {
     super(prisma, 'event');
   }
 
-  protected toDTO(eventModel: event): Event {
+  protected toDTO(event: Event): EventDTO {
     return {
-      id: eventModel.id,
-      name: eventModel.name,
-      location: eventModel.location,
-      startDate: eventModel.start_date,
-      endDate: eventModel.end_date,
+      id: event.id,
+      name: event.name,
+      location: event.location,
+      startDate: event.start_date,
+      endDate: event.end_date,
     };
   }
 
-  protected toPrisma(eventDTO: Event): event {
+  protected toPrisma(EventDTO: EventDTO): Event {
     return {
-      id: eventDTO.id,
-      name: eventDTO.name,
-      location: eventDTO.location,
-      start_date: eventDTO.startDate,
-      end_date: eventDTO.endDate,
+      id: EventDTO.id,
+      name: EventDTO.name,
+      location: EventDTO.location,
+      start_date: EventDTO.startDate,
+      end_date: EventDTO.endDate,
     };
   }
 }

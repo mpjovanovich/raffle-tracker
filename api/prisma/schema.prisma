@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -8,41 +8,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model event {
+model Event {
   id         Int      @id @default(autoincrement())
   name       String   @unique
   location   String
   start_date String
   end_date   String
-  race       race[]
-  ticket     ticket[]
+  race       Race[]
+  ticket     Ticket[]
 }
 
-model race {
+model Race {
   id          Int      @id @default(autoincrement())
   event_id    Int
   race_number Int
   closed      Int      @default(0) // 0 or 1
-  event       event    @relation(fields: [event_id], references: [id])
-  horse       horse[]
-  ticket      ticket[]
+  event       Event    @relation(fields: [event_id], references: [id])
+  horse       Horse[]
+  ticket      Ticket[]
 
   @@unique([event_id, race_number])
 }
 
-model horse {
+model Horse {
   id        Int      @id @default(autoincrement())
   race_id   Int
   number    Int
   winner    Int      @default(0) // 0 or 1
   scratched Int      @default(0) // 0 or 1
-  race      race     @relation(fields: [race_id], references: [id])
-  ticket    ticket[]
+  race      Race     @relation(fields: [race_id], references: [id])
+  ticket    Ticket[]
 
   @@unique([race_id, number])
 }
 
-model ticket {
+model Ticket {
   id            Int     @id @default(autoincrement())
   event_id      Int
   race_id       Int
@@ -51,9 +51,9 @@ model ticket {
   redeemed_dttm String?
   refunded_dttm String?
   status        Int     @default(0) // 0: Issued/Valid, 1: Redeemed, 2: Refunded
-  horse         horse   @relation(fields: [horse_id], references: [id])
-  race          race    @relation(fields: [race_id], references: [id])
-  event         event   @relation(fields: [event_id], references: [id])
+  horse         Horse   @relation(fields: [horse_id], references: [id])
+  race          Race    @relation(fields: [race_id], references: [id])
+  event         Event   @relation(fields: [event_id], references: [id])
 
   @@index([event_id], map: "idx_ticket_event")
 }
