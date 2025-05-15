@@ -8,5 +8,6 @@ export abstract class BaseRepository<PrismaType, DTO> {
     return items.map((item: PrismaType) => this.toDTO(item));
   }
 
-  protected abstract toDTO(model: PrismaType): DTO;
+  protected abstract toDTO(item: PrismaType): DTO;
+  protected abstract toPrisma(item: DTO): PrismaType;
 }

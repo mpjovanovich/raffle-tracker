@@ -1,5 +1,5 @@
 {
-  "name": "@horse-race-raffle-tracker/common",
+  "name": "@horse-race-raffle-tracker/dto",
   "private": true,
   "version": "1.0.0",
   "description": "",

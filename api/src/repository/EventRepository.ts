@@ -17,4 +17,14 @@ export class EventRepository extends BaseRepository<event, Event> {
       endDate: eventModel.end_date,
     };
   }
+
+  protected toPrisma(eventDTO: Event): event {
+    return {
+      id: eventDTO.id,
+      name: eventDTO.name,
+      location: eventDTO.location,
+      start_date: eventDTO.startDate,
+      end_date: eventDTO.endDate,
+    };
+  }
 }
