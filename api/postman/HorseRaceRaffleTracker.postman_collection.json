@@ -8,6 +8,84 @@
 	},
 	"item": [
 		{
+			"name": "events",
+			"item": [
+				{
+					"name": "GetEvents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/events",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateEvent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\": \"FAIR!!! Yeehaw!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/events/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InsertEvent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My Awesome Event\",\r\n    \"location\": \"Greatville, USA\",\r\n    \"startDate\": \"2025-01-01\",\r\n    \"endDate\": \"2025-01-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/events",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "HealthCheck",
 			"request": {
 				"method": "GET",
@@ -20,79 +98,6 @@
 					"path": [
 						"api",
 						"healthcheck"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GetEvents",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/api/events",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"api",
-						"events"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "UpdateEvent",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"location\": \"FAIR!!! Yeehaw!\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/api/events/1",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"api",
-						"events",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"My Awesome Event\",\r\n    \"location\": \"Greatville, USA\",\r\n    \"startDate\": \"2025-01-01\",\r\n    \"endDate\": \"2025-01-02\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/api/events",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"api",
-						"events"
 					]
 				}
 			},
