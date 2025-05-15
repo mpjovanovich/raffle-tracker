@@ -3,6 +3,7 @@ import morgan from "morgan";
 import "dotenv/config";
 import logger from "./utility/logger.js";
 import eventsRouter from "./routes/events.js";
+import { containerMiddleware } from "./middleware/containerMiddleware.js";
 
 const logFormat = ":remote-addr :method :url :status :response-time ms";
 
@@ -10,6 +11,7 @@ const logFormat = ":remote-addr :method :url :status :response-time ms";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(containerMiddleware);
 app.use(
   morgan(logFormat, {
     stream: {

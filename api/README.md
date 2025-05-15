@@ -6,6 +6,23 @@ Recall that the DTOs are defined in the `shared` module, and contain no business
 
 ## Architecture Layers
 
+_Overview:_
+
+A round trip initiated by the client looks something like this:
+
+```
+Client -> API Layer -> Business Logic Layer -> Data Access Layer -> Database
+```
+
+... then back the other way.
+
+_Layers:_
+
+- The **API Layer** (implemented in `app.ts` and `routes`) is the layer that handles the API requests and responses. It sits above the business logic layer and handles:
+
+  - Network request and response handling
+  - Delegating to API routes and endpoints
+
 - The **Business Logic Layer (BLL)** (implemented in `services`) contains business logic and orchestrates operations. It sits above the data access layer and handles:
 
   - Business rules and workflows
@@ -13,6 +30,7 @@ Recall that the DTOs are defined in the `shared` module, and contain no business
   - Coordination between repositories
 
 - The **Data Access Layer (DAL)** (implemented in `repositories`) manages database interactions. It sits above the database and handles:
+
   - Database operations (CRUD)
   - Data persistence
   - Database connections
