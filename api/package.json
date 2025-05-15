@@ -1,8 +1,6 @@
 {
   "name": "@horse-race-raffle-tracker/api",
   "private": true,
-  "version": "1.0.0",
-  "description": "",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -17,9 +15,6 @@
     "prisma:push": "npx prisma db push",
     "prisma:studio": "npx prisma studio"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@horse-race-raffle-tracker/dto": "file:../dto",
     "@prisma/client": "^6.7.0",
