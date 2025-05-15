@@ -2,16 +2,17 @@ import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
 import logger from './utility/logger.js';
-import eventsRouter from './routes/events.js';
-import { containerMiddleware } from './middleware/containerMiddleware.js';
+// import eventsRouter from './routes/events.js';
+// import { containerMiddleware } from './middleware/containerMiddleware.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
 // App and middleware
 const app = express();
+// TODO: CORS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(containerMiddleware);
+// app.use(containerMiddleware);
 app.use(
   morgan(logFormat, {
     stream: {
@@ -30,13 +31,12 @@ app.use(
   })
 );
 
-// Health check endpoint
-app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok' });
-});
+// Routes (import)
+// app.use('/api/events', eventsRouter);
+import healthcheckRouter from './routes/healthcheck.js';
 
-// Routes
-app.use('/api/events', eventsRouter);
+// Routes (implement)
+app.use('/api/healthcheck', healthcheckRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

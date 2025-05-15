@@ -7,7 +7,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "dev": "NODE_ENV=development nodemon --exec 'tsx watch' src/index.ts",
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:seed-test": "sqlite3 data/database.db < scripts/create-test-data.sql",
     "db:reset": "rm -f data/database.db && npm run prisma:generate && npm run prisma:push",

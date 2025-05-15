@@ -1,4 +1,4 @@
-import express from 'express';
+// import express from 'express';
 
 // TODO: eventually it'd be nice to have a base router clasee that's something like
 // this:
@@ -23,11 +23,11 @@ router.post('/', async (req, res) => {
 */
 // For now though we'll just hand code them.
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const events = await req.container.services.event.fetchAll();
-  res.json(events);
-});
+// router.get('/', async (req, res) => {
+//   const events = await req.container.services.event.fetchAll();
+//   res.json(events);
+// });
 
-export default router;
+// export default router;
