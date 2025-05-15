@@ -26,10 +26,16 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
     return this.repo.getAll();
   }
 
-  async upsert(
+  async insert(
+    item: RepositoryTypes<Repo>['dto']
+  ): Promise<RepositoryTypes<Repo>['dto']> {
+    return this.repo.insert(item);
+  }
+
+  async update(
     id: number,
     item: Partial<RepositoryTypes<Repo>['dto']>
   ): Promise<RepositoryTypes<Repo>['dto']> {
-    return this.repo.upsert(id, item);
+    return this.repo.update(id, item);
   }
 }

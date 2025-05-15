@@ -18,9 +18,14 @@ class EventController {
     res.status(200).json(new APIResponse(200, JSON.stringify(items)));
   });
 
-  upsert = asyncHandler(async (req: Request, res: Response) => {
+  insert = asyncHandler(async (req: Request, res: Response) => {
+    const item = await this.eventService.insert(req.body);
+    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+  });
+
+  update = asyncHandler(async (req: Request, res: Response) => {
     // TODO: Validate the request body. Can put this in middleware using Zod.
-    const item = await this.eventService.upsert(
+    const item = await this.eventService.update(
       parseInt(req.params.id),
       req.body
     );

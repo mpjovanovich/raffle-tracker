@@ -11,7 +11,15 @@ export abstract class BaseRepository<PrismaType, DTO> {
     return items.map((item: PrismaType) => this.toDTO(item));
   }
 
-  async upsert(id: number, item: Partial<DTO>): Promise<DTO> {
+  async insert(item: DTO): Promise<DTO> {
+    const prismaItem = this.toPrisma(item as DTO);
+    const newItem = await this.getModel().create({
+      data: prismaItem,
+    });
+    return this.toDTO(newItem);
+  }
+
+  async update(id: number, item: Partial<DTO>): Promise<DTO> {
     const prismaItem = this.toPrisma(item as DTO);
     const updatedItem = await this.getModel().update({
       where: { id },
