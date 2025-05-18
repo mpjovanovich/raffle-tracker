@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from 'next/font/google';
-import Link from 'next/link';
+import Navigation from './components/Navigation';
 import './globals.css';
 
 const geistSans = Geist({
@@ -23,16 +23,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <div className="flex h-screen">
-          <nav className="w-40 md:w-60 lg:w-60 border-r p-4">
-            <ul>
-              <li>
-                <Link href="/">Home</Link>
-              </li>
-              <li>
-                <Link href="/events">Events</Link>
-              </li>
-            </ul>
-          </nav>
+          <Navigation />
           <main className="flex-1 flex items-center justify-center p-8 sm:p-20">
             <div className="max-w-4xl">{children}</div>
           </main>
