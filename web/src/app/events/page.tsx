@@ -1,8 +1,9 @@
+import Card from '../ui/Card';
+
 export default function Events() {
   return (
-    <>
-      <h1 className="text-4xl font-bold mb-8">Events</h1>
+    <Card title="Events">
       <p>Events page</p>
-    </>
+    </Card>
   );
 }
