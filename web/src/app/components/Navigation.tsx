@@ -20,10 +20,13 @@ function NavItem({ href, children }: NavItemProps) {
 
 export default function Navigation() {
   return (
-    <nav className="bg-light-accent w-full border-b-1 border-light-accent2">
+    <nav className="flex justify-between bg-light-accent w-full border-b-1 border-light-accent2">
       <ul className="flex gap-4 mx-4">
         <NavItem href="/">Home</NavItem>
         <NavItem href="/events">Events</NavItem>
+      </ul>
+      <ul className="flex gap-4 mx-4">
+        <NavItem href="/">TODO: Login</NavItem>
       </ul>
     </nav>
   );
