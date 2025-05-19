@@ -1,7 +1,8 @@
 import { Event } from '@horse-race-raffle-tracker/dto';
+import { API_BASE_URL } from '@/config/constants';
 
 export async function getEvents() {
-  return fetch('http://localhost:3001/api/events')
+  return fetch(`${API_BASE_URL}/events`)
     .then(res => {
       if (!res.ok) {
         throw new Error('Failed to fetch events');
