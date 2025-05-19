@@ -1,9 +1,14 @@
 import Card from '../ui/Card';
+import { getEvents } from '@/services/events';
 
-export default function Events() {
+export default async function Events() {
+  const events = await getEvents();
+
   return (
     <Card title="Events">
-      <p>Events page</p>
+      {events.map(event => (
+        <div key={event.id}>{event.name}</div>
+      ))}
     </Card>
   );
 }
