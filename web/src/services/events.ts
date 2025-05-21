@@ -11,3 +11,14 @@ export async function getEvents() {
     })
     .then(data => JSON.parse(data.data) as Event[]);
 }
+
+export async function getEvent(id: number) {
+  return fetch(`${API_BASE_URL}/events/${id}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Failed to fetch event');
+      }
+      return res.json();
+    })
+    .then(data => JSON.parse(data.data) as Event);
+}
