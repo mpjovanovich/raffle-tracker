@@ -26,6 +26,10 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
     return this.repo.getAll();
   }
 
+  async getById(id: number): Promise<RepositoryTypes<Repo>['dto']> {
+    return this.repo.getById(id);
+  }
+
   async insert(
     item: RepositoryTypes<Repo>['dto']
   ): Promise<RepositoryTypes<Repo>['dto']> {

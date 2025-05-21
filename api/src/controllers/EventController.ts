@@ -18,6 +18,15 @@ class EventController {
     res.status(200).json(new APIResponse(200, JSON.stringify(items)));
   });
 
+  getById = asyncHandler(async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      throw new Error(`Invalid ID format: ${req.params.id}`);
+    }
+    const item = await this.eventService.getById(id);
+    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+  });
+
   insert = asyncHandler(async (req: Request, res: Response) => {
     const item = await this.eventService.insert(req.body);
     res.status(200).json(new APIResponse(200, JSON.stringify(item)));

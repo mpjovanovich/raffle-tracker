@@ -11,6 +11,11 @@ export abstract class BaseRepository<PrismaType, DTO> {
     return items.map((item: PrismaType) => this.toDTO(item));
   }
 
+  async getById(id: number): Promise<DTO> {
+    const item = await this.getModel().findUnique({ where: { id } });
+    return this.toDTO(item);
+  }
+
   async insert(item: DTO): Promise<DTO> {
     const prismaItem = this.toPrisma(item as DTO);
     const newItem = await this.getModel().create({
