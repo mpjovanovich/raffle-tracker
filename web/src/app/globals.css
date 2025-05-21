@@ -14,8 +14,6 @@
   --color-light-accent2: var(--light-accent2);
   --color-dark-primary: var(--dark-primary);
   --color-dark-accent: var(--dark-accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 /* @media (prefers-color-scheme: dark) {
