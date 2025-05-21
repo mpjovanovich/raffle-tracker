@@ -1,15 +1,9 @@
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 import Navigation from './components/Navigation';
 import './globals.css';
 import { Metadata } from 'next';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const nunito = Nunito({
   subsets: ['latin'],
 });
 
@@ -28,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${nunito.className} antialiased min-h-screen flex flex-col`}
       >
         <div className="flex flex-col h-screen">
           <Navigation />
