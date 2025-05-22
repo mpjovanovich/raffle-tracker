@@ -20,6 +20,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
         <Input
           type="text"
           name="name"
+          placeholder="Name"
           value={localEvent.name}
           onChange={e => {
             setLocalEvent({ ...localEvent, name: e.target.value });
@@ -33,9 +34,36 @@ export default function EventDetails({ event }: EventDetailsProps) {
         <Input
           type="text"
           name="location"
+          placeholder="Location"
           value={localEvent.location}
           onChange={e => {
             setLocalEvent({ ...localEvent, location: e.target.value });
+          }}
+        />
+      </LabeledField>
+      <LabeledField
+        label="Start Date"
+        htmlFor="startDate"
+      >
+        <Input
+          type="date"
+          name="startDate"
+          value={localEvent.startDate}
+          onChange={e => {
+            setLocalEvent({ ...localEvent, startDate: e.target.value });
+          }}
+        />
+      </LabeledField>
+      <LabeledField
+        label="End Date"
+        htmlFor="endDate"
+      >
+        <Input
+          type="date"
+          name="endDate"
+          value={localEvent.endDate}
+          onChange={e => {
+            setLocalEvent({ ...localEvent, endDate: e.target.value });
           }}
         />
       </LabeledField>

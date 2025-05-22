@@ -1,4 +1,5 @@
 import { BaseButton, BaseButtonProps } from './BaseButton';
+import { bodyFont } from '../fonts';
 
 export default function BasicButton({
   children,
@@ -9,7 +10,7 @@ export default function BasicButton({
 }: BaseButtonProps) {
   return (
     <BaseButton
-      classname={`bg-dark-accent hover:bg-dark-primary text-light-primary px-6 py-1 ${classname}`}
+      classname={`bg-dark-accent text-light-primary px-6 py-1 font-semibold ${bodyFont.className} ${classname}`}
       href={href}
       onClick={onClick}
       title={title}

@@ -24,9 +24,3 @@
     --foreground: #ededed;
   }
 } */
-
-body {
-  background: var(--light-primary);
-  color: var(--dark-primary);
-  font-family: Arial, Helvetica, sans-serif;
-}

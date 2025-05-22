@@ -15,8 +15,8 @@ export default async function EventPage({ params }: EventPageProps) {
     id: 0,
     name: '',
     location: '',
-    startDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: new Date().toISOString().split('T')[0],
   };
   const event = isNewEvent ? NEW_EVENT : await getEvent(event_id);
 

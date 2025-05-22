@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${mainFont.className} antialiased min-h-screen flex flex-col`}
+        className={`${mainFont.className} antialiased min-h-screen flex flex-col bg-light-primary text-dark-primary`}
       >
         <div className="flex flex-col h-screen">
           <Navigation />
