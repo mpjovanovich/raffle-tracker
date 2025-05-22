@@ -1,23 +1,20 @@
-interface IconButtonProps {
-  title: string;
-  icon: React.ReactNode;
-  onClick?: () => Promise<void>;
-  classNames?: string;
-}
+import { BaseButton, BaseButtonProps } from './BaseButton';
 
 export default function IconButton({
-  title,
-  icon,
-  onClick,
+  children,
   classNames,
-}: IconButtonProps) {
+  href,
+  onClick,
+  title,
+}: BaseButtonProps) {
   return (
-    <button
-      className={`p-2 rounded-md cursor-pointer hover:bg-light-accent ${classNames}`}
+    <BaseButton
+      classNames={`hover:bg-dark-accent hover:text-light-primary px-2 py-2 ${classNames}`}
+      href={href}
       title={title}
       onClick={onClick}
     >
-      {icon}
-    </button>
+      {children}
+    </BaseButton>
   );
 }

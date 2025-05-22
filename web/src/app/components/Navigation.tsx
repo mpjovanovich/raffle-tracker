@@ -9,8 +9,7 @@ function NavItem({ href, children }: NavItemProps) {
   return (
     <li>
       <Link
-        // className="hover:bg-light-accent2 px-6 py-4 inline-block font-bold"
-        className="hover:bg-light-accent2 px-6 py-3 inline-block font-bold"
+        className="hover:text-dark-accent px-6 py-3 inline-block font-bold"
         href={href}
       >
         {children}
