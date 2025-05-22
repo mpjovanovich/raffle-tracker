@@ -10,7 +10,7 @@ interface Action {
   onClick: () => Promise<void>;
 }
 
-interface EventButtonProps {
+interface EventListButtonProps {
   eventId: number;
 }
 
@@ -30,7 +30,7 @@ const getActions = (
   ];
 };
 
-export default function EventButtonActions({ eventId }: EventButtonProps) {
+export default function EventListButtons({ eventId }: EventListButtonProps) {
   const router = useRouter();
   const actions = getActions(eventId, router);
 

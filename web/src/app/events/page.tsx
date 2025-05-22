@@ -2,7 +2,7 @@ import Card from '../ui/Card';
 import { getEvents } from '@/services/events';
 import ItemList from '../ui/ItemList';
 import ItemListItem from '../ui/ItemListItem';
-import EventButtonActions from './components/EventButtonActions';
+import EventListButtons from './components/EventListButtons';
 import BasicButton from '../ui/BasicButton';
 
 export default async function Events() {
@@ -14,7 +14,7 @@ export default async function Events() {
         {events.map(event => (
           <ItemListItem key={event.id}>
             <span>{event.name}</span>
-            <EventButtonActions eventId={event.id} />
+            <EventListButtons eventId={event.id} />
           </ItemListItem>
         ))}
       </ItemList>
