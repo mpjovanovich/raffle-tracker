@@ -1,11 +1,7 @@
-import { Nunito } from 'next/font/google';
 import Navigation from './components/Navigation';
 import './globals.css';
 import { Metadata } from 'next';
-
-const nunito = Nunito({
-  subsets: ['latin'],
-});
+import { mainFont } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Raffle Tracker',
@@ -22,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${nunito.className} antialiased min-h-screen flex flex-col`}
+        className={`${mainFont.className} antialiased min-h-screen flex flex-col`}
       >
         <div className="flex flex-col h-screen">
           <Navigation />

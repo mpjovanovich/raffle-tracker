@@ -9,7 +9,7 @@ export default function BasicButton({
 }: BaseButtonProps) {
   return (
     <BaseButton
-      classNames={`bg-dark-accent hover:bg-dark-primary text-light-primary font-bold px-4 py-2 ${classNames}`}
+      classNames={`bg-dark-accent hover:bg-dark-primary text-light-primary px-6 py-1 ${classNames}`}
       href={href}
       onClick={onClick}
       title={title}
