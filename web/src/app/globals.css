@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 :root {
+  --active: #0060de;
   --light-primary: #ffffff;
   --light-accent: #f8fafd;
   --light-accent2: #e2e7eb;
@@ -14,6 +15,7 @@
   --color-light-accent2: var(--light-accent2);
   --color-dark-primary: var(--dark-primary);
   --color-dark-accent: var(--dark-accent);
+  --color-active: var(--active);
 }
 
 /* @media (prefers-color-scheme: dark) {

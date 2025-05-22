@@ -1,7 +1,7 @@
 import CardTitle from './CardTitle';
 
 interface CardProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
 }
 
