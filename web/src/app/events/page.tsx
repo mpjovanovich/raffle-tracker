@@ -3,6 +3,7 @@ import { getEvents } from '@/services/events';
 import ItemList from '../ui/ItemList';
 import ItemListItem from '../ui/ItemListItem';
 import EventButtonActions from './components/EventButtonActions';
+import BasicButton from '../ui/BasicButton';
 
 export default async function Events() {
   const events = await getEvents();
@@ -17,6 +18,7 @@ export default async function Events() {
           </ItemListItem>
         ))}
       </ItemList>
+      <BasicButton classNames="my-4 mx-4">New Event</BasicButton>
     </Card>
   );
 }

@@ -1,11 +1,5 @@
-import Card from './ui/Card';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <>
-      <Card title="Welcome">
-        <p className="">Your app starts here</p>
-      </Card>
-    </>
-  );
+  redirect('/events');
 }
