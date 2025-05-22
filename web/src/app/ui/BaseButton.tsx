@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export interface BaseButtonProps {
   children: React.ReactNode;
-  classNames?: string;
+  classname?: string;
   href?: string;
   onClick?: () => Promise<void>;
   title?: string;
@@ -12,7 +12,7 @@ export function BaseButton({
   children,
   href,
   onClick,
-  classNames,
+  classname,
   title,
 }: BaseButtonProps) {
   if (!href && !onClick) {
@@ -21,7 +21,7 @@ export function BaseButton({
     throw new Error('href and onClick cannot both be provided');
   }
 
-  const buttonClassNames = `inline-block rounded-md cursor-pointer ${classNames}`;
+  const buttonClassNames = `inline-block rounded-md cursor-pointer ${classname}`;
 
   if (href) {
     return (

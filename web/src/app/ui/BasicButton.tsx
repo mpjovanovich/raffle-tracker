@@ -2,14 +2,14 @@ import { BaseButton, BaseButtonProps } from './BaseButton';
 
 export default function BasicButton({
   children,
-  classNames,
+  classname,
   href,
   onClick,
   title,
 }: BaseButtonProps) {
   return (
     <BaseButton
-      classNames={`bg-dark-accent hover:bg-dark-primary text-light-primary px-6 py-1 ${classNames}`}
+      classname={`bg-dark-accent hover:bg-dark-primary text-light-primary px-6 py-1 ${classname}`}
       href={href}
       onClick={onClick}
       title={title}

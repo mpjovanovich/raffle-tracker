@@ -18,7 +18,7 @@ export default async function Events() {
           </ItemListItem>
         ))}
       </ItemList>
-      <EventNewButton classNames="my-4 mx-4" />
+      <EventNewButton classname="my-4 mx-4" />
     </Card>
   );
 }

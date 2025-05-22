@@ -3,14 +3,14 @@
 import BasicButton from '@/app/ui/BasicButton';
 
 interface EventNewButtonProps {
-  classNames?: string;
+  classname?: string;
 }
 
-export default function EventNewButton({ classNames }: EventNewButtonProps) {
+export default function EventNewButton({ classname }: EventNewButtonProps) {
   return (
     <BasicButton
       href="/events/new"
-      classNames={classNames}
+      classname={classname}
     >
       New Event
     </BasicButton>
