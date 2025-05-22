@@ -1,6 +1,6 @@
 'use client';
 
-import BasicButton from '@/app/ui/BasicButton';
+import SimpleButton from '@/app/ui/SimpleButton';
 
 interface EventNewButtonProps {
   classname?: string;
@@ -8,11 +8,11 @@ interface EventNewButtonProps {
 
 export default function EventNewButton({ classname }: EventNewButtonProps) {
   return (
-    <BasicButton
+    <SimpleButton
       href="/events/new"
       classname={classname}
     >
       New Event
-    </BasicButton>
+    </SimpleButton>
   );
 }
