@@ -1,4 +1,4 @@
-import { BaseButton, type BaseButtonProps } from './BaseButton';
+import BaseButton, { type BaseButtonProps } from './BaseButton';
 import { bodyFont } from '../fonts';
 
 export default function SimpleButton(props: BaseButtonProps) {

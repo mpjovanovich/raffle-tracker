@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import Link from 'next/link';
 
 // Don't allow href for a "button"
@@ -14,7 +15,10 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 export type BaseButtonProps = ButtonProps | LinkProps;
 
-export function BaseButton({ className, children, ...props }: BaseButtonProps) {
+const BaseButton = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  BaseButtonProps
+>(({ className, children, ...props }, ref) => {
   const buttonClassNames = `inline-block rounded-md cursor-pointer ${className ?? ''}`;
 
   if ('href' in props) {
@@ -22,6 +26,7 @@ export function BaseButton({ className, children, ...props }: BaseButtonProps) {
     return (
       <Link
         className={buttonClassNames}
+        ref={ref as React.Ref<HTMLAnchorElement>}
         {...linkProps}
       >
         {children}
@@ -32,10 +37,15 @@ export function BaseButton({ className, children, ...props }: BaseButtonProps) {
     return (
       <button
         className={buttonClassNames}
+        ref={ref as React.Ref<HTMLButtonElement>}
         {...buttonProps}
       >
         {children}
       </button>
     );
   }
-}
+});
+
+BaseButton.displayName = 'BaseButton';
+
+export default BaseButton;

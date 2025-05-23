@@ -1,4 +1,4 @@
-import { BaseButton, type BaseButtonProps } from './BaseButton';
+import BaseButton, { type BaseButtonProps } from './BaseButton';
 
 export default function IconButton(props: BaseButtonProps) {
   return (
