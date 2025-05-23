@@ -7,6 +7,7 @@ import { FaRegFloppyDisk } from 'react-icons/fa6';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { useForm } from 'react-hook-form';
 import { upsertEvent } from '@/services/events';
+import { useRouter } from 'next/navigation';
 
 type EventFormData = Omit<Event, 'id'>;
 
@@ -19,6 +20,7 @@ interface EventDetailsProps {
 
 export default function EventDetails({ event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -35,7 +37,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
     // We need to rethrow the exception.
     try {
       updatedEvent = await upsertEvent(updatedEvent);
-      console.log(updatedEvent);
+      router.push(`/events/${updatedEvent.id}`);
     } catch (error) {
       // TODO: show error message to user
       console.error(error);
@@ -44,6 +46,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/* CRITICAL ERROR GOZE HEER! */}
       <div className="flex justify-end mb-2">
         <IconButton
           title="Save"
