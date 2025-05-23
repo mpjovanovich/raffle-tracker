@@ -22,7 +22,10 @@ export default function EventDetails({ event }: EventDetailsProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EventFormData>({ defaultValues });
+  } = useForm<EventFormData>({
+    defaultValues: defaultValues,
+    mode: 'onBlur',
+  });
 
   console.log(defaultValues.name);
 
@@ -43,35 +46,45 @@ export default function EventDetails({ event }: EventDetailsProps) {
       <LabeledField
         label="Name"
         htmlFor="name"
+        error={errors.name?.message}
       >
         <Input
           {...register('name', { required: 'Name is required' })}
-          defaultValue={defaultValues.name}
-          // value={defaultValues.name}
           placeholder="Name"
           type="text"
         />
-        {errors.name && (
-          <div className="text-red-500 text-sm mt-1">{errors.name.message}</div>
-        )}
       </LabeledField>
       <LabeledField
         label="Location"
         htmlFor="location"
+        error={errors.location?.message}
       >
         <Input
           {...register('location', { required: 'Location is required' })}
           placeholder="Location"
+          type="text"
         />
       </LabeledField>
       <LabeledField
         label="Start Date"
         htmlFor="startDate"
+        error={errors.startDate?.message}
       >
         <Input
           {...register('startDate', { required: 'Start date is required' })}
           type="date"
           placeholder="Start Date"
+        />
+      </LabeledField>
+      <LabeledField
+        label="End Date"
+        htmlFor="endDate"
+        error={errors.endDate?.message}
+      >
+        <Input
+          {...register('endDate', { required: 'End date is required' })}
+          type="date"
+          placeholder="End Date"
         />
       </LabeledField>
     </form>

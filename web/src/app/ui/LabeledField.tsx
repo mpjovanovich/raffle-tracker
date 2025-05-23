@@ -1,13 +1,15 @@
 interface LabeledFieldProps {
+  children: React.ReactNode;
   label: string;
   htmlFor: string;
-  children: React.ReactNode;
+  error?: string;
 }
 
 export default function LabeledField({
+  children,
   label,
   htmlFor,
-  children,
+  error,
 }: LabeledFieldProps) {
   return (
     <div className={`flex flex-col gap-2 mb-2`}>
@@ -18,6 +20,7 @@ export default function LabeledField({
         {label}
       </label>
       {children}
+      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
     </div>
   );
 }
