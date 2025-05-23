@@ -5,6 +5,7 @@ import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
 import { FaRegFloppyDisk } from 'react-icons/fa6';
 import { Event } from '@horse-race-raffle-tracker/dto';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 
 interface EventDetailsProps {
@@ -17,11 +18,14 @@ interface EventDetailsProps {
 export default function EventDetails({ event }: EventDetailsProps) {
   const [localEvent, setLocalEvent] = useState<Event>({ ...event });
   return (
-    <>
+    <form>
       <div className="flex justify-end mb-2">
         <IconButton
-          onClick={async () => {
-            console.log('saving...', localEvent);
+          title="Save"
+          type="submit"
+          onClick={e => {
+            e.preventDefault();
+            console.log('saving...');
           }}
         >
           <FaRegFloppyDisk />
@@ -35,10 +39,8 @@ export default function EventDetails({ event }: EventDetailsProps) {
           type="text"
           name="name"
           placeholder="Name"
-          value={localEvent.name}
-          onChange={e => {
-            setLocalEvent({ ...localEvent, name: e.target.value });
-          }}
+          required
+          defaultValue={localEvent.name}
         />
       </LabeledField>
       <LabeledField
@@ -49,6 +51,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
           type="text"
           name="location"
           placeholder="Location"
+          required
           value={localEvent.location}
           onChange={e => {
             setLocalEvent({ ...localEvent, location: e.target.value });
@@ -62,6 +65,7 @@ export default function EventDetails({ event }: EventDetailsProps) {
         <Input
           type="date"
           name="startDate"
+          required
           value={localEvent.startDate}
           onChange={e => {
             setLocalEvent({ ...localEvent, startDate: e.target.value });
@@ -75,12 +79,13 @@ export default function EventDetails({ event }: EventDetailsProps) {
         <Input
           type="date"
           name="endDate"
+          required
           value={localEvent.endDate}
           onChange={e => {
             setLocalEvent({ ...localEvent, endDate: e.target.value });
           }}
         />
       </LabeledField>
-    </>
+    </form>
   );
 }

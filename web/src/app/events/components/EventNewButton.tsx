@@ -2,15 +2,12 @@
 
 import SimpleButton from '@/app/ui/SimpleButton';
 
-interface EventNewButtonProps {
-  classname?: string;
-}
-
-export default function EventNewButton({ classname }: EventNewButtonProps) {
+export default function EventNewButton() {
   return (
     <SimpleButton
       href="/events/new"
-      classname={classname}
+      className="my-4 mx-4"
+      title="New Event"
     >
       New Event
     </SimpleButton>

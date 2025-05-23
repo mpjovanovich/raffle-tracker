@@ -1,19 +1,19 @@
 import Link from 'next/link';
 
-export interface BaseButtonProps {
+export interface BaseButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  classname?: string;
+  className?: string;
   href?: string;
-  onClick?: () => Promise<void>;
-  title?: string;
 }
 
 export function BaseButton({
   children,
+  className,
   href,
   onClick,
-  classname,
   title,
+  type,
 }: BaseButtonProps) {
   if (!href && !onClick) {
     throw new Error('href or onClick must be provided');
@@ -21,13 +21,14 @@ export function BaseButton({
     throw new Error('href and onClick cannot both be provided');
   }
 
-  const buttonClassNames = `inline-block rounded-md cursor-pointer ${classname}`;
+  const buttonClassNames = `inline-block rounded-md cursor-pointer ${className}`;
 
   if (href) {
     return (
       <Link
         className={buttonClassNames}
         href={href}
+        title={title ?? ''}
       >
         {children}
       </Link>
@@ -39,6 +40,7 @@ export function BaseButton({
       className={buttonClassNames}
       onClick={onClick}
       title={title ?? ''}
+      type={type}
     >
       {children}
     </button>
