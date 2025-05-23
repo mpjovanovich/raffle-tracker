@@ -1,11 +1,9 @@
 import { createLogger, format, transports } from 'winston';
-import dotenv from 'dotenv';
 import { mkdir } from 'fs/promises';
+import { config } from '../config/config.js';
 
 // Set up the log directory
-dotenv.config();
-const logDir = process.env.LOG_DIR || './logs';
-await mkdir(logDir, { recursive: true });
+await mkdir(config.logDir, { recursive: true });
 
 // These are all tools that winston provides
 const { combine, timestamp, json } = format;
@@ -26,7 +24,7 @@ const logger = createLogger({
       format: consoleLogFormat,
     }),
     new transports.File({
-      filename: `${logDir}/app.log`,
+      filename: `${config.logDir}/app.log`,
       maxsize: 5242880, // 5MB
       maxFiles: 5,
     }),

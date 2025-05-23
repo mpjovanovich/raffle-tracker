@@ -1,5 +1,6 @@
 import { Event } from '@horse-race-raffle-tracker/dto';
-import { API_BASE_URL } from '@/config/constants';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function getEvents() {
   return fetch(`${API_BASE_URL}/events`)

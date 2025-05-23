@@ -1,14 +1,14 @@
 import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
-import 'dotenv/config';
+import { config } from './config/config.js';
 import logger from './utility/logger.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
 // App and middleware
 const app = express();
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -39,11 +39,10 @@ app.use('/api/events', eventsRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  // TODO: logger
   console.error(err.stack);
   res.status(500).json({
     error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    message: config.nodeEnv === 'development' ? err.message : undefined,
   });
 });
 
