@@ -8,6 +8,7 @@ import { Event } from '@horse-race-raffle-tracker/dto';
 import { useForm } from 'react-hook-form';
 import { upsertEvent } from '@/services/events';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type EventFormData = Omit<Event, 'id'>;
 
@@ -21,6 +22,7 @@ interface EventDetailsProps {
 export default function EventDetails({ event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -33,20 +35,21 @@ export default function EventDetails({ event }: EventDetailsProps) {
   const onSubmit = async (data: EventFormData) => {
     let updatedEvent: Event = { id, ...data };
 
-    // In a client side component, Next.js WILL NOT automatically route to the error page if an exception is thrown.
-    // We need to rethrow the exception.
     try {
       updatedEvent = await upsertEvent(updatedEvent);
       router.push(`/events/${updatedEvent.id}`);
     } catch (error) {
-      // TODO: show error message to user
-      console.error(error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* CRITICAL ERROR GOZE HEER! */}
+      {error && <p className="text-red-500">{error}</p>}
       <div className="flex justify-end mb-2">
         <IconButton
           title="Save"
