@@ -6,7 +6,8 @@ import LabeledField from '@/app/ui/LabeledField';
 import { FaRegFloppyDisk } from 'react-icons/fa6';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+
+type EventFormData = Omit<Event, 'id'>;
 
 interface EventDetailsProps {
   event: Event;
@@ -16,7 +17,15 @@ interface EventDetailsProps {
 // When in edit mode, bg should be white as it is on focus
 
 export default function EventDetails({ event }: EventDetailsProps) {
-  const [localEvent, setLocalEvent] = useState<Event>({ ...event });
+  const { id, ...defaultValues } = event;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EventFormData>({ defaultValues });
+
+  console.log(defaultValues.name);
+
   return (
     <form>
       <div className="flex justify-end mb-2">
@@ -36,26 +45,23 @@ export default function EventDetails({ event }: EventDetailsProps) {
         htmlFor="name"
       >
         <Input
-          type="text"
-          name="name"
+          {...register('name', { required: 'Name is required' })}
+          defaultValue={defaultValues.name}
+          // value={defaultValues.name}
           placeholder="Name"
-          required
-          defaultValue={localEvent.name}
+          type="text"
         />
+        {errors.name && (
+          <div className="text-red-500 text-sm mt-1">{errors.name.message}</div>
+        )}
       </LabeledField>
       <LabeledField
         label="Location"
         htmlFor="location"
       >
         <Input
-          type="text"
-          name="location"
+          {...register('location', { required: 'Location is required' })}
           placeholder="Location"
-          required
-          value={localEvent.location}
-          onChange={e => {
-            setLocalEvent({ ...localEvent, location: e.target.value });
-          }}
         />
       </LabeledField>
       <LabeledField
@@ -63,27 +69,9 @@ export default function EventDetails({ event }: EventDetailsProps) {
         htmlFor="startDate"
       >
         <Input
+          {...register('startDate', { required: 'Start date is required' })}
           type="date"
-          name="startDate"
-          required
-          value={localEvent.startDate}
-          onChange={e => {
-            setLocalEvent({ ...localEvent, startDate: e.target.value });
-          }}
-        />
-      </LabeledField>
-      <LabeledField
-        label="End Date"
-        htmlFor="endDate"
-      >
-        <Input
-          type="date"
-          name="endDate"
-          required
-          value={localEvent.endDate}
-          onChange={e => {
-            setLocalEvent({ ...localEvent, endDate: e.target.value });
-          }}
+          placeholder="Start Date"
         />
       </LabeledField>
     </form>

@@ -1,48 +1,41 @@
 import Link from 'next/link';
 
-export interface BaseButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+// Don't allow href for a "button"
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  href?: string;
+  href?: never;
 }
 
-export function BaseButton({
-  children,
-  className,
-  href,
-  onClick,
-  title,
-  type,
-}: BaseButtonProps) {
-  if (!href && !onClick) {
-    throw new Error('href or onClick must be provided');
-  } else if (href && onClick) {
-    throw new Error('href and onClick cannot both be provided');
-  }
+// Don't allow onClick for a "linkbutton"
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  className?: string;
+  onClick?: never;
+}
 
-  const buttonClassNames = `inline-block rounded-md cursor-pointer ${className}`;
+export type BaseButtonProps = ButtonProps | LinkProps;
 
-  if (href) {
+export function BaseButton({ className, children, ...props }: BaseButtonProps) {
+  const buttonClassNames = `inline-block rounded-md cursor-pointer ${className ?? ''}`;
+
+  if ('href' in props) {
+    const linkProps = props as LinkProps;
     return (
       <Link
         className={buttonClassNames}
-        href={href}
-        title={title ?? ''}
+        {...linkProps}
       >
         {children}
       </Link>
     );
+  } else {
+    const buttonProps = props as ButtonProps;
+    return (
+      <button
+        className={buttonClassNames}
+        {...buttonProps}
+      >
+        {children}
+      </button>
+    );
   }
-
-  return (
-    <button
-      className={buttonClassNames}
-      onClick={onClick}
-      title={title ?? ''}
-      type={type}
-    >
-      {children}
-    </button>
-  );
 }
