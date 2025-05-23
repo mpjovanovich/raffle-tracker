@@ -18,6 +18,9 @@ export default async function EventPage({ params }: EventPageProps) {
     startDate: new Date().toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0],
   };
+
+  // In server side components Next.js will automatically route to the error page if an exception is thrown.
+  // This is what we want.
   const event = isNewEvent ? NEW_EVENT : await getEvent(event_id);
 
   return (

@@ -6,6 +6,7 @@ import LabeledField from '@/app/ui/LabeledField';
 import { FaRegFloppyDisk } from 'react-icons/fa6';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { useForm } from 'react-hook-form';
+import { upsertEvent } from '@/services/events';
 
 type EventFormData = Omit<Event, 'id'>;
 
@@ -27,18 +28,26 @@ export default function EventDetails({ event }: EventDetailsProps) {
     mode: 'onBlur',
   });
 
-  console.log(defaultValues.name);
+  const onSubmit = async (data: EventFormData) => {
+    let updatedEvent: Event = { id, ...data };
+
+    // In a client side component, Next.js WILL NOT automatically route to the error page if an exception is thrown.
+    // We need to rethrow the exception.
+    try {
+      updatedEvent = await upsertEvent(updatedEvent);
+      console.log(updatedEvent);
+    } catch (error) {
+      // TODO: show error message to user
+      console.error(error);
+    }
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-end mb-2">
         <IconButton
           title="Save"
           type="submit"
-          onClick={e => {
-            e.preventDefault();
-            console.log('saving...');
-          }}
         >
           <FaRegFloppyDisk />
         </IconButton>
