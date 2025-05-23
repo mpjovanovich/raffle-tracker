@@ -1,6 +1,9 @@
 import { PrismaClient } from '.prisma/client';
 
-export abstract class BaseRepository<PrismaType, DTO> {
+export abstract class BaseRepository<
+  PrismaType extends { id: number },
+  DTO extends { id: number },
+> {
   constructor(
     protected prisma: PrismaClient,
     protected modelName: string
@@ -18,8 +21,9 @@ export abstract class BaseRepository<PrismaType, DTO> {
 
   async insert(item: DTO): Promise<DTO> {
     const prismaItem = this.toPrisma(item as DTO);
+    const { id, ...dataWithoutId } = prismaItem;
     const newItem = await this.getModel().create({
-      data: prismaItem,
+      data: dataWithoutId,
     });
     return this.toDTO(newItem);
   }

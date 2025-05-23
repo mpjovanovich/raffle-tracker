@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
@@ -7,7 +8,7 @@ const logFormat = ':remote-addr :method :url :status :response-time ms';
 
 // App and middleware
 const app = express();
-// TODO: CORS
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
