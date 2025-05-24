@@ -17,7 +17,9 @@ interface EventDetailsProps {
   event: Event;
 }
 
-// TODO: separate route for edit mode
+// TODO: separate route for edit mode = way fucking easier:
+// /events/[id]/page.tsx - view only component
+// /events/[id]/edit/page.tsx - edit only component
 
 export default function EventDetails({ event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
