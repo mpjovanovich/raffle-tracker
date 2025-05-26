@@ -5,6 +5,7 @@ import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
+import { upsertEvent } from '@/services/events';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -16,27 +17,45 @@ interface EventDetailsProps {
   event: Event;
 }
 
-// TODO: separate route for edit mode = way fucking easier:
-// /events/[id]/page.tsx - view only component
-// /events/[id]/edit/page.tsx - edit only component
-
 export default function EventDetails({ mode, event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const isDisabled = mode === 'view';
 
   const {
-    register,
     formState: { errors },
+    handleSubmit,
+    register,
   } = useForm<EventFormData>({
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
 
+  // TODO: may have to hoist this to the parent component; will have a races grid
+  // underneath this component that also needs to be loaded.
   useEffect(() => {
     setIsLoading(false);
   }, []);
+
+  const onSubmit = async (data: EventFormData) => {
+    let updatedEvent: Event = { id, ...data };
+
+    try {
+      console.log('Saving event', updatedEvent);
+      setIsSaving(true);
+      updatedEvent = await upsertEvent(updatedEvent);
+      router.push(`/events/${updatedEvent.id}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
 
   const getEditButtons = () => {
     return (
@@ -45,7 +64,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
           <>
             <IconButton
               title="Save"
-              // disabled={isSaving}
+              disabled={isSaving}
             >
               <FaRegFloppyDisk />
             </IconButton>
@@ -58,7 +77,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
                   : router.push(`/events/${event.id}`);
                 e.preventDefault();
               }}
-              // disabled={isSaving}
+              disabled={isSaving}
             >
               <FaXmark />
             </IconButton>
@@ -71,7 +90,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
               router.push(`/events/${event.id}/edit`);
               e.preventDefault();
             }}
-            // disabled={isSaving}
+            disabled={isSaving}
           >
             <FaPenToSquare />
           </IconButton>
@@ -136,5 +155,10 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     );
   };
 
-  return <form>{isLoading ? <p>Loading...</p> : getFormContent()}</form>;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {error && <p className="text-red-500">{error}</p>}
+      {isLoading ? <p>Loading...</p> : getFormContent()}
+    </form>
+  );
 }
