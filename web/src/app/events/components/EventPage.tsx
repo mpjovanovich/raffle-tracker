@@ -9,12 +9,14 @@ interface EventPageProps {
 
 export default function EventPage({ mode, event }: EventPageProps) {
   return (
-    <Card title={`Event: ${event.name}`}>
-      <EventDetails
-        event={event}
-        mode={mode}
-      />
-    </Card>
-    // Races will go here
+    <>
+      <Card title={`Event: ${event.name}`}>
+        <EventDetails
+          event={event}
+          mode={mode}
+        />
+      </Card>
+      {/* // Races will go here */}
+    </>
   );
 }

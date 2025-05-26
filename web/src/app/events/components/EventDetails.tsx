@@ -7,7 +7,6 @@ import { Event } from '@horse-race-raffle-tracker/dto';
 import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
 import { upsertEvent } from '@/services/events';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 type EventFormData = Omit<Event, 'id'>;
@@ -20,7 +19,6 @@ interface EventDetailsProps {
 export default function EventDetails({ mode, event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const isDisabled = mode === 'view';
@@ -33,12 +31,6 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
-
-  // TODO: may have to hoist this to the parent component; will have a races grid
-  // underneath this component that also needs to be loaded.
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
 
   const onSubmit = async (data: EventFormData) => {
     let updatedEvent: Event = { id, ...data };
@@ -158,7 +150,8 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {error && <p className="text-red-500">{error}</p>}
-      {isLoading ? <p>Loading...</p> : getFormContent()}
+      {/* {isLoading ? <p>Loading...</p> : getFormContent()} */}
+      {getFormContent()}
     </form>
   );
 }
