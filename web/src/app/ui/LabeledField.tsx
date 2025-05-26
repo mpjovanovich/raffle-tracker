@@ -1,3 +1,5 @@
+import { createClassNames } from '../lib/utils';
+
 interface LabeledFieldProps {
   children: React.ReactNode;
   label: string;
@@ -11,8 +13,9 @@ export default function LabeledField({
   htmlFor,
   error,
 }: LabeledFieldProps) {
+  const classes = createClassNames('flex', 'flex-col', 'gap-2', 'mb-2');
   return (
-    <div className={`flex flex-col gap-2 mb-2`}>
+    <div className={classes}>
       <label
         className="font-semibold"
         htmlFor={htmlFor}

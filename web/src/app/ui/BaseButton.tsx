@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import Link from 'next/link';
+import { createClassNames } from '../lib/utils';
 
 // Don't allow href for a "button"
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -21,7 +22,12 @@ const BaseButton = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   BaseButtonProps
 >(({ className, children, ...props }, ref) => {
-  const buttonClassNames = `inline-block rounded-md cursor-pointer ${className ?? ''}`;
+  const buttonClassNames = createClassNames(
+    'inline-block',
+    'rounded-md',
+    'cursor-pointer',
+    className
+  );
 
   if ('href' in props) {
     const linkProps = props as LinkProps;

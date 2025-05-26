@@ -21,7 +21,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
-  const isDisabled = mode === 'view';
+  const isReadOnly = mode === 'view';
 
   const {
     formState: { errors },
@@ -78,11 +78,8 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
           <IconButton
             title="Edit"
             type="button"
-            onClick={e => {
-              router.push(`/events/${event.id}/edit`);
-              e.preventDefault();
-            }}
             disabled={isSaving}
+            href={`/events/${event.id}/edit`}
           >
             <FaPenToSquare />
           </IconButton>
@@ -104,7 +101,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('name', { required: 'Name is required' })}
             placeholder="Name"
             type="text"
-            disabled={isDisabled}
+            readOnly={isReadOnly}
           />
         </LabeledField>
         <LabeledField
@@ -116,7 +113,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('location', { required: 'Location is required' })}
             placeholder="Location"
             type="text"
-            disabled={isDisabled}
+            readOnly={isReadOnly}
           />
         </LabeledField>
         <LabeledField
@@ -128,7 +125,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('startDate', { required: 'Start date is required' })}
             type="date"
             placeholder="Start Date"
-            disabled={isDisabled}
+            readOnly={isReadOnly}
           />
         </LabeledField>
         <LabeledField
@@ -140,7 +137,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('endDate', { required: 'End date is required' })}
             type="date"
             placeholder="End Date"
-            disabled={isDisabled}
+            readOnly={isReadOnly}
           />
         </LabeledField>
       </>

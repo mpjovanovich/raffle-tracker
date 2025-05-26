@@ -1,23 +1,32 @@
 import { bodyFont } from '../fonts';
 import { forwardRef } from 'react';
+import { createClassNames } from '../lib/utils';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  let appliedClassName = `rounded-md px-4 py-2 bg-light-accent focus:bg-light-primary border border-light-accent2 outline-active ${bodyFont.className}`;
-  if (props.type === 'date') {
-    appliedClassName += ' self-start';
-  }
-  if (props.className) {
-    appliedClassName += ' ' + props.className;
-  }
+  const classes = createClassNames(
+    bodyFont.className,
+    'rounded-md px-4 py-2',
+    'bg-light-accent',
+    'border border-light-accent2',
+    'outline-active',
+    'read-only:bg-light-accent',
+    'read-only:cursor-default',
+    'read-only:outline-none',
+    'read-only:focus:bg-light-accent',
+    'focus:bg-light-primary',
+    props.type === 'date' && 'self-start',
+    props.className
+  );
+
   return (
     <input
       ref={ref}
       {...props}
-      className={appliedClassName}
+      className={classes}
     />
   );
 });
