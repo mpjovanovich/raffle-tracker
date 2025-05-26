@@ -3,16 +3,17 @@
 import IconButton from '@/app/ui/IconButton';
 import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
+import { FaPenToSquare, FaRegFloppyDisk } from 'react-icons/fa6';
 import { Event } from '@horse-race-raffle-tracker/dto';
-import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { upsertEvent } from '@/services/events';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useState } from 'react';
+
 type EventFormData = Omit<Event, 'id'>;
 
 interface EventDetailsProps {
-  mode: 'create' | 'edit' | 'view';
   event: Event;
 }
 
@@ -20,70 +21,83 @@ interface EventDetailsProps {
 // /events/[id]/page.tsx - view only component
 // /events/[id]/edit/page.tsx - edit only component
 
-export default function EventDetails({ mode, event }: EventDetailsProps) {
+export default function EventDetails({ event }: EventDetailsProps) {
   const { id, ...defaultValues } = event;
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const isDisabled = mode === 'view';
+  const [error, setError] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<EventFormData>({
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
 
+  const onSubmit = async (data: EventFormData) => {
+    let updatedEvent: Event = { id, ...data };
+
+    try {
+      console.log('Saving event', updatedEvent);
+      setIsSaving(true);
+      updatedEvent = await upsertEvent(updatedEvent);
+      router.push(`/events/${updatedEvent.id}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
+
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
-  const getEditButtons = () => {
-    return (
-      <div className="flex justify-end mb-2">
-        {mode === 'edit' || mode === 'create' ? (
-          <>
-            <IconButton
-              title="Save"
-              // disabled={isSaving}
-            >
-              <FaRegFloppyDisk />
-            </IconButton>
-            <IconButton
-              title="Cancel"
-              type="button"
-              onClick={e => {
-                mode === 'create'
-                  ? router.push(`/events`)
-                  : router.push(`/events/${event.id}`);
-                e.preventDefault();
-              }}
-              // disabled={isSaving}
-            >
-              <FaXmark />
-            </IconButton>
-          </>
-        ) : (
-          <IconButton
-            title="Edit"
-            type="button"
-            onClick={e => {
-              router.push(`/events/${event.id}/edit`);
-              e.preventDefault();
-            }}
-            // disabled={isSaving}
-          >
-            <FaPenToSquare />
-          </IconButton>
-        )}
-      </div>
-    );
-  };
-
   const getFormContent = () => {
     return (
       <>
-        {getEditButtons()}
+        <div className="flex justify-end mb-2">
+          {editMode ? (
+            <>
+              <IconButton
+                title="Save"
+                disabled={isSaving}
+              >
+                <FaRegFloppyDisk />
+              </IconButton>
+              <IconButton
+                title="Cancel"
+                type="button"
+                onClick={e => {
+                  setEditMode(false);
+                  e.preventDefault();
+                }}
+                disabled={isSaving}
+              >
+                <FaRegFloppyDisk />
+              </IconButton>
+            </>
+          ) : (
+            <IconButton
+              title="Edit"
+              type="button"
+              onClick={e => {
+                setEditMode(true);
+                router.push(`/events/${event.id}/edit`);
+                e.preventDefault();
+              }}
+              disabled={isSaving}
+            >
+              <FaPenToSquare />
+            </IconButton>
+          )}
+        </div>
         <LabeledField
           label="Name"
           htmlFor="name"
@@ -93,7 +107,6 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('name', { required: 'Name is required' })}
             placeholder="Name"
             type="text"
-            disabled={isDisabled}
           />
         </LabeledField>
         <LabeledField
@@ -105,7 +118,6 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('location', { required: 'Location is required' })}
             placeholder="Location"
             type="text"
-            disabled={isDisabled}
           />
         </LabeledField>
         <LabeledField
@@ -117,7 +129,6 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('startDate', { required: 'Start date is required' })}
             type="date"
             placeholder="Start Date"
-            disabled={isDisabled}
           />
         </LabeledField>
         <LabeledField
@@ -129,12 +140,16 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             {...register('endDate', { required: 'End date is required' })}
             type="date"
             placeholder="End Date"
-            disabled={isDisabled}
           />
         </LabeledField>
       </>
     );
   };
 
-  return <form>{isLoading ? <p>Loading...</p> : getFormContent()}</form>;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {error && <p className="text-red-500">{error}</p>}
+      {isLoading ? <p>Loading...</p> : getFormContent()}
+    </form>
+  );
 }

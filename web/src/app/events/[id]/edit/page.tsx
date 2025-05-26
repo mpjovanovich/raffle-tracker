@@ -1,4 +1,4 @@
-import EventPage from '../components/EventPage';
+import EventPage from '../../components/EventPage';
 import { getEvent } from '@/services/events';
 
 interface PageProps {
@@ -12,7 +12,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <EventPage
       event={event}
-      mode="view"
+      mode="edit"
     />
   );
 }
