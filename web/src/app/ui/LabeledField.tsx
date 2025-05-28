@@ -1,4 +1,4 @@
-import { createClassNames } from '../lib/utils';
+import { clsx } from 'clsx';
 
 interface LabeledFieldProps {
   children: React.ReactNode;
@@ -15,23 +15,22 @@ export default function LabeledField({
   error,
   className,
 }: LabeledFieldProps) {
-  const classes = createClassNames(
-    'flex',
-    'flex-col',
-    'gap-2',
-    'mb-2',
-    className
-  );
   return (
-    <div className={classes}>
+    <div className={clsx(styles.labeledField, className)}>
       <label
-        className="font-semibold"
+        className={styles.label}
         htmlFor={htmlFor}
       >
         {label}
       </label>
       {children}
-      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
+      {error && <div className={styles.error}>{error}</div>}
     </div>
   );
 }
+
+const styles = {
+  error: clsx('text-red-500', 'text-sm', 'mt-1'),
+  labeledField: clsx('flex', 'flex-col', 'gap-2', 'mb-2'),
+  label: clsx('font-semibold'),
+};

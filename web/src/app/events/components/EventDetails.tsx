@@ -9,6 +9,7 @@ import { upsertEvent } from '@/services/events';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import clsx from 'clsx';
 type EventFormData = Omit<Event, 'id'>;
 
 interface EventDetailsProps {
@@ -146,9 +147,13 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
       {/* {isLoading ? <p>Loading...</p> : getFormContent()} */}
       {getFormContent()}
     </form>
   );
 }
+
+const styles = {
+  error: clsx('text-red-500'),
+};

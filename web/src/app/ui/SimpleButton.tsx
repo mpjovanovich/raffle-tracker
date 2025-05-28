@@ -1,24 +1,26 @@
 import BaseButton, { type BaseButtonProps } from './BaseButton';
 import { bodyFont } from '../fonts';
-import { createClassNames } from '../lib/utils';
+import clsx from 'clsx';
 
 export default function SimpleButton(props: BaseButtonProps) {
-  const classes = createClassNames(
+  return (
+    <BaseButton
+      {...props}
+      className={clsx(styles.button, props.className)}
+    >
+      {props.children}
+    </BaseButton>
+  );
+}
+
+const styles = {
+  button: clsx(
     'bg-light-accent2',
     'hover:bg-dark-accent',
     'hover:text-light-primary',
     'px-6',
     'py-1',
     'font-semibold',
-    bodyFont.className,
-    props.className
-  );
-  return (
-    <BaseButton
-      {...props}
-      className={classes}
-    >
-      {props.children}
-    </BaseButton>
-  );
-}
+    bodyFont.className
+  ),
+};

@@ -1,5 +1,5 @@
 import CardTitle from './CardTitle';
-import { createClassNames } from '../lib/utils';
+import clsx from 'clsx';
 
 interface CardProps {
   children?: React.ReactNode;
@@ -8,16 +8,14 @@ interface CardProps {
 }
 
 export default function Card({ children, title, className }: CardProps) {
-  const classes = createClassNames(
-    'bg-light-primary',
-    'p-8',
-    'min-w-[720px]',
-    className
-  );
   return (
-    <div className={classes}>
+    <div className={clsx(styles.card, className)}>
       {title && <CardTitle>{title}</CardTitle>}
       {children}
     </div>
   );
 }
+
+const styles = {
+  card: clsx('bg-light-primary', 'p-8', 'min-w-[720px]'),
+};

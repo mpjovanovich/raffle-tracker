@@ -1,5 +1,5 @@
 import { bodyFont } from '../fonts';
-import { createClassNames } from '../lib/utils';
+import clsx from 'clsx';
 
 interface ItemListProps {
   children: React.ReactNode;
@@ -7,12 +7,9 @@ interface ItemListProps {
 }
 
 export default function ItemList({ children, className }: ItemListProps) {
-  const classes = createClassNames(
-    'flex',
-    'flex-col',
-    'gap-1',
-    bodyFont.className,
-    className
-  );
-  return <div className={classes}>{children}</div>;
+  return <div className={clsx(styles.itemList, className)}>{children}</div>;
 }
+
+const styles = {
+  itemList: clsx('flex', 'flex-col', 'gap-1', bodyFont.className),
+};

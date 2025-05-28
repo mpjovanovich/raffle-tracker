@@ -5,7 +5,7 @@ import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
-import { createClassNames } from '@/app/lib/utils';
+import clsx from 'clsx';
 
 export default function RacesGrid() {
   return (
@@ -47,18 +47,13 @@ export default function RacesGrid() {
 }
 
 const styles = {
-  raceAdd: createClassNames(
+  raceAdd: clsx(
     'border-t-2',
     'border-light-accent2',
     'flex',
     'flex-row',
     'px-8'
   ),
-  raceAddLabeledField: createClassNames(
-    'flex-row',
-    'items-center',
-    'm-2',
-    'justify-end'
-  ),
-  raceAddLabeledFieldNumber: createClassNames('w-1/4', 'ml-8'),
+  raceAddLabeledField: clsx('flex-row', 'items-center', 'm-2', 'justify-end'),
+  raceAddLabeledFieldNumber: clsx('w-1/4', 'ml-8'),
 };

@@ -1,5 +1,6 @@
 import { FaRegPenToSquare } from 'react-icons/fa6';
 import IconButton from '@/app/ui/IconButton';
+import clsx from 'clsx';
 
 interface EventButtonProps {
   eventId: number;
@@ -7,7 +8,7 @@ interface EventButtonProps {
 
 export default function EventButtonActions({ eventId }: EventButtonProps) {
   return (
-    <div className="flex flex-row gap-2 items-center>">
+    <div className={styles.eventListButtons}>
       <IconButton
         title="Edit"
         href={`/events/${eventId}`}
@@ -17,3 +18,7 @@ export default function EventButtonActions({ eventId }: EventButtonProps) {
     </div>
   );
 }
+
+const styles = {
+  eventListButtons: clsx('flex', 'flex-row', 'gap-2', 'items-center'),
+};

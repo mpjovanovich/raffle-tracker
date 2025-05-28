@@ -1,11 +1,16 @@
-import { createClassNames } from '../lib/utils';
+import clsx from 'clsx';
 
 interface CardTitleProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-export default function CardTitle({ children }: CardTitleProps) {
-  const classes = createClassNames(
+export default function CardTitle({ children, className }: CardTitleProps) {
+  return <h1 className={clsx(styles.cardTitle, className)}>{children}</h1>;
+}
+
+const styles = {
+  cardTitle: clsx(
     'text-2xl',
     'font-bold',
     'mb-6',
@@ -14,6 +19,5 @@ export default function CardTitle({ children }: CardTitleProps) {
     'border-b-1',
     'border-light-accent2',
     'pb-2'
-  );
-  return <h1 className={classes}>{children}</h1>;
-}
+  ),
+};

@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import Link from 'next/link';
-import { createClassNames } from '../lib/utils';
+import clsx from 'clsx';
 
 // Don't allow href for a "button"
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -22,18 +22,11 @@ const BaseButton = forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   BaseButtonProps
 >(({ className, children, ...props }, ref) => {
-  const buttonClassNames = createClassNames(
-    'inline-block',
-    'rounded-md',
-    'cursor-pointer',
-    className
-  );
-
   if ('href' in props) {
     const linkProps = props as LinkProps;
     return (
       <Link
-        className={buttonClassNames}
+        className={clsx(styles.button, className)}
         ref={ref as React.Ref<HTMLAnchorElement>}
         {...linkProps}
       >
@@ -44,7 +37,7 @@ const BaseButton = forwardRef<
     const buttonProps = props as ButtonProps;
     return (
       <button
-        className={buttonClassNames}
+        className={clsx(styles.button, className)}
         ref={ref as React.Ref<HTMLButtonElement>}
         {...buttonProps}
       >
@@ -53,6 +46,10 @@ const BaseButton = forwardRef<
     );
   }
 });
+
+const styles = {
+  button: clsx('inline-block', 'rounded-md', 'cursor-pointer'),
+};
 
 BaseButton.displayName = 'BaseButton';
 
