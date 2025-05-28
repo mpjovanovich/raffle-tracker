@@ -5,6 +5,7 @@ interface LabeledFieldProps {
   label: string;
   htmlFor: string;
   error?: string;
+  className?: string;
 }
 
 export default function LabeledField({
@@ -12,8 +13,15 @@ export default function LabeledField({
   label,
   htmlFor,
   error,
+  className,
 }: LabeledFieldProps) {
-  const classes = createClassNames('flex', 'flex-col', 'gap-2', 'mb-2');
+  const classes = createClassNames(
+    'flex',
+    'flex-col',
+    'gap-2',
+    'mb-2',
+    className
+  );
   return (
     <div className={classes}>
       <label

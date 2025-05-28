@@ -22,7 +22,7 @@ export default function RootLayout({
       >
         <div className="flex flex-col h-screen">
           <Navigation />
-          <main className="flex-1 flex justify-center p-8 sm:p-20">
+          <main className="flex-1 flex justify-center px-8 py-4">
             <div className="max-w-4xl">{children}</div>
           </main>
         </div>
