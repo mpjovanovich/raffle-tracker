@@ -17,7 +17,7 @@ export default function EventPage({ mode, event }: EventPageProps) {
           mode={mode}
         />
       </Card>
-      {mode === 'view' && <RacesGrid />}
+      {mode === 'view' && <RacesGrid eventId={event.id} />}
     </>
   );
 }

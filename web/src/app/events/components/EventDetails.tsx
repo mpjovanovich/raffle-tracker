@@ -37,7 +37,6 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     let updatedEvent: Event = { id, ...data };
 
     try {
-      console.log('Saving event', updatedEvent);
       setIsSaving(true);
       updatedEvent = await upsertEvent(updatedEvent);
       router.push(`/events/${updatedEvent.id}`);
@@ -99,6 +98,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
         >
           <Input
             {...register('name', { required: 'Name is required' })}
+            id="name"
             placeholder="Name"
             type="text"
             readOnly={isReadOnly}
@@ -111,6 +111,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
         >
           <Input
             {...register('location', { required: 'Location is required' })}
+            id="location"
             placeholder="Location"
             type="text"
             readOnly={isReadOnly}
@@ -123,6 +124,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
         >
           <Input
             {...register('startDate', { required: 'Start date is required' })}
+            id="startDate"
             type="date"
             placeholder="Start Date"
             readOnly={isReadOnly}
@@ -135,6 +137,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
         >
           <Input
             {...register('endDate', { required: 'End date is required' })}
+            id="endDate"
             type="date"
             placeholder="End Date"
             readOnly={isReadOnly}

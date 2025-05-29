@@ -7,10 +7,56 @@ import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-export default function RacesGrid() {
+interface RaceFormData {
+  raceNumber: number;
+  numberOfHorses: number;
+}
+
+interface RacesGridProps {
+  eventId: number;
+}
+
+export default function RacesGrid({ eventId }: RacesGridProps) {
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm<RaceFormData>({
+    defaultValues: {
+      raceNumber: 1,
+      numberOfHorses: 1,
+    },
+    mode: 'onBlur',
+  });
+
+  const onSubmit = async (data: RaceFormData) => {
+    const submissionData = { eventId: eventId, ...data };
+
+    try {
+      setIsSaving(true);
+      console.log(submissionData);
+      // updatedEvent = await upsertEvent(updatedEvent);
+      // router.push(`/events/${updatedEvent.id}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
+
   return (
-    <div className={styles.raceContainer}>
+    <form
+      className={styles.raceContainer}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Card title="Races">
         <ItemList>
           <ItemListItem>Stuff</ItemListItem>
@@ -21,27 +67,51 @@ export default function RacesGrid() {
           label="Race Number:"
           htmlFor="raceNumber"
           className={styles.raceAddLabeledField}
+          error={errors.raceNumber?.message}
         >
           <Input
             type="number"
             id="raceNumber"
+            min={1}
             className={styles.raceAddLabeledFieldNumber}
+            {...register('raceNumber', {
+              required: 'Race number is required',
+              min: {
+                value: 1,
+                message: 'Race number must be at least 1',
+              },
+            })}
           />
         </LabeledField>
         <LabeledField
           label="Number of Horses:"
           htmlFor="numberOfHorses"
           className={styles.raceAddLabeledField}
+          error={errors.numberOfHorses?.message}
         >
           <Input
             type="number"
             id="numberOfHorses"
+            min={1}
             className={styles.raceAddLabeledFieldNumber}
+            {...register('numberOfHorses', {
+              required: 'Number of horses is required',
+              min: {
+                value: 1,
+                message: 'Number of horses must be at least 1',
+              },
+            })}
           />
         </LabeledField>
-        <SimpleButton className={styles.raceAddButton}>Add</SimpleButton>
+        <SimpleButton
+          className={styles.raceAddButton}
+          type="submit"
+          disabled={isSaving}
+        >
+          Add
+        </SimpleButton>
       </div>
-    </div>
+    </form>
   );
 }
 
