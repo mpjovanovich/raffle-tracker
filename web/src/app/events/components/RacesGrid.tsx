@@ -7,6 +7,7 @@ import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
+import { CreateRace } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useState } from 'react';
 
@@ -37,7 +38,7 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
   });
 
   const onSubmit = async (data: RaceFormData) => {
-    const submissionData = { eventId: eventId, ...data };
+    const submissionData: CreateRace = { eventId: eventId, ...data };
 
     try {
       setIsSaving(true);

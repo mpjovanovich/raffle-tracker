@@ -25,26 +25,26 @@ VALUES
 
 INSERT INTO ticket (event_id, race_id, horse_id, status)
 VALUES 
-    (1, 1, 1, 0),
-    (1, 1, 1, 0),
-    (1, 1, 2, 0),
-    (1, 1, 2, 0),
-    (1, 1, 3, 0),
-    (1, 1, 3, 0),
-    (1, 1, 4, 0),
-    (1, 1, 4, 0),
-    (1, 1, 1, 0),
-    (1, 1, 2, 0);
+    (1, 1, 1, 'ISSUED'),
+    (1, 1, 1, 'ISSUED'),
+    (1, 1, 2, 'ISSUED'),
+    (1, 1, 2, 'ISSUED'),
+    (1, 1, 3, 'ISSUED'),
+    (1, 1, 3, 'ISSUED'),
+    (1, 1, 4, 'ISSUED'),
+    (1, 1, 4, 'ISSUED'),
+    (1, 1, 1, 'ISSUED'),
+    (1, 1, 2, 'ISSUED');
 
 INSERT INTO ticket (event_id, race_id, horse_id, status)
 VALUES 
-    (1, 2, 5, 0),
-    (1, 2, 6, 0),
-    (1, 2, 7, 0),
-    (1, 2, 8, 0),
-    (1, 2, 9, 0),
-    (1, 2, 5, 0),
-    (1, 2, 6, 0),
-    (1, 2, 7, 0),
-    (1, 2, 8, 0),
-    (1, 2, 9, 0);
+    (1, 2, 5, 'ISSUED'),
+    (1, 2, 6, 'ISSUED'),
+    (1, 2, 7, 'ISSUED'),
+    (1, 2, 8, 'ISSUED'),
+    (1, 2, 9, 'ISSUED'),
+    (1, 2, 5, 'ISSUED'),
+    (1, 2, 6, 'ISSUED'),
+    (1, 2, 7, 'ISSUED'),
+    (1, 2, 8, 'ISSUED'),
+    (1, 2, 9, 'ISSUED');

@@ -6,7 +6,7 @@ export interface Ticket {
   raceId: number;
   horseId: number;
   createdDttm: Date;
-  redeemedDttm: Date;
-  refundedDttm: Date;
+  redeemedDttm: Date | null;
+  refundedDttm: Date | null;
   status: TicketStatus;
 }

@@ -22,7 +22,7 @@ model Race {
   id          Int      @id @default(autoincrement())
   event_id    Int
   race_number Int
-  closed      Int      @default(0) // 0 or 1
+  closed      Int      @default(0)
   event       Event    @relation(fields: [event_id], references: [id])
   horse       Horse[]
   ticket      Ticket[]
@@ -34,8 +34,8 @@ model Horse {
   id        Int      @id @default(autoincrement())
   race_id   Int
   number    Int
-  winner    Int      @default(0) // 0 or 1
-  scratch   Int      @default(0) // 0 or 1
+  winner    Int      @default(0)
+  scratch   Int      @default(0)
   race      Race     @relation(fields: [race_id], references: [id])
   ticket    Ticket[]
 
@@ -50,7 +50,7 @@ model Ticket {
   created_dttm  DateTime  @default(now())
   redeemed_dttm String?
   refunded_dttm String?
-  status        Int     @default(0) // 0: Issued/Valid, 1: Redeemed, 2: Refunded
+  status        String
   horse         Horse   @relation(fields: [horse_id], references: [id])
   race          Race    @relation(fields: [race_id], references: [id])
   event         Event   @relation(fields: [event_id], references: [id])
