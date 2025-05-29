@@ -6,9 +6,9 @@ import LabeledField from '@/app/ui/LabeledField';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
 import { upsertEvent } from '@/services/events';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import clsx from 'clsx';
 type EventFormData = Omit<Event, 'id'>;
 
@@ -27,8 +27,9 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
   const {
     formState: { errors },
     handleSubmit,
+    isInitialized,
     register,
-  } = useForm<EventFormData>({
+  } = useInitializedForm<EventFormData>({
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
@@ -46,6 +47,8 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
           ? error.message
           : 'An error occurred. Please contact an administrator.'
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -146,6 +149,10 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
       </div>
     );
   };
+
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

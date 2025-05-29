@@ -7,7 +7,7 @@ import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
-import { useForm } from 'react-hook-form';
+import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useState } from 'react';
 
 interface RaceFormData {
@@ -26,8 +26,9 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
   const {
     formState: { errors },
     handleSubmit,
+    isInitialized,
     register,
-  } = useForm<RaceFormData>({
+  } = useInitializedForm<RaceFormData>({
     defaultValues: {
       raceNumber: 1,
       numberOfHorses: 1,
@@ -49,19 +50,13 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
           ? error.message
           : 'An error occurred. Please contact an administrator.'
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  return (
-    <form
-      className={styles.raceContainer}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Card title="Races">
-        <ItemList>
-          <ItemListItem>Stuff</ItemListItem>
-        </ItemList>
-      </Card>
+  const RaceAdd = () => {
+    return (
       <div className={styles.raceAdd}>
         <LabeledField
           label="Race Number:"
@@ -72,7 +67,6 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
           <Input
             type="number"
             id="raceNumber"
-            min={1}
             className={styles.raceAddLabeledFieldNumber}
             {...register('raceNumber', {
               required: 'Race number is required',
@@ -92,7 +86,6 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
           <Input
             type="number"
             id="numberOfHorses"
-            min={1}
             className={styles.raceAddLabeledFieldNumber}
             {...register('numberOfHorses', {
               required: 'Number of horses is required',
@@ -111,11 +104,34 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
           Add
         </SimpleButton>
       </div>
+    );
+  };
+
+  return (
+    <form
+      className={styles.raceContainer}
+      onSubmit={e => {
+        e.preventDefault();
+        handleSubmit(onSubmit)(e);
+      }}
+    >
+      <Card title="Races">
+        {error && <p className={styles.error}>{error}</p>}
+        {isInitialized ? (
+          <ItemList>
+            <ItemListItem>Stuff</ItemListItem>
+          </ItemList>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </Card>
+      {isInitialized && <RaceAdd />}
     </form>
   );
 }
 
 const styles = {
+  error: clsx('text-red-500'),
   raceAdd: clsx(
     'border-t-2',
     'border-light-accent2',
