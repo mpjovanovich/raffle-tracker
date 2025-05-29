@@ -41,6 +41,6 @@ export abstract class BaseRepository<
     return this.prisma[this.modelName as keyof PrismaClient] as any;
   }
 
-  protected abstract toDTO(item: PrismaType): DTO;
+  public abstract toDTO(item: PrismaType): DTO;
   protected abstract toPrisma(item: DTO): PrismaType;
 }

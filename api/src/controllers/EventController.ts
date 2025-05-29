@@ -4,13 +4,21 @@ import { asyncHandler } from '../utility/asyncHandler.js';
 import { prisma } from '../db.js';
 import { EventService } from '../services/EventService.js';
 import { EventRepository } from '../repository/EventRepository.js';
+// import { HorseRepository } from '../repository/HorseRepository.js';
+// import { RaceRepository } from '../repository/RaceRepository.js';
 
 class EventController {
   private eventService: EventService;
 
   constructor() {
     const eventRepository = new EventRepository(prisma);
-    this.eventService = new EventService(eventRepository);
+    // const raceRepository = new RaceRepository(prisma);
+    // const horseRepository = new HorseRepository(prisma);
+    this.eventService = new EventService(
+      eventRepository
+      // raceRepository,
+      // horseRepository
+    );
   }
 
   getAll = asyncHandler(async (req: Request, res: Response) => {

@@ -7,7 +7,7 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
     super(prisma, 'horse');
   }
 
-  protected toDTO(horse: Horse): HorseDTO {
+  public toDTO(horse: Horse): HorseDTO {
     return {
       id: horse.id,
       raceId: horse.race_id,
@@ -26,4 +26,11 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
       scratch: horse.scratch ? 1 : 0,
     };
   }
+
+  //   async getByRaceId(raceId: number): Promise<HorseDTO[]> {
+  //     const horses = await this.prisma.horse.findMany({
+  //       where: { race_id: raceId },
+  //     });
+  //     return horses.map(this.toDTO);
+  //   }
 }

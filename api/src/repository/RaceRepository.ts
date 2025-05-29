@@ -7,7 +7,7 @@ export class RaceRepository extends BaseRepository<Race, RaceDTO> {
     super(prisma, 'race');
   }
 
-  protected toDTO(race: Race): RaceDTO {
+  public toDTO(race: Race): RaceDTO {
     return {
       id: race.id,
       eventId: race.event_id,

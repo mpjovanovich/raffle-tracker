@@ -10,7 +10,7 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
     super(prisma, 'ticket');
   }
 
-  protected toDTO(ticket: Ticket): TicketDTO {
+  public toDTO(ticket: Ticket): TicketDTO {
     return {
       id: ticket.id,
       eventId: ticket.event_id,
