@@ -50,7 +50,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     }
   };
 
-  const getEditButtons = () => {
+  const EditButtons = () => {
     return (
       <div className="flex justify-end mb-2">
         {mode === 'edit' || mode === 'create' ? (
@@ -89,10 +89,9 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     );
   };
 
-  const getFormContent = () => {
+  const FormContent = () => {
     return (
-      <>
-        {getEditButtons()}
+      <div className={styles.formContent}>
         <LabeledField
           label="Name"
           htmlFor="name"
@@ -141,19 +140,20 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             readOnly={isReadOnly}
           />
         </LabeledField>
-      </>
+      </div>
     );
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {error && <p className={styles.error}>{error}</p>}
-      {/* {isLoading ? <p>Loading...</p> : getFormContent()} */}
-      {getFormContent()}
+      <EditButtons />
+      <FormContent />
     </form>
   );
 }
 
 const styles = {
   error: clsx('text-red-500'),
+  formContent: clsx('flex', 'flex-col', 'gap-2'),
 };

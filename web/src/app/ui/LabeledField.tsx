@@ -31,6 +31,6 @@ export default function LabeledField({
 
 const styles = {
   error: clsx('text-red-500', 'text-sm', 'mt-1'),
-  labeledField: clsx('flex', 'flex-col', 'gap-2', 'mb-2'),
+  labeledField: clsx('flex', 'flex-col', 'gap-2'),
   label: clsx('font-semibold'),
 };

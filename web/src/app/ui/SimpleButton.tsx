@@ -19,7 +19,7 @@ const styles = {
     'hover:bg-dark-accent',
     'hover:text-light-primary',
     'px-6',
-    'py-1',
+    'py-2',
     'font-semibold',
     bodyFont.className
   ),

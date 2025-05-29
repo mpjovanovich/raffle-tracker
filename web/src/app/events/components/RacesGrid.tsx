@@ -5,11 +5,12 @@ import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
+import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
 
 export default function RacesGrid() {
   return (
-    <div className="border-2 border-light-accent2 rounded-sm m-6">
+    <div className={styles.raceContainer}>
       <Card title="Races">
         <ItemList>
           <ItemListItem>Stuff</ItemListItem>
@@ -38,9 +39,7 @@ export default function RacesGrid() {
             className={styles.raceAddLabeledFieldNumber}
           />
         </LabeledField>
-        <div className="flex-1">
-          <p>Add</p>
-        </div>
+        <SimpleButton className={styles.raceAddButton}>Add</SimpleButton>
       </div>
     </div>
   );
@@ -52,8 +51,11 @@ const styles = {
     'border-light-accent2',
     'flex',
     'flex-row',
+    'gap-4',
     'px-8'
   ),
-  raceAddLabeledField: clsx('flex-row', 'items-center', 'm-2', 'justify-end'),
-  raceAddLabeledFieldNumber: clsx('w-1/4', 'ml-8'),
+  raceAddButton: clsx('my-2', 'h-fit'),
+  raceAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
+  raceAddLabeledFieldNumber: clsx('w-1/4'),
+  raceContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
 };
