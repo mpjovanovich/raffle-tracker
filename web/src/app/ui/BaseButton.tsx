@@ -48,7 +48,14 @@ const BaseButton = forwardRef<
 });
 
 const styles = {
-  button: clsx('inline-block', 'rounded-md', 'cursor-pointer'),
+  button: clsx(
+    'inline-block',
+    'rounded-md',
+    'cursor-pointer',
+    'hover:bg-dark-accent',
+    'hover:bg-dark-accent',
+    'hover:text-light-primary'
+  ),
 };
 
 BaseButton.displayName = 'BaseButton';
