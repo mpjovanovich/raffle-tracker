@@ -1,5 +1,2 @@
-export enum TicketStatus {
-  Issued = 0,
-  Redeemed = 1,
-  Refunded = 2,
-}
+export const TICKET_STATUSES = ['ISSUED', 'REDEEMED', 'REFUNDED'] as const;
+export type TicketStatus = (typeof TICKET_STATUSES)[number];

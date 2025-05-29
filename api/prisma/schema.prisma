@@ -35,7 +35,7 @@ model Horse {
   race_id   Int
   number    Int
   winner    Int      @default(0) // 0 or 1
-  scratched Int      @default(0) // 0 or 1
+  scratch   Int      @default(0) // 0 or 1
   race      Race     @relation(fields: [race_id], references: [id])
   ticket    Ticket[]
 
