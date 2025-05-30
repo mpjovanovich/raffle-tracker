@@ -1,16 +1,17 @@
 'use client';
 
+import clsx from 'clsx';
 import Card from '@/app/ui/Card';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
-import clsx from 'clsx';
+import { addRaces } from '@/services/events';
 import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface RacesGridProps {
   event: Event;
@@ -32,18 +33,26 @@ export default function RacesGrid({ event }: RacesGridProps) {
     handleSubmit,
     isInitialized,
     register,
+    setValue,
   } = useInitializedForm<CreateRacesRequest>({
     defaultValues: {
-      raceNumber: maxRaceNumber + 1,
+      raceNumber: 1,
       numberOfHorses: 1,
     },
     mode: 'onBlur',
   });
 
+  // Whenever new races are added and the component is re-rendered,
+  // the race number should be set to the highest race number + 1.
+  useEffect(() => {
+    setValue('raceNumber', maxRaceNumber + 1);
+  }, [maxRaceNumber, setValue]);
+
   const onSubmit = async (data: CreateRacesRequest) => {
     try {
       setIsSaving(true);
-      // TODO: do the actual add races and horses
+      setError(null);
+      await addRaces(event.id, data.raceNumber, data.numberOfHorses);
       router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
@@ -75,6 +84,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 value: 1,
                 message: 'Race number must be at least 1',
               },
+              valueAsNumber: true,
             })}
           />
         </LabeledField>
@@ -94,6 +104,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 value: 1,
                 message: 'Number of horses must be at least 1',
               },
+              valueAsNumber: true,
             })}
           />
         </LabeledField>

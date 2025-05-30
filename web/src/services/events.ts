@@ -10,6 +10,9 @@ export async function addRaces(
   return fetch(`${API_BASE_URL}/events/${eventId}/races`, {
     method: 'POST',
     body: JSON.stringify({ raceNumber, numberOfHorses }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
     .then(res => {
       if (!res.ok) {
