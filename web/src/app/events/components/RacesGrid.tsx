@@ -24,6 +24,12 @@ export default function RacesGrid({ event }: RacesGridProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const maxRaceNumber =
+    event.races?.reduce(
+      (max, race) => (race.raceNumber > max ? race.raceNumber : max),
+      1
+    ) ?? 1;
+
   const {
     formState: { errors },
     handleSubmit,
@@ -31,7 +37,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
     register,
   } = useInitializedForm<RaceFormData>({
     defaultValues: {
-      raceNumber: 1,
+      raceNumber: maxRaceNumber + 1,
       numberOfHorses: 1,
     },
     mode: 'onBlur',
