@@ -6,8 +6,8 @@ export default async function Page() {
     id: 0,
     name: '',
     location: '',
-    startDate: new Date().toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0],
+    startDate: new Date(),
+    endDate: new Date(),
   };
   return (
     <EventPage

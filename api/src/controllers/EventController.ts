@@ -5,6 +5,8 @@ import { prisma } from '../db.js';
 import { EventService } from '../services/EventService.js';
 import { EventRepository } from '../repository/EventRepository.js';
 
+// TODO: Validate the request body. Can put this in middleware using Zod.
+
 class EventController {
   private eventService: EventService;
 
@@ -33,7 +35,6 @@ class EventController {
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {
-    // TODO: Validate the request body. Can put this in middleware using Zod.
     const item = await this.eventService.update(
       parseInt(req.params.id),
       req.body
