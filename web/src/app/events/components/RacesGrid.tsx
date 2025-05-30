@@ -7,7 +7,7 @@ import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
-import { CreateRace } from '@horse-race-raffle-tracker/dto';
+import { CreateRace, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useState } from 'react';
 
@@ -17,10 +17,10 @@ interface RaceFormData {
 }
 
 interface RacesGridProps {
-  eventId: number;
+  event: Event;
 }
 
-export default function RacesGrid({ eventId }: RacesGridProps) {
+export default function RacesGrid({ event }: RacesGridProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -38,7 +38,7 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
   });
 
   const onSubmit = async (data: RaceFormData) => {
-    const submissionData: CreateRace = { eventId: eventId, ...data };
+    const submissionData: CreateRace = { eventId: event.id, ...data };
 
     try {
       setIsSaving(true);
@@ -120,7 +120,9 @@ export default function RacesGrid({ eventId }: RacesGridProps) {
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
           <ItemList>
-            <ItemListItem>Stuff</ItemListItem>
+            {event.races?.map(race => (
+              <ItemListItem key={race.id}>Race {race.raceNumber}</ItemListItem>
+            ))}
           </ItemList>
         ) : (
           <div>Loading...</div>
