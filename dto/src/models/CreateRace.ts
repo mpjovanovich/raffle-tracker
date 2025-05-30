@@ -1,5 +1,4 @@
-export interface CreateRace {
-  eventId: number;
+export interface CreateRacesRequest {
   raceNumber: number;
   numberOfHorses: number;
 }

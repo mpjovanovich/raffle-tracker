@@ -76,4 +76,37 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
         })) ?? [],
     };
   }
+
+  async addRaces(
+    eventId: number,
+    raceNumber: number,
+    numberOfHorses: number
+  ): Promise<EventDTO | null> {
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    const race = await this.raceRepository.insert({
+      id: 0,
+      eventId: eventId,
+      raceNumber: raceNumber,
+      closed: false,
+    });
+
+    for (let i = 1; i < numberOfHorses + 1; i++) {
+      await this.horseRepository.insert({
+        id: 0,
+        raceId: race.id,
+        number: i,
+        winner: false,
+        scratch: false,
+      });
+    }
+
+    return this.getWithChildren(eventId);
+  }
 }

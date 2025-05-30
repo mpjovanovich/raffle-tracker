@@ -16,4 +16,12 @@ export class EventService extends BaseService<EventRepository> {
   async getWithChildren(id: number): Promise<EventDTO | null> {
     return this.repo.getWithChildren(id);
   }
+
+  async addRaces(
+    eventId: number,
+    raceNumber: number,
+    numberOfHorses: number
+  ): Promise<EventDTO | null> {
+    return this.repo.addRaces(eventId, raceNumber, numberOfHorses);
+  }
 }

@@ -7,7 +7,6 @@ import { EventService } from '../services/EventService.js';
 import { EventRepository } from '../repository/EventRepository.js';
 
 // TODO: Validate the request body. Can put this in middleware using Zod.
-
 class EventController {
   private eventService: EventService;
 
@@ -15,6 +14,15 @@ class EventController {
     const eventRepository = new EventRepository(prisma);
     this.eventService = new EventService(eventRepository);
   }
+
+  addRaces = asyncHandler(async (req: Request, res: Response) => {
+    const item = await this.eventService.addRaces(
+      parseInt(req.params.id),
+      parseInt(req.body.raceNumber),
+      parseInt(req.body.numberOfHorses)
+    );
+    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+  });
 
   getAll = asyncHandler(async (req: Request, res: Response) => {
     const items = await this.eventService.getAll();
@@ -38,6 +46,13 @@ class EventController {
     res.status(200).json(new APIResponse(200, JSON.stringify(item)));
   });
 
+  getWithChildren = asyncHandler(async (req: Request, res: Response) => {
+    const item = await this.eventService.getWithChildren(
+      parseInt(req.params.id)
+    );
+    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+  });
+
   insert = asyncHandler(async (req: Request, res: Response) => {
     const item = await this.eventService.insert(req.body);
     res.status(200).json(new APIResponse(200, JSON.stringify(item)));
@@ -47,13 +62,6 @@ class EventController {
     const item = await this.eventService.update(
       parseInt(req.params.id),
       req.body
-    );
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
-  });
-
-  getWithChildren = asyncHandler(async (req: Request, res: Response) => {
-    const item = await this.eventService.getWithChildren(
-      parseInt(req.params.id)
     );
     res.status(200).json(new APIResponse(200, JSON.stringify(item)));
   });

@@ -6,8 +6,8 @@ export default async function Page() {
     id: 0,
     name: '',
     location: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: '',
+    endDate: '',
   };
   return (
     <EventPage

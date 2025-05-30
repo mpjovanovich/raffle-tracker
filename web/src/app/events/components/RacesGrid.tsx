@@ -7,14 +7,10 @@ import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
 import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
-import { CreateRace, Event } from '@horse-race-raffle-tracker/dto';
+import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-interface RaceFormData {
-  raceNumber: number;
-  numberOfHorses: number;
-}
 
 interface RacesGridProps {
   event: Event;
@@ -23,6 +19,7 @@ interface RacesGridProps {
 export default function RacesGrid({ event }: RacesGridProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const router = useRouter();
 
   const maxRaceNumber =
     event.races?.reduce(
@@ -35,7 +32,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
     handleSubmit,
     isInitialized,
     register,
-  } = useInitializedForm<RaceFormData>({
+  } = useInitializedForm<CreateRacesRequest>({
     defaultValues: {
       raceNumber: maxRaceNumber + 1,
       numberOfHorses: 1,
@@ -43,14 +40,11 @@ export default function RacesGrid({ event }: RacesGridProps) {
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: RaceFormData) => {
-    const submissionData: CreateRace = { eventId: event.id, ...data };
-
+  const onSubmit = async (data: CreateRacesRequest) => {
     try {
       setIsSaving(true);
-      console.log(submissionData);
-      // updatedEvent = await upsertEvent(updatedEvent);
-      // router.push(`/events/${updatedEvent.id}`);
+      // TODO: do the actual add races and horses
+      router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
         error instanceof Error
