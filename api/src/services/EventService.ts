@@ -9,11 +9,11 @@ import { EventRepository } from '../repository/EventRepository.js';
  */
 
 export class EventService extends BaseService<EventRepository> {
-  constructor(eventRepo: EventRepository) {
-    super(eventRepo);
+  constructor(repo: EventRepository) {
+    super(repo);
   }
 
   async getWithChildren(id: number): Promise<EventDTO | null> {
-    return null;
+    return this.repo.getWithChildren(id);
   }
 }

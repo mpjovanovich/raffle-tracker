@@ -8,7 +8,7 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const event_id = parseInt(id);
-  const event = await getEvent(event_id);
+  const event = await getEvent(event_id, true);
   return (
     <EventPage
       event={event}
