@@ -8,10 +8,34 @@
 	},
 	"item": [
 		{
-			"name": "events",
+			"name": "Event",
 			"item": [
 				{
-					"name": "GetEvents",
+					"name": "AddRaces",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"raceNumber\": \"3\",\r\n    \"numberOfHorses\": \"4\"\r\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/api/events/1/races",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"1",
+								"races"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -29,7 +53,101 @@
 					"response": []
 				},
 				{
-					"name": "UpdateEvent",
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/events/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByIdWithChildren",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/events/1?includeChildren=true",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"1"
+							],
+							"query": [
+								{
+									"key": "includeChildren",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Pre-request script\r",
+									"let randomAdj = pm.variables.replaceIn('{{$randomAdjective}}');\r",
+									"let capitalizedWord = randomAdj.charAt(0).toUpperCase() + randomAdj.slice(1);\r",
+									"pm.variables.set('name', capitalizedWord + ' Event' );\r",
+									"\r",
+									"const getDateFromToday = (days) => {\r",
+									"    const date = new Date();\r",
+									"    date.setDate(date.getDate() + days);\r",
+									"    return date.toISOString().slice(0,10);\r",
+									"}\r",
+									"pm.environment.set(\"startDate\", getDateFromToday(0));\r",
+									"pm.environment.set(\"endDate\", getDateFromToday(1));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"location\": \"{{$randomCity}}\",\r\n    \"startDate\": \"{{startDate}}\",\r\n    \"endDate\": \"{{endDate}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/events",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -55,53 +173,31 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Healthcheck",
+			"item": [
 				{
-					"name": "InsertEvent",
+					"name": "HealthCheck",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"My Awesome Event\",\r\n    \"location\": \"Greatville, USA\",\r\n    \"startDate\": \"2025-01-01\",\r\n    \"endDate\": \"2025-01-02\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{api_url}}/api/events",
+							"raw": "{{api_url}}/api/healthcheck",
 							"host": [
 								"{{api_url}}"
 							],
 							"path": [
 								"api",
-								"events"
+								"healthcheck"
 							]
 						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "HealthCheck",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/api/healthcheck",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"api",
-						"healthcheck"
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }
