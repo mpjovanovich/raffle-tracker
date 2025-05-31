@@ -19,8 +19,8 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       id: event.id,
       name: event.name,
       location: event.location,
-      startDate: event.start_date,
-      endDate: event.end_date,
+      startDate: event.start_date.toISOString(),
+      endDate: event.end_date.toISOString(),
     };
   }
 
@@ -29,8 +29,8 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       id: EventDTO.id,
       name: EventDTO.name,
       location: EventDTO.location,
-      start_date: EventDTO.startDate,
-      end_date: EventDTO.endDate,
+      start_date: new Date(new Date(EventDTO.startDate).setHours(0, 0, 0, 0)),
+      end_date: new Date(new Date(EventDTO.endDate).setHours(0, 0, 0, 0)),
     };
   }
 

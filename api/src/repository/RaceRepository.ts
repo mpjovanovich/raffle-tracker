@@ -24,4 +24,8 @@ export class RaceRepository extends BaseRepository<Race, RaceDTO> {
       closed: race.closed ? 1 : 0,
     };
   }
+
+  public async delete(id: number): Promise<void> {
+    await this.prisma.race.delete({ where: { id } });
+  }
 }
