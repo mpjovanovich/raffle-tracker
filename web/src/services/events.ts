@@ -7,76 +7,72 @@ export async function addRaces(
   raceNumber: number,
   numberOfHorses: number
 ) {
-  return fetch(`${API_BASE_URL}/events/${eventId}/races`, {
+  const res = await fetch(`${API_BASE_URL}/events/${eventId}/races`, {
     method: 'POST',
     body: JSON.stringify({ raceNumber, numberOfHorses }),
     headers: {
       'Content-Type': 'application/json',
     },
-  })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error('Failed to add races');
-      }
-      return res.json();
-    })
-    .then(data => JSON.parse(data.data) as Event);
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to add races');
+  }
+
+  const data = await res.json();
+  return JSON.parse(data.data) as Event;
+}
+
+export async function deleteRace(eventId: number, raceId: number) {
+  const res = await fetch(`${API_BASE_URL}/events/${eventId}/races/${raceId}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) {
+    throw new Error('Failed to delete race');
+  }
 }
 
 export async function getEvents() {
-  return fetch(`${API_BASE_URL}/events`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error('Failed to fetch events');
-      }
-      return res.json();
-    })
-    .then(data => JSON.parse(data.data) as Event[]);
+  const res = await fetch(`${API_BASE_URL}/events`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch events');
+  }
+
+  const data = await res.json();
+  return JSON.parse(data.data) as Event[];
 }
 
 export async function getEvent(id: number, includeChildren: boolean) {
-  return fetch(
+  const res = await fetch(
     `${API_BASE_URL}/events/${id}${includeChildren ? '?includeChildren=true' : ''}`
-  )
-    .then(res => {
-      if (!res.ok) {
-        throw new Error('Failed to fetch event');
-      }
-      return res.json();
-    })
-    .then(data => JSON.parse(data.data) as Event);
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch event');
+  }
+
+  const data = await res.json();
+  return JSON.parse(data.data) as Event;
 }
 
 export async function upsertEvent(event: Event) {
-  if (event.id === 0) {
-    return fetch(`${API_BASE_URL}/events`, {
-      method: 'POST',
-      body: JSON.stringify(event),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to save event');
-        }
-        return res.json();
-      })
-      .then(data => JSON.parse(data.data) as Event);
-  } else {
-    return fetch(`${API_BASE_URL}/events/${event.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(event),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to save event');
-        }
-        return res.json();
-      })
-      .then(data => JSON.parse(data.data) as Event);
+  const url =
+    event.id === 0
+      ? `${API_BASE_URL}/events`
+      : `${API_BASE_URL}/events/${event.id}`;
+
+  const res = await fetch(url, {
+    method: event.id === 0 ? 'POST' : 'PUT',
+    body: JSON.stringify(event),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to save event');
   }
+
+  const data = await res.json();
+  return JSON.parse(data.data) as Event;
 }
