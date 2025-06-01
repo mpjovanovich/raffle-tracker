@@ -16,7 +16,7 @@ export async function addRaces(
   });
 
   if (!res.ok) {
-    throw new Error('Failed to add races');
+    throw new Error('Failed to add race');
   }
 
   const data = await res.json();
