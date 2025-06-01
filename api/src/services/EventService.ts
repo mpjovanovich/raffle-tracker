@@ -13,15 +13,19 @@ export class EventService extends BaseService<EventRepository> {
     super(repo);
   }
 
-  async getWithChildren(id: number): Promise<EventDTO | null> {
-    return this.repo.getWithChildren(id);
-  }
-
   async addRaces(
     eventId: number,
     raceNumber: number,
     numberOfHorses: number
   ): Promise<EventDTO | null> {
     return this.repo.addRaces(eventId, raceNumber, numberOfHorses);
+  }
+
+  async deleteRace(id: number): Promise<void> {
+    return this.repo.deleteRace(id);
+  }
+
+  async getWithChildren(id: number): Promise<EventDTO | null> {
+    return this.repo.getWithChildren(id);
   }
 }

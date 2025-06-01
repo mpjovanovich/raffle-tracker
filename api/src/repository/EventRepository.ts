@@ -29,12 +29,49 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       id: EventDTO.id,
       name: EventDTO.name,
       location: EventDTO.location,
-      start_date: new Date(new Date(EventDTO.startDate).setHours(0, 0, 0, 0)),
-      end_date: new Date(new Date(EventDTO.endDate).setHours(0, 0, 0, 0)),
+      start_date: new Date(EventDTO.startDate),
+      end_date: new Date(EventDTO.endDate),
     };
   }
 
-  async getWithChildren(id: number): Promise<EventDTO | null> {
+  public async addRaces(
+    eventId: number,
+    raceNumber: number,
+    numberOfHorses: number
+  ): Promise<EventDTO | null> {
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    const race = await this.raceRepository.insert({
+      id: 0,
+      eventId: eventId,
+      raceNumber: raceNumber,
+      closed: false,
+    });
+
+    for (let i = 1; i < numberOfHorses + 1; i++) {
+      await this.horseRepository.insert({
+        id: 0,
+        raceId: race.id,
+        number: i,
+        winner: false,
+        scratch: false,
+      });
+    }
+
+    return this.getWithChildren(eventId);
+  }
+
+  public async deleteRace(id: number): Promise<void> {
+    await this.raceRepository.delete(id);
+  }
+
+  public async getWithChildren(id: number): Promise<EventDTO | null> {
     const eventWithRaces = await this.prisma.event.findUnique({
       where: { id },
       include: {
@@ -75,38 +112,5 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
           // value for the races property. We did the same above for the horses.
         })) ?? [],
     };
-  }
-
-  async addRaces(
-    eventId: number,
-    raceNumber: number,
-    numberOfHorses: number
-  ): Promise<EventDTO | null> {
-    const event = await this.prisma.event.findUnique({
-      where: { id: eventId },
-    });
-
-    if (!event) {
-      throw new Error('Event not found');
-    }
-
-    const race = await this.raceRepository.insert({
-      id: 0,
-      eventId: eventId,
-      raceNumber: raceNumber,
-      closed: false,
-    });
-
-    for (let i = 1; i < numberOfHorses + 1; i++) {
-      await this.horseRepository.insert({
-        id: 0,
-        raceId: race.id,
-        number: i,
-        winner: false,
-        scratch: false,
-      });
-    }
-
-    return this.getWithChildren(eventId);
   }
 }

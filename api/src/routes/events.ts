@@ -15,4 +15,7 @@ router.route('/:id').put(eventController.update);
 router.route('/').post(eventController.insert);
 router.route('/:id/races').post(eventController.addRaces);
 
+// DELETE
+router.route('/:id/races/:raceId').delete(eventController.deleteRace);
+
 export default router;

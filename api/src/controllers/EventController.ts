@@ -24,6 +24,11 @@ class EventController {
     res.status(200).json(new APIResponse(200, JSON.stringify(item)));
   });
 
+  deleteRace = asyncHandler(async (req: Request, res: Response) => {
+    await this.eventService.deleteRace(parseInt(req.params.id));
+    res.status(200).json(new APIResponse(200, 'Race deleted'));
+  });
+
   getAll = asyncHandler(async (req: Request, res: Response) => {
     const items = await this.eventService.getAll();
     res.status(200).json(new APIResponse(200, JSON.stringify(items)));

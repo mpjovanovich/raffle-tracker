@@ -26,11 +26,4 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
       scratch: horse.scratch ? 1 : 0,
     };
   }
-
-  //   async getByRaceId(raceId: number): Promise<HorseDTO[]> {
-  //     const horses = await this.prisma.horse.findMany({
-  //       where: { race_id: raceId },
-  //     });
-  //     return horses.map(this.toDTO);
-  //   }
 }
