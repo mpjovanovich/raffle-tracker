@@ -24,16 +24,18 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       location: event.location,
       startDate: event.start_date.toISOString().split('T')[0],
       endDate: event.end_date.toISOString().split('T')[0],
+      closed: event.closed ? 1 : 0,
     };
   }
 
-  protected toPrisma(EventDTO: EventDTO): Event {
+  protected toPrisma(event: EventDTO): Event {
     return {
-      id: EventDTO.id,
-      name: EventDTO.name,
-      location: EventDTO.location,
-      start_date: new Date(EventDTO.startDate),
-      end_date: new Date(EventDTO.endDate),
+      id: event.id,
+      name: event.name,
+      location: event.location,
+      start_date: new Date(event.startDate),
+      end_date: new Date(event.endDate),
+      closed: event.closed === 1,
     };
   }
 
@@ -54,7 +56,7 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       id: 0,
       eventId: eventId,
       raceNumber: raceNumber,
-      closed: false,
+      closed: 0,
     });
 
     for (let i = 1; i < numberOfHorses + 1; i++) {
@@ -62,8 +64,8 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
         id: 0,
         raceId: race.id,
         number: i,
-        winner: false,
-        scratch: false,
+        winner: 0,
+        scratch: 0,
       });
     }
 

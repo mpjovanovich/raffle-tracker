@@ -4,6 +4,6 @@ export interface Race {
   id: number;
   eventId: number;
   raceNumber: number;
-  closed: number;
+  closed: number; // 0 or 1
   horses?: Horse[];
 }

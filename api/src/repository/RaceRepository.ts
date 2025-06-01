@@ -12,7 +12,7 @@ export class RaceRepository extends BaseRepository<Race, RaceDTO> {
       id: race.id,
       eventId: race.event_id,
       raceNumber: race.race_number,
-      closed: race.closed === 1,
+      closed: race.closed ? 1 : 0,
     };
   }
 
@@ -21,7 +21,7 @@ export class RaceRepository extends BaseRepository<Race, RaceDTO> {
       id: race.id,
       event_id: race.eventId,
       race_number: race.raceNumber,
-      closed: race.closed ? 1 : 0,
+      closed: race.closed === 1,
     };
   }
 

@@ -6,5 +6,6 @@ export interface Event {
   location: string;
   startDate: string;
   endDate: string;
+  closed: number; // 0 or 1
   races?: Race[];
 }

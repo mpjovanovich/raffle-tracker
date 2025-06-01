@@ -2,6 +2,6 @@ export interface Horse {
   id: number;
   raceId: number;
   number: number;
-  winner: boolean;
-  scratch: boolean;
+  winner: number; // 0 or 1
+  scratch: number; // 0 or 1
 }

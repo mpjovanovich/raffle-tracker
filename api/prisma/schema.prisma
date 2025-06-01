@@ -14,6 +14,7 @@ model Event {
   location   String
   start_date DateTime
   end_date   DateTime
+  closed      Boolean  @default(false)
   race       Race[]
   ticket     Ticket[]
 }
@@ -22,7 +23,7 @@ model Race {
   id          Int      @id @default(autoincrement())
   event_id    Int
   race_number Int
-  closed      Int      @default(0)
+  closed      Boolean  @default(false)
   event       Event    @relation(fields: [event_id], references: [id])
   horse       Horse[]  @relation("RaceToHorse") // This relation needs a name for the cacade delete
   ticket      Ticket[]
@@ -34,8 +35,8 @@ model Horse {
   id        Int      @id @default(autoincrement())
   race_id   Int
   number    Int
-  winner    Int      @default(0)
-  scratch   Int      @default(0)
+  winner    Boolean @default(false)
+  scratch   Boolean @default(false)
   race      Race     @relation("RaceToHorse", fields: [race_id], references: [id], onDelete: Cascade)
   ticket    Ticket[]
 

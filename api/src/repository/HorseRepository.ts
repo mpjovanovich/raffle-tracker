@@ -12,8 +12,8 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
       id: horse.id,
       raceId: horse.race_id,
       number: horse.number,
-      winner: horse.winner === 1,
-      scratch: horse.scratch === 1,
+      winner: horse.winner ? 1 : 0,
+      scratch: horse.scratch ? 1 : 0,
     };
   }
 
@@ -22,8 +22,8 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
       id: horse.id,
       race_id: horse.raceId,
       number: horse.number,
-      winner: horse.winner ? 1 : 0,
-      scratch: horse.scratch ? 1 : 0,
+      winner: horse.winner === 1,
+      scratch: horse.scratch === 1,
     };
   }
 }
