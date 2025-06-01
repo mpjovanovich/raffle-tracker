@@ -10,6 +10,5 @@ export default async function Page({ params }: PageProps) {
   const event_id = parseInt(eventId);
   const race_id = parseInt(raceId);
   const race = await getRace(event_id, race_id, true);
-  console.log(race);
   //   return <HorsesGrid race={race} />;
 }

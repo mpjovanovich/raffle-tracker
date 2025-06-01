@@ -12,8 +12,8 @@ import { addRaces, deleteRace } from '@/services/events';
 import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, MouseEvent } from 'react';
-import { FaTrash } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { FaXmark } from 'react-icons/fa6';
 
 interface RacesGridProps {
   event: Event;
@@ -140,6 +140,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
               >
                 <span>Race {race.raceNumber}</span>
                 <IconButton
+                  title="Delete"
                   onClick={async () => {
                     if (
                       confirm(
@@ -159,7 +160,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                     }
                   }}
                 >
-                  <FaTrash />
+                  <FaXmark />
                 </IconButton>
               </ItemListLink>
             ))}
