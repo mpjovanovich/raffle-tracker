@@ -21,7 +21,7 @@ class EventController {
       parseInt(req.body.raceNumber),
       parseInt(req.body.numberOfHorses)
     );
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+    res.status(200).json(new APIResponse(200, item));
   });
 
   deleteRace = asyncHandler(async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ class EventController {
 
   getAll = asyncHandler(async (req: Request, res: Response) => {
     const items = await this.eventService.getAll();
-    res.status(200).json(new APIResponse(200, JSON.stringify(items)));
+    res.status(200).json(new APIResponse(200, items));
   });
 
   getById = asyncHandler(async (req: Request, res: Response) => {
@@ -48,19 +48,19 @@ class EventController {
     } else {
       item = await this.eventService.getById(id);
     }
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+    res.status(200).json(new APIResponse(200, item));
   });
 
   getWithChildren = asyncHandler(async (req: Request, res: Response) => {
     const item = await this.eventService.getWithChildren(
       parseInt(req.params.id)
     );
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+    res.status(200).json(new APIResponse(200, item));
   });
 
   insert = asyncHandler(async (req: Request, res: Response) => {
     const item = await this.eventService.insert(req.body);
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+    res.status(200).json(new APIResponse(200, item));
   });
 
   update = asyncHandler(async (req: Request, res: Response) => {
@@ -68,7 +68,7 @@ class EventController {
       parseInt(req.params.id),
       req.body
     );
-    res.status(200).json(new APIResponse(200, JSON.stringify(item)));
+    res.status(200).json(new APIResponse(200, item));
   });
 }
 

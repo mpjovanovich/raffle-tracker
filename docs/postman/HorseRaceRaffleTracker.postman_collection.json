@@ -35,7 +35,44 @@
 					"response": []
 				},
 				{
+					"name": "DeleteRace",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\": \"FAIR!!! Yeehaw!\"\r\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/api/events/1/races/3",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"events",
+								"1",
+								"races",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GetAll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],

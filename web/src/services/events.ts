@@ -20,7 +20,7 @@ export async function addRaces(
   }
 
   const data = await res.json();
-  return JSON.parse(data.data) as Event;
+  return data.data as Event;
 }
 
 export async function deleteRace(eventId: number, raceId: number) {
@@ -39,7 +39,7 @@ export async function getEvents() {
   }
 
   const data = await res.json();
-  return JSON.parse(data.data) as Event[];
+  return data.data as Event[];
 }
 
 export async function getEvent(id: number, includeChildren: boolean) {
@@ -52,7 +52,7 @@ export async function getEvent(id: number, includeChildren: boolean) {
   }
 
   const data = await res.json();
-  return JSON.parse(data.data) as Event;
+  return data.data as Event;
 }
 
 export async function upsertEvent(event: Event) {
@@ -74,5 +74,5 @@ export async function upsertEvent(event: Event) {
   }
 
   const data = await res.json();
-  return JSON.parse(data.data) as Event;
+  return data.data as Event;
 }
