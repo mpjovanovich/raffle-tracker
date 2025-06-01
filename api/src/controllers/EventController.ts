@@ -51,13 +51,6 @@ class EventController {
     res.status(200).json(new APIResponse(200, item));
   });
 
-  getWithChildren = asyncHandler(async (req: Request, res: Response) => {
-    const item = await this.eventService.getWithChildren(
-      parseInt(req.params.id)
-    );
-    res.status(200).json(new APIResponse(200, item));
-  });
-
   insert = asyncHandler(async (req: Request, res: Response) => {
     const item = await this.eventService.insert(req.body);
     res.status(200).json(new APIResponse(200, item));
