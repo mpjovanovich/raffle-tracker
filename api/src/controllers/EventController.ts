@@ -25,7 +25,7 @@ class EventController {
   });
 
   deleteRace = asyncHandler(async (req: Request, res: Response) => {
-    await this.eventService.deleteRace(parseInt(req.params.id));
+    await this.eventService.deleteRace(parseInt(req.params.raceId));
     res.status(200).json(new APIResponse(200, 'Race deleted'));
   });
 

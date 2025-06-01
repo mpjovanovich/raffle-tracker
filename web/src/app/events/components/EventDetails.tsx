@@ -6,7 +6,7 @@ import LabeledField from '@/app/ui/LabeledField';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
 import { upsertEvent } from '@/services/events';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
