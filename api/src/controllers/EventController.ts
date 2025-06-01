@@ -5,7 +5,6 @@ import { prisma } from '../db.js';
 import {
   Event as EventDTO,
   Race as RaceDTO,
-  Horse as HorseDTO,
 } from '@horse-race-raffle-tracker/dto';
 import { EventService } from '../services/EventService.js';
 import { EventRepository } from '../repository/EventRepository.js';
