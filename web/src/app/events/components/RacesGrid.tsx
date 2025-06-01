@@ -6,12 +6,14 @@ import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
 import Input from '@/app/ui/Input';
+import IconButton from '@/app/ui/IconButton';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { addRaces } from '@/services/events';
+import { addRaces, deleteRace } from '@/services/events';
 import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
 
 interface RacesGridProps {
   event: Event;
@@ -67,7 +69,13 @@ export default function RacesGrid({ event }: RacesGridProps) {
 
   const RaceAdd = () => {
     return (
-      <div className={styles.raceAdd}>
+      <form
+        className={styles.raceAdd}
+        onSubmit={e => {
+          e.preventDefault();
+          handleSubmit(onSubmit)(e);
+        }}
+      >
         <LabeledField
           label="Race Number:"
           htmlFor="raceNumber"
@@ -115,32 +123,44 @@ export default function RacesGrid({ event }: RacesGridProps) {
         >
           Add
         </SimpleButton>
-      </div>
+      </form>
     );
   };
 
   return (
-    <form
-      className={styles.raceContainer}
-      onSubmit={e => {
-        e.preventDefault();
-        handleSubmit(onSubmit)(e);
-      }}
-    >
+    <div className={styles.raceContainer}>
       <Card title="Races">
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
           <ItemList>
             {event.races?.map(race => (
-              <ItemListItem key={race.id}>Race {race.raceNumber}</ItemListItem>
+              <ItemListItem key={race.id}>
+                Race {race.raceNumber}
+                <IconButton
+                  onClick={async () => {
+                    try {
+                      await deleteRace(event.id, race.id);
+                      router.push(`/events/${event.id}`);
+                    } catch (error) {
+                      setError(
+                        error instanceof Error
+                          ? error.message
+                          : 'An error occurred. Please contact an administrator.'
+                      );
+                    }
+                  }}
+                >
+                  <FaTrash />
+                </IconButton>
+              </ItemListItem>
             ))}
           </ItemList>
         ) : (
           <div>Loading...</div>
         )}
       </Card>
-      {isInitialized && <RaceAdd />}
-    </form>
+      <RaceAdd />
+    </div>
   );
 }
 
