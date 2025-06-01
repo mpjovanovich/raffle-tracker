@@ -3,14 +3,16 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 // Don't allow href for a "button"
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   disabled?: boolean;
   href?: never;
 }
 
 // Don't allow onClick for a "linkbutton"
-interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface LinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
   disabled?: boolean;
   onClick?: never;

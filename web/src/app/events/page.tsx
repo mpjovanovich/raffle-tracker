@@ -1,8 +1,7 @@
 import Card from '@/app/ui/Card';
 import clsx from 'clsx';
 import ItemList from '@/app/ui/ItemList';
-import ItemListItem from '@/app/ui/ItemListItem';
-import Link from 'next/link';
+import ItemListLink from '../ui/ItemListLink';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { getEvents } from '@/services/events';
 
@@ -13,14 +12,13 @@ export default async function Events() {
     <Card title="Events">
       <ItemList>
         {events.map(event => (
-          <ItemListItem key={event.id}>
-            <Link
-              className={styles.itemListLink}
-              href={`/events/${event.id}`}
-            >
-              {event.name}
-            </Link>
-          </ItemListItem>
+          <ItemListLink
+            key={event.id}
+            className={styles.itemListLink}
+            href={`/events/${event.id}`}
+          >
+            {event.name}
+          </ItemListLink>
         ))}
       </ItemList>
       <SimpleButton

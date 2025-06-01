@@ -3,9 +3,8 @@
 import clsx from 'clsx';
 import Card from '@/app/ui/Card';
 import ItemList from '@/app/ui/ItemList';
-import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
-import Link from 'next/link';
+import ItemListLink from '@/app/ui/ItemListLink';
 import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
 import SimpleButton from '@/app/ui/SimpleButton';
@@ -13,7 +12,7 @@ import { addRaces, deleteRace } from '@/services/events';
 import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
 interface RacesGridProps {
@@ -135,13 +134,11 @@ export default function RacesGrid({ event }: RacesGridProps) {
         {isInitialized ? (
           <ItemList>
             {event.races?.map(race => (
-              <ItemListItem key={race.id}>
-                <Link
-                  className={styles.itemListLink}
-                  href={`/events/${event.id}/races/${race.id}`}
-                >
-                  Race {race.raceNumber}
-                </Link>
+              <ItemListLink
+                key={race.id}
+                href={`/events/${event.id}/races/${race.id}`}
+              >
+                <span>Race {race.raceNumber}</span>
                 <IconButton
                   onClick={async () => {
                     if (
@@ -164,7 +161,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 >
                   <FaTrash />
                 </IconButton>
-              </ItemListItem>
+              </ItemListLink>
             ))}
           </ItemList>
         ) : (
@@ -178,7 +175,6 @@ export default function RacesGrid({ event }: RacesGridProps) {
 
 const styles = {
   error: clsx('text-red-500'),
-  itemListLink: clsx('w-full', 'px-6', 'py-1'),
   raceAdd: clsx(
     'border-t-2',
     'border-light-accent2',
