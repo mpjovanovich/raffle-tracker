@@ -5,6 +5,7 @@ import Card from '@/app/ui/Card';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
+import Link from 'next/link';
 import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
 import SimpleButton from '@/app/ui/SimpleButton';
@@ -135,18 +136,29 @@ export default function RacesGrid({ event }: RacesGridProps) {
           <ItemList>
             {event.races?.map(race => (
               <ItemListItem key={race.id}>
-                Race {race.raceNumber}
+                <Link
+                  className={styles.itemListLink}
+                  href={`/events/${event.id}/races/${race.id}`}
+                >
+                  Race {race.raceNumber}
+                </Link>
                 <IconButton
                   onClick={async () => {
-                    try {
-                      await deleteRace(event.id, race.id);
-                      router.push(`/events/${event.id}`);
-                    } catch (error) {
-                      setError(
-                        error instanceof Error
-                          ? error.message
-                          : 'An error occurred. Please contact an administrator.'
-                      );
+                    if (
+                      confirm(
+                        `Are you sure you want to delete Race ${race.raceNumber}?`
+                      )
+                    ) {
+                      try {
+                        await deleteRace(event.id, race.id);
+                        router.push(`/events/${event.id}`);
+                      } catch (error) {
+                        setError(
+                          error instanceof Error
+                            ? error.message
+                            : 'An error occurred. Please contact an administrator.'
+                        );
+                      }
                     }
                   }}
                 >
@@ -166,6 +178,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
 
 const styles = {
   error: clsx('text-red-500'),
+  itemListLink: clsx('w-full', 'px-6', 'py-1'),
   raceAdd: clsx(
     'border-t-2',
     'border-light-accent2',

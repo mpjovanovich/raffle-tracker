@@ -18,8 +18,6 @@ const styles = {
     'flex-row',
     'items-center',
     'justify-between',
-    'px-6',
-    'py-1',
     'rounded-md',
     'hover:bg-light-accent2'
   ),

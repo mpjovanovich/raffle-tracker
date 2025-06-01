@@ -11,5 +11,5 @@ export default function ItemList({ children, className }: ItemListProps) {
 }
 
 const styles = {
-  itemList: clsx('flex', 'flex-col', 'gap-1', bodyFont.className),
+  itemList: clsx('flex', 'flex-col', 'gap-2', bodyFont.className),
 };
