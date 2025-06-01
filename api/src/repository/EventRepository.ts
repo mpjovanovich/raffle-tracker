@@ -1,5 +1,8 @@
 import { BaseRepository } from './BaseRepository.js';
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import {
+  Event as EventDTO,
+  Race as RaceDTO,
+} from '@horse-race-raffle-tracker/dto';
 import { PrismaClient, Event } from '.prisma/client';
 import { HorseRepository } from './HorseRepository.js';
 import { RaceRepository } from './RaceRepository.js';
@@ -104,13 +107,35 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
           ...this.raceRepository.toDTO(race),
           // Now assign the horses property, still within the outer map call.
           // Use the toDTO method from the horse repository to convert the
-          // horses from this race to a DTO.
+          // horses from this race to a DTO.gg
           horses:
             race.horse?.map(horse => this.horseRepository.toDTO(horse)) ?? [],
           // Finally, use the nullish coalescing operator to return an empty array
           // if there are no races. That way we don't ever have an undefined
           // value for the races property. We did the same above for the horses.
         })) ?? [],
+    };
+  }
+
+  public async getRaceById(id: number): Promise<RaceDTO | null> {
+    return this.raceRepository.getById(id);
+  }
+
+  public async getRaceWithChildren(id: number): Promise<RaceDTO | null> {
+    const raceWithHorses = await this.prisma.race.findUnique({
+      where: { id },
+      include: { horse: true },
+    });
+
+    if (!raceWithHorses) {
+      return null;
+    }
+
+    return {
+      ...this.raceRepository.toDTO(raceWithHorses),
+      horses: raceWithHorses.horse?.map(horse => ({
+        ...(this.horseRepository.toDTO(horse) ?? []),
+      })),
     };
   }
 }

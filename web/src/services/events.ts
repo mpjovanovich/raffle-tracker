@@ -1,4 +1,4 @@
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event, Race } from '@horse-race-raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -53,6 +53,23 @@ export async function getEvent(id: number, includeChildren: boolean) {
 
   const data = await res.json();
   return data.data as Event;
+}
+
+export async function getRace(
+  id: number,
+  raceId: number,
+  includeChildren: boolean
+) {
+  const res = await fetch(
+    `${API_BASE_URL}/events/${id}/races/${raceId}${includeChildren ? '?includeChildren=true' : ''}`
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch race');
+  }
+
+  const data = await res.json();
+  return data.data as Race;
 }
 
 export async function upsertEvent(event: Event) {

@@ -2,14 +2,13 @@ import EventPage from '../components/EventPage';
 import { getEvent } from '@/services/events';
 
 interface PageProps {
-  params: { id: string };
+  params: { eventId: string };
 }
 
 export default async function Page({ params }: PageProps) {
-  const { id } = await params;
-  const event_id = parseInt(id);
+  const { eventId } = await params;
+  const event_id = parseInt(eventId);
   const event = await getEvent(event_id, true);
-  console.log(event);
   return (
     <EventPage
       event={event}

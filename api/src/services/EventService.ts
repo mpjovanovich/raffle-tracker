@@ -1,5 +1,8 @@
 import { BaseService } from './BaseService.js';
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import {
+  Event as EventDTO,
+  Race as RaceDTO,
+} from '@horse-race-raffle-tracker/dto';
 import { EventRepository } from '../repository/EventRepository.js';
 
 /*
@@ -23,6 +26,14 @@ export class EventService extends BaseService<EventRepository> {
 
   async deleteRace(id: number): Promise<void> {
     return this.repo.deleteRace(id);
+  }
+
+  async getRaceById(id: number): Promise<RaceDTO | null> {
+    return this.repo.getRaceById(id);
+  }
+
+  async getRaceWithChildren(id: number): Promise<RaceDTO | null> {
+    return this.repo.getRaceWithChildren(id);
   }
 
   async getWithChildren(id: number): Promise<EventDTO | null> {

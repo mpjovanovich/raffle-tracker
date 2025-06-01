@@ -6,7 +6,7 @@ const router = Router();
 // GET
 router.route('/').get(eventController.getAll);
 router.route('/:id').get(eventController.getById);
-// router.route('/:id').get(eventController.getWithChildren);
+router.route('/:id/races/:raceId').get(eventController.getRaceById);
 
 // PUT
 router.route('/:id').put(eventController.update);

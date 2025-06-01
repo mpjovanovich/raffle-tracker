@@ -2,7 +2,11 @@ import { Request, Response } from 'express';
 import { APIResponse } from '../utility/APIResponse.js';
 import { asyncHandler } from '../utility/asyncHandler.js';
 import { prisma } from '../db.js';
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import {
+  Event as EventDTO,
+  Race as RaceDTO,
+  Horse as HorseDTO,
+} from '@horse-race-raffle-tracker/dto';
 import { EventService } from '../services/EventService.js';
 import { EventRepository } from '../repository/EventRepository.js';
 
@@ -47,6 +51,23 @@ class EventController {
       item = await this.eventService.getWithChildren(id);
     } else {
       item = await this.eventService.getById(id);
+    }
+    res.status(200).json(new APIResponse(200, item));
+  });
+
+  getRaceById = asyncHandler(async (req: Request, res: Response) => {
+    const id = parseInt(req.params.raceId);
+    if (isNaN(id)) {
+      throw new Error(`Invalid ID format: ${req.params.raceId}`);
+    }
+
+    // Check for the include parameter
+    let item: RaceDTO | null = null;
+    const includeChildren = req.query.includeChildren === 'true';
+    if (includeChildren) {
+      item = await this.eventService.getRaceWithChildren(id);
+    } else {
+      item = await this.eventService.getRaceById(id);
     }
     res.status(200).json(new APIResponse(200, item));
   });
