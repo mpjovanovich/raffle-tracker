@@ -141,7 +141,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 <span>Race {race.raceNumber}</span>
                 <IconButton
                   title="Delete"
-                  onClick={async () => {
+                  onClick={async e => {
                     if (
                       confirm(
                         `Are you sure you want to delete Race ${race.raceNumber}?`

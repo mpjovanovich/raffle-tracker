@@ -59,6 +59,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
           <>
             <IconButton
               title="Save"
+              type="submit"
               disabled={isSaving}
             >
               <FaRegFloppyDisk />
@@ -82,7 +83,9 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             title="Edit"
             type="button"
             disabled={isSaving}
-            href={`/events/${event.id}/edit`}
+            onClick={() => {
+              router.push(`/events/${event.id}/edit`);
+            }}
           >
             <FaPenToSquare />
           </IconButton>

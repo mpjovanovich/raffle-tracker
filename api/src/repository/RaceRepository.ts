@@ -47,37 +47,4 @@ export class RaceRepository extends BaseRepository<Race, RaceDTO> {
       })),
     };
   }
-
-  // public async insert(
-  //   eventId: number,
-  //   raceNumber: number,
-  //   numberOfHorses: number
-  // ): Promise<EventDTO | null> {
-  //   const event = await this.prisma.event.findUnique({
-  //     where: { id: eventId },
-  //   });
-
-  //   if (!event) {
-  //     throw new Error('Event not found');
-  //   }
-
-  //   const race = await this.raceRepository.insert({
-  //     id: 0,
-  //     eventId: eventId,
-  //     raceNumber: raceNumber,
-  //     closed: 0,
-  //   });
-
-  //   for (let i = 1; i < numberOfHorses + 1; i++) {
-  //     await this.horseRepository.insert({
-  //       id: 0,
-  //       raceId: race.id,
-  //       number: i,
-  //       winner: 0,
-  //       scratch: 0,
-  //     });
-  //   }
-
-  //   return this.getWithChildren(eventId);
-  // }
 }

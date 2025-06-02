@@ -9,18 +9,6 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
     super(prisma, 'event');
   }
 
-  // translate = {
-  //   toDTO: (event: Event): EventDTO => {
-  //       id: event.id,
-  //       name: event.name,
-  //       location: event.location,
-  //       startDate: event.start_date.toISOString().split('T')[0],
-  //       endDate: event.end_date.toISOString().split('T')[0],
-  //       closed: event.closed ? 1 : 0,
-  //     };
-  //   },
-  // };
-
   public static toDTO(event: Event): EventDTO {
     return {
       id: event.id,
@@ -33,7 +21,6 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
   }
 
   protected static toPrisma(event: EventDTO): Event {
-    console.log(event);
     return {
       id: event.id,
       name: event.name,
