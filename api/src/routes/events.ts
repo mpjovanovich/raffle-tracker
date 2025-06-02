@@ -3,19 +3,14 @@ import eventController from '../controllers/EventController.js';
 
 const router = Router();
 
-// GET
+// EVENTS
 router.route('/').get(eventController.getAll);
-router.route('/:id').get(eventController.getById);
-router.route('/:id/races/:raceId').get(eventController.getRaceById);
-
-// PUT
-router.route('/:id').put(eventController.update);
-
-// POST
 router.route('/').post(eventController.insert);
-router.route('/:id/races').post(eventController.addRace);
+router.route('/:eventId').get(eventController.getById);
+router.route('/:eventId').put(eventController.update);
 
-// DELETE
-router.route('/:id/races/:raceId').delete(eventController.deleteRace);
+router.route('/:eventId/races/:raceId').get(eventController.getRaceById);
+router.route('/:eventId/races').post(eventController.addRace);
+router.route('/:eventId/races/:raceId').delete(eventController.deleteRace);
 
 export default router;

@@ -1,23 +1,27 @@
 import { BaseRepository } from './BaseRepository.js';
-import {
-  Event as EventDTO,
-  Race as RaceDTO,
-} from '@horse-race-raffle-tracker/dto';
+import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
 import { PrismaClient, Event } from '.prisma/client';
 import { HorseRepository } from './HorseRepository.js';
 import { RaceRepository } from './RaceRepository.js';
 
 export class EventRepository extends BaseRepository<Event, EventDTO> {
-  private raceRepository: RaceRepository;
-  private horseRepository: HorseRepository;
-
   constructor(prisma: PrismaClient) {
     super(prisma, 'event');
-    this.raceRepository = new RaceRepository(prisma);
-    this.horseRepository = new HorseRepository(prisma);
   }
 
-  public toDTO(event: Event): EventDTO {
+  // translate = {
+  //   toDTO: (event: Event): EventDTO => {
+  //       id: event.id,
+  //       name: event.name,
+  //       location: event.location,
+  //       startDate: event.start_date.toISOString().split('T')[0],
+  //       endDate: event.end_date.toISOString().split('T')[0],
+  //       closed: event.closed ? 1 : 0,
+  //     };
+  //   },
+  // };
+
+  public static toDTO(event: Event): EventDTO {
     return {
       id: event.id,
       name: event.name,
@@ -28,7 +32,8 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
     };
   }
 
-  protected toPrisma(event: EventDTO): Event {
+  protected static toPrisma(event: EventDTO): Event {
+    console.log(event);
     return {
       id: event.id,
       name: event.name,
@@ -37,44 +42,6 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       end_date: new Date(event.endDate),
       closed: event.closed === 1,
     };
-  }
-
-  public async addRace(
-    eventId: number,
-    raceNumber: number,
-    numberOfHorses: number
-  ): Promise<EventDTO | null> {
-    // TODO: Add transaction to ensure consistency.
-    const event = await this.prisma.event.findUnique({
-      where: { id: eventId },
-    });
-
-    if (!event) {
-      throw new Error('Event not found');
-    }
-
-    const race = await this.raceRepository.insert({
-      id: 0,
-      eventId: eventId,
-      raceNumber: raceNumber,
-      closed: 0,
-    });
-
-    for (let i = 1; i < numberOfHorses + 1; i++) {
-      await this.horseRepository.insert({
-        id: 0,
-        raceId: race.id,
-        number: i,
-        winner: 0,
-        scratch: 0,
-      });
-    }
-
-    return this.getWithChildren(eventId);
-  }
-
-  public async deleteRace(id: number): Promise<void> {
-    await this.raceRepository.delete(id);
   }
 
   public async getWithChildren(id: number): Promise<EventDTO | null> {
@@ -107,38 +74,16 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
         eventWithRaces.race?.map(race => ({
           // Use the toDTO method from the race repository to convert the races
           // from this event to a DTO.
-          ...this.raceRepository.toDTO(race),
+          // ...this.raceRepository.toDTO(race),
+          ...RaceRepository.toDTO(race),
           // Now assign the horses property, still within the outer map call.
           // Use the toDTO method from the horse repository to convert the
           // horses from this race to a DTO.gg
-          horses:
-            race.horse?.map(horse => this.horseRepository.toDTO(horse)) ?? [],
+          horses: race.horse?.map(horse => HorseRepository.toDTO(horse)) ?? [],
           // Finally, use the nullish coalescing operator to return an empty array
           // if there are no races. That way we don't ever have an undefined
           // value for the races property. We did the same above for the horses.
         })) ?? [],
-    };
-  }
-
-  public async getRaceById(id: number): Promise<RaceDTO | null> {
-    return this.raceRepository.getById(id);
-  }
-
-  public async getRaceWithChildren(id: number): Promise<RaceDTO | null> {
-    const raceWithHorses = await this.prisma.race.findUnique({
-      where: { id },
-      include: { horse: true },
-    });
-
-    if (!raceWithHorses) {
-      return null;
-    }
-
-    return {
-      ...this.raceRepository.toDTO(raceWithHorses),
-      horses: raceWithHorses.horse?.map(horse => ({
-        ...(this.horseRepository.toDTO(horse) ?? []),
-      })),
     };
   }
 }

@@ -10,7 +10,7 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
     super(prisma, 'ticket');
   }
 
-  public toDTO(ticket: Ticket): TicketDTO {
+  public static toDTO(ticket: Ticket): TicketDTO {
     return {
       id: ticket.id,
       eventId: ticket.event_id,
@@ -27,7 +27,7 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
     };
   }
 
-  protected toPrisma(ticket: TicketDTO): Ticket {
+  protected static toPrisma(ticket: TicketDTO): Ticket {
     return {
       id: ticket.id,
       event_id: ticket.eventId,

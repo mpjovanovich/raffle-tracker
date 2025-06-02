@@ -7,7 +7,7 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
     super(prisma, 'horse');
   }
 
-  public toDTO(horse: Horse): HorseDTO {
+  public static toDTO(horse: Horse): HorseDTO {
     return {
       id: horse.id,
       raceId: horse.race_id,
@@ -17,7 +17,7 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
     };
   }
 
-  protected toPrisma(horse: HorseDTO): Horse {
+  protected static toPrisma(horse: HorseDTO): Horse {
     return {
       id: horse.id,
       race_id: horse.raceId,
@@ -25,5 +25,9 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
       winner: horse.winner === 1,
       scratch: horse.scratch === 1,
     };
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.prisma.horse.delete({ where: { id } });
   }
 }

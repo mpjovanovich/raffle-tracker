@@ -7,7 +7,18 @@ export abstract class BaseRepository<
   constructor(
     protected prisma: PrismaClient,
     protected modelName: string
-  ) {}
+  ) {
+    // Runtime check for static methods.
+    // There's no way to make an abstract static method, so we do this here.
+    if (
+      !(this.constructor as any).toDTO ||
+      !(this.constructor as any).toPrisma
+    ) {
+      throw new Error(
+        'Repository must implement static toDTO and toPrisma methods'
+      );
+    }
+  }
 
   async getAll(): Promise<DTO[]> {
     const items = await this.getModel().findMany();
@@ -41,6 +52,11 @@ export abstract class BaseRepository<
     return this.prisma[this.modelName as keyof PrismaClient] as any;
   }
 
-  public abstract toDTO(item: PrismaType): DTO;
-  protected abstract toPrisma(item: DTO): PrismaType;
+  public toDTO(item: PrismaType): DTO {
+    return (this.constructor as any).toDTO(item);
+  }
+
+  protected toPrisma(item: DTO): PrismaType {
+    return (this.constructor as any).toPrisma(item);
+  }
 }
