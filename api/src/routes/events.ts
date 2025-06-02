@@ -13,7 +13,7 @@ router.route('/:id').put(eventController.update);
 
 // POST
 router.route('/').post(eventController.insert);
-router.route('/:id/races').post(eventController.addRaces);
+router.route('/:id/races').post(eventController.addRace);
 
 // DELETE
 router.route('/:id/races/:raceId').delete(eventController.deleteRace);

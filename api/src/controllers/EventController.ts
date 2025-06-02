@@ -18,8 +18,8 @@ class EventController {
     this.eventService = new EventService(eventRepository);
   }
 
-  addRaces = asyncHandler(async (req: Request, res: Response) => {
-    const item = await this.eventService.addRaces(
+  addRace = asyncHandler(async (req: Request, res: Response) => {
+    const item = await this.eventService.addRace(
       parseInt(req.params.id),
       parseInt(req.body.raceNumber),
       parseInt(req.body.numberOfHorses)

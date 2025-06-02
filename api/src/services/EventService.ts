@@ -16,12 +16,12 @@ export class EventService extends BaseService<EventRepository> {
     super(repo);
   }
 
-  async addRaces(
+  async addRace(
     eventId: number,
     raceNumber: number,
     numberOfHorses: number
   ): Promise<EventDTO | null> {
-    return this.repo.addRaces(eventId, raceNumber, numberOfHorses);
+    return this.repo.addRace(eventId, raceNumber, numberOfHorses);
   }
 
   async deleteRace(id: number): Promise<void> {

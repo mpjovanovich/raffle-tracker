@@ -39,11 +39,12 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
     };
   }
 
-  public async addRaces(
+  public async addRace(
     eventId: number,
     raceNumber: number,
     numberOfHorses: number
   ): Promise<EventDTO | null> {
+    // TODO: Add transaction to ensure consistency.
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
     });
