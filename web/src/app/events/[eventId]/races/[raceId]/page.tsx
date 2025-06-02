@@ -1,4 +1,4 @@
-// import HorsesGrid from '@/components/HorsesGrid';
+import HorsesGrid from '@/app/events/components/HorsesGrid';
 import { getRace } from '@/services/events';
 
 interface PageProps {
@@ -10,5 +10,5 @@ export default async function Page({ params }: PageProps) {
   const event_id = parseInt(eventId);
   const race_id = parseInt(raceId);
   const race = await getRace(event_id, race_id, true);
-  //   return <HorsesGrid race={race} />;
+  return <HorsesGrid race={race} />;
 }

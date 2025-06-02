@@ -4,7 +4,7 @@ import Link from 'next/link';
 interface ItemListLinkProps {
   children?: React.ReactNode;
   className?: string;
-  href: string;
+  href?: string;
 }
 
 // The children for this are expected to be the button lists if there are any.
@@ -16,7 +16,7 @@ export default function ItemListLink({
   return (
     <Link
       className={clsx(styles.itemListLink, className)}
-      href={href}
+      href={href ?? ''}
     >
       {children}
     </Link>
