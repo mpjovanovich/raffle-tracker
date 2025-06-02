@@ -9,7 +9,11 @@ import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { addRaces, deleteRace } from '@/services/events';
-import { CreateRacesRequest, Event } from '@horse-race-raffle-tracker/dto';
+import {
+  CreateRacesRequest,
+  Event,
+  Race,
+} from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -49,6 +53,21 @@ export default function RacesGrid({ event }: RacesGridProps) {
   useEffect(() => {
     setValue('raceNumber', maxRaceNumber + 1);
   }, [maxRaceNumber, setValue]);
+
+  const handleDeleteRace = async (race: Race) => {
+    if (confirm(`Are you sure you want to delete Race ${race.raceNumber}?`)) {
+      try {
+        await deleteRace(event.id, race.id);
+        router.push(`/events/${event.id}`);
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'An error occurred. Please contact an administrator.'
+        );
+      }
+    }
+  };
 
   const onSubmit = async (data: CreateRacesRequest) => {
     try {
@@ -141,23 +160,8 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 <span>Race {race.raceNumber}</span>
                 <IconButton
                   title="Delete"
-                  onClick={async e => {
-                    if (
-                      confirm(
-                        `Are you sure you want to delete Race ${race.raceNumber}?`
-                      )
-                    ) {
-                      try {
-                        await deleteRace(event.id, race.id);
-                        router.push(`/events/${event.id}`);
-                      } catch (error) {
-                        setError(
-                          error instanceof Error
-                            ? error.message
-                            : 'An error occurred. Please contact an administrator.'
-                        );
-                      }
-                    }
+                  onClick={() => {
+                    handleDeleteRace(race);
                   }}
                 >
                   <FaXmark />
