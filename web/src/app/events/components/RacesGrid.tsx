@@ -31,8 +31,8 @@ export default function RacesGrid({ event }: RacesGridProps) {
   const maxRaceNumber =
     event.races?.reduce(
       (max, race) => (race.raceNumber > max ? race.raceNumber : max),
-      1
-    ) ?? 1;
+      0
+    ) ?? 0;
 
   const {
     formState: { errors },
