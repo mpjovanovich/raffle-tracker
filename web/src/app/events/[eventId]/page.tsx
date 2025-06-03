@@ -1,5 +1,6 @@
 import EventPage from '../components/EventPage';
-import { getEvent } from '@/services/events';
+import { getEvent } from '@/services/eventService';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: { eventId: string };
@@ -7,8 +8,13 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { eventId } = await params;
-  const event_id = parseInt(eventId);
-  const event = await getEvent(event_id, true);
+  // TODO: more consistent validation of URL params
+  const eventIdNumber = parseInt(eventId);
+  if (isNaN(eventIdNumber)) {
+    notFound();
+  }
+
+  const event = await getEvent(eventIdNumber, true);
   return (
     <EventPage
       event={event}

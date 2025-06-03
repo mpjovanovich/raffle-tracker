@@ -6,6 +6,5 @@ const router = Router();
 router.route('/').post(raceController.createRace);
 router.route('/:raceId').get(raceController.getById);
 router.route('/:raceId').delete(raceController.delete);
-router.route('/:raceId').post(raceController.createRace);
 
 export default router;

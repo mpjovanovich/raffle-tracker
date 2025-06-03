@@ -8,12 +8,8 @@ import ItemListLink from '@/app/ui/ItemListLink';
 import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { addRaces, deleteRace } from '@/services/events';
-import {
-  CreateRacesRequest,
-  Event,
-  Race,
-} from '@horse-race-raffle-tracker/dto';
+import { addRace, deleteRace } from '@/services/raceService';
+import { CreateRaceRequest, Event, Race } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -30,7 +26,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
 
   const maxRaceNumber =
     event.races?.reduce(
-      (max, race) => (race.raceNumber > max ? race.raceNumber : max),
+      (max, race) => (race.number > max ? race.number : max),
       0
     ) ?? 0;
 
@@ -40,7 +36,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
     isInitialized,
     register,
     setValue,
-  } = useInitializedForm<CreateRacesRequest>({
+  } = useInitializedForm<CreateRaceRequest>({
     defaultValues: {
       raceNumber: 1,
       numberOfHorses: 1,
@@ -55,9 +51,9 @@ export default function RacesGrid({ event }: RacesGridProps) {
   }, [maxRaceNumber, setValue]);
 
   const handleDeleteRace = async (race: Race) => {
-    if (confirm(`Are you sure you want to delete Race ${race.raceNumber}?`)) {
+    if (confirm(`Are you sure you want to delete Race ${race.number}?`)) {
       try {
-        await deleteRace(event.id, race.id);
+        await deleteRace(race.id);
         router.push(`/events/${event.id}`);
       } catch (error) {
         setError(
@@ -69,11 +65,11 @@ export default function RacesGrid({ event }: RacesGridProps) {
     }
   };
 
-  const onSubmit = async (data: CreateRacesRequest) => {
+  const onSubmit = async (data: CreateRaceRequest) => {
     try {
       setIsSaving(true);
       setError(null);
-      await addRaces(event.id, data.raceNumber, data.numberOfHorses);
+      await addRace(event.id, data.raceNumber, data.numberOfHorses);
       router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
@@ -157,7 +153,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                 key={race.id}
                 href={`/events/${event.id}/races/${race.id}`}
               >
-                <span>Race {race.raceNumber}</span>
+                <span>Race {race.number}</span>
                 <IconButton
                   title="Delete"
                   onClick={() => {

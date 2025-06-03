@@ -7,14 +7,13 @@ import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
 import { Event } from '@horse-race-raffle-tracker/dto';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface EventsPageProps {
   events: Event[];
 }
 
 export default function EventsPage({ events }: EventsPageProps) {
-  const router = useRouter();
-
   return (
     <Card title="Events">
       <ItemList>
@@ -28,15 +27,14 @@ export default function EventsPage({ events }: EventsPageProps) {
           </ItemListLink>
         ))}
       </ItemList>
-      <SimpleButton
-        onClick={() => {
-          router.push('/events/create');
-        }}
-        className={styles.newButton}
-        title="New Event"
-      >
-        New Event
-      </SimpleButton>
+      <Link href="/events/create">
+        <SimpleButton
+          className={styles.newButton}
+          title="New Event"
+        >
+          New Event
+        </SimpleButton>
+      </Link>
     </Card>
   );
 }

@@ -1,14 +1,17 @@
 import HorsesGrid from '@/app/events/components/HorsesGrid';
-import { getRace } from '@/services/events';
+import { getRace } from '@/services/raceService';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: { eventId: string; raceId: string };
 }
 
 export default async function Page({ params }: PageProps) {
-  const { eventId, raceId } = await params;
-  const event_id = parseInt(eventId);
-  const race_id = parseInt(raceId);
-  const race = await getRace(event_id, race_id, true);
+  const { raceId } = await params;
+  const raceIdNumber = parseInt(raceId);
+  if (isNaN(raceIdNumber)) {
+    notFound();
+  }
+  const race = await getRace(raceIdNumber, true);
   return <HorsesGrid race={race} />;
 }
