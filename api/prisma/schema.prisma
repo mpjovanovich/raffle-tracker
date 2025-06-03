@@ -22,13 +22,13 @@ model Event {
 model Race {
   id          Int      @id @default(autoincrement())
   event_id    Int
-  race_number Int
+  number      Int
   closed      Boolean  @default(false)
   event       Event    @relation(fields: [event_id], references: [id])
   horse       Horse[]  @relation("RaceToHorse") // This relation needs a name for the cacade delete
   ticket      Ticket[]
 
-  @@unique([event_id, race_number])
+  @@unique([event_id, number])
 }
 
 model Horse {

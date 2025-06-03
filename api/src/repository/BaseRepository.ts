@@ -1,4 +1,5 @@
 import { PrismaClient } from '.prisma/client';
+import { count } from 'console';
 
 export abstract class BaseRepository<
   PrismaType extends { id: number },
@@ -31,12 +32,25 @@ export abstract class BaseRepository<
   }
 
   async insert(item: DTO): Promise<DTO> {
-    const prismaItem = this.toPrisma(item as DTO);
-    const { id, ...dataWithoutId } = prismaItem;
+    const { id, ...prismaItem } = this.toPrisma(item as DTO);
     const newItem = await this.getModel().create({
-      data: dataWithoutId,
+      data: prismaItem,
     });
     return this.toDTO(newItem);
+  }
+
+  async insertMany(items: DTO[]): Promise<number> {
+    const prismaItems = items.map(item => {
+      const { id, ...prismaItem } = this.toPrisma(item);
+      return prismaItem;
+    });
+
+    console.error('prismaItems', prismaItems);
+
+    const count = await this.getModel().createMany({
+      data: prismaItems,
+    });
+    return count;
   }
 
   async update(id: number, item: Partial<DTO>): Promise<DTO> {

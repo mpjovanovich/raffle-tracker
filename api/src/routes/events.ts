@@ -9,8 +9,4 @@ router.route('/').post(eventController.insert);
 router.route('/:eventId').get(eventController.getById);
 router.route('/:eventId').put(eventController.update);
 
-router.route('/:eventId/races/:raceId').get(eventController.getRaceById);
-router.route('/:eventId/races').post(eventController.addRace);
-router.route('/:eventId/races/:raceId').delete(eventController.deleteRace);
-
 export default router;
