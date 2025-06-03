@@ -11,55 +11,6 @@
 			"name": "Event",
 			"item": [
 				{
-					"name": "AddRaces",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"raceNumber\": \"3\",\r\n    \"numberOfHorses\": \"4\"\r\n}"
-						},
-						"url": {
-							"raw": "{{api_url}}/api/events/1/races",
-							"host": [
-								"{{api_url}}"
-							],
-							"path": [
-								"api",
-								"events",
-								"1",
-								"races"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DeleteRace",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"location\": \"FAIR!!! Yeehaw!\"\r\n}"
-						},
-						"url": {
-							"raw": "{{api_url}}/api/events/1/races/3",
-							"host": [
-								"{{api_url}}"
-							],
-							"path": [
-								"api",
-								"events",
-								"1",
-								"races",
-								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "GetAll",
 					"event": [
 						{
@@ -235,6 +186,66 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Race",
+			"item": [
+				{
+					"name": "CreateRace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"eventId\": 1,\r\n    \"raceNumber\": 3,\r\n    \"numberOfHorses\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/races",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"races"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GetByIdWithChildren",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": []
 		}
 	]
 }
