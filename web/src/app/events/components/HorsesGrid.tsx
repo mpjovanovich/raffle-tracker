@@ -5,12 +5,16 @@ import Card from '@/app/ui/Card';
 import IconButton from '@/app/ui/IconButton';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
-import { deleteHorse, toggleWinner } from '@/services/horseService';
+import {
+  deleteHorse,
+  toggleScratch,
+  toggleWinner,
+} from '@/services/horseService';
 import { Horse, Race } from '@horse-race-raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaCheck, FaCircleCheck, FaXmark } from 'react-icons/fa6';
+import { FaBan, FaCheck, FaCircleCheck, FaXmark } from 'react-icons/fa6';
 
 interface HorsesGridProps {
   race: Race;
@@ -63,6 +67,19 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     }
   };
 
+  const handleToggleScratch = async (horse: Horse) => {
+    try {
+      await toggleScratch(horse.id);
+      router.push(`/events/${race.eventId}/races/${race.id}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
+
   const handleToggleWinner = async (horse: Horse) => {
     try {
       await toggleWinner(horse.id);
@@ -88,12 +105,22 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
                 <div className={styles.actionButtonContainer}>
                   <IconButton
                     title="Winner"
-                    className={clsx(horse.winner && styles.winnerButton)}
+                    className={clsx(horse.winner && styles.winner)}
                     onClick={() => {
                       handleToggleWinner(horse);
                     }}
                   >
                     {horse.winner ? <FaCircleCheck /> : <FaCheck />}
+                  </IconButton>
+                  <IconButton
+                    title="Scratch"
+                    className={clsx(horse.scratch && styles.scratch)}
+                    onClick={() => {
+                      handleToggleScratch(horse);
+                    }}
+                  >
+                    {/* {horse.scratch ? <FaBan /> : <FaBan />} */}
+                    <FaBan />
                   </IconButton>
                   <IconButton
                     title="Delete"
@@ -131,5 +158,6 @@ const styles = {
   horseAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   horseAddLabeledFieldNumber: clsx('w-1/4'),
   horseContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
-  winnerButton: clsx('text-green-500', 'text-xl'),
+  scratch: clsx('text-red-500'),
+  winner: clsx('text-green-500', 'text-xl'),
 };
