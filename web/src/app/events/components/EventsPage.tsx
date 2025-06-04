@@ -1,13 +1,14 @@
 'use client';
 
 import Card from '@/app/ui/Card';
-import ItemList from '@/app/ui/ItemList';
-import ItemListLink from '@/app/ui/ItemListLink';
-import SimpleButton from '@/app/ui/SimpleButton';
 import clsx from 'clsx';
-import { Event } from '@horse-race-raffle-tracker/dto';
-import { useRouter } from 'next/navigation';
+import ItemList from '@/app/ui/ItemList';
+import ItemListItem from '@/app/ui/ItemListItem';
+import SimpleButton from '@/app/ui/SimpleButton';
 import Link from 'next/link';
+import IconButton from '@/app/ui/IconButton';
+import { Event } from '@horse-race-raffle-tracker/dto';
+import { FaPenToSquare } from 'react-icons/fa6';
 
 interface EventsPageProps {
   events: Event[];
@@ -18,13 +19,17 @@ export default function EventsPage({ events }: EventsPageProps) {
     <Card title="Events">
       <ItemList>
         {events.map(event => (
-          <ItemListLink
+          <ItemListItem
             key={event.id}
             className={styles.itemListLink}
-            href={`/events/${event.id}`}
           >
-            {event.name}
-          </ItemListLink>
+            <span>{event.name}</span>
+            <Link href={`/events/${event.id}`}>
+              <IconButton title="Edit">
+                <FaPenToSquare />
+              </IconButton>
+            </Link>
+          </ItemListItem>
         ))}
       </ItemList>
       <Link href="/events/create">

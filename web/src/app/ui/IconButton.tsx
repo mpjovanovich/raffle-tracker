@@ -13,8 +13,7 @@ export default function IconButton({
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Check if the button is inside a link by looking at parent elements
     const isInsideLink = e.currentTarget.closest('a') !== null;
-
-    if (isInsideLink) {
+    if (suppressNavigation && isInsideLink) {
       e.preventDefault();
       e.stopPropagation();
     }

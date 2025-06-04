@@ -3,11 +3,8 @@
 import clsx from 'clsx';
 import Card from '@/app/ui/Card';
 import ItemList from '@/app/ui/ItemList';
-import LabeledField from '@/app/ui/LabeledField';
-import ItemListLink from '@/app/ui/ItemListLink';
-import Input from '@/app/ui/Input';
+import ItemListItem from '@/app/ui/ItemListItem';
 import IconButton from '@/app/ui/IconButton';
-import SimpleButton from '@/app/ui/SimpleButton';
 // import { addHorses, deleteHorse } from '@/services/events';
 import { Race, Horse } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
@@ -69,34 +66,36 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
   //   }
   // };
 
-  interface DeleteButtonProps {
-    horse: Horse;
-  }
-  const DeleteButton = ({ horse }: DeleteButtonProps) => {
-    return (
-      <IconButton
-        title="Delete"
-        onClick={async () => {
-          if (
-            confirm(`Are you sure you want to delete Horse ${horse.number}?`)
-          ) {
-            try {
-              // await deleteHorse(event.id, horse.id);
-              // router.push(`/events/${event.id}`);
-            } catch (error) {
-              setError(
-                error instanceof Error
-                  ? error.message
-                  : 'An error occurred. Please contact an administrator.'
-              );
-            }
-          }
-        }}
-      >
-        <FaXmark />
-      </IconButton>
-    );
+  const handleDeleteHorse = async (horse: Horse) => {
+    if (confirm(`Are you sure you want to delete Horse ${horse.number}?`)) {
+      try {
+        // await deleteHorse(event.id, horse.id);
+        // router.push(`/events/${event.id}`);
+      } catch (error) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'An error occurred. Please contact an administrator.'
+        );
+      }
+    }
   };
+
+  // interface DeleteButtonProps {
+  //   horse: Horse;
+  // }
+  // const DeleteButton = ({ horse }: DeleteButtonProps) => {
+  //   return (
+  //     <IconButton
+  //       title="Delete"
+  //       onClick={() => {
+  //         handleDeleteHorse(horse);
+  //       }}
+  //     >
+  //       <FaXmark />
+  //     </IconButton>
+  //   );
+  // };
 
   //   const HorseAdd = () => {
   //     return (
@@ -165,14 +164,19 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
         {isInitialized ? (
           <ItemList>
             {race.horses?.map(horse => (
-              <ItemListLink key={horse.id}>
+              <ItemListItem key={horse.id}>
                 <span>Horse {horse.number}</span>
-                <div className={styles.itemListButtonContainer}>
-                  <DeleteButton horse={horse} />
-                  {/* // Just for layout debugging */}
-                  <DeleteButton horse={horse} />
+                <div className={styles.actionButtonContainer}>
+                  <IconButton
+                    title="Delete"
+                    onClick={() => {
+                      handleDeleteHorse(horse);
+                    }}
+                  >
+                    <FaXmark />
+                  </IconButton>
                 </div>
-              </ItemListLink>
+              </ItemListItem>
             ))}
           </ItemList>
         ) : (
@@ -185,6 +189,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
 }
 
 const styles = {
+  actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
   error: clsx('text-red-500'),
   horseAdd: clsx(
     'border-t-2',
@@ -198,5 +203,4 @@ const styles = {
   horseAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   horseAddLabeledFieldNumber: clsx('w-1/4'),
   horseContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
-  itemListButtonContainer: clsx('flex', 'flex-row', 'gap-2'),
 };

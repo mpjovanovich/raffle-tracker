@@ -4,16 +4,17 @@ import clsx from 'clsx';
 import Card from '@/app/ui/Card';
 import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
-import ItemListLink from '@/app/ui/ItemListLink';
 import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
+import ItemListItem from '@/app/ui/ItemListItem';
+import Link from 'next/link';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { addRace, deleteRace } from '@/services/raceService';
 import { CreateRaceRequest, Event, Race } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaXmark } from 'react-icons/fa6';
+import { FaPenToSquare, FaXmark } from 'react-icons/fa6';
 
 interface RacesGridProps {
   event: Event;
@@ -149,20 +150,24 @@ export default function RacesGrid({ event }: RacesGridProps) {
         {isInitialized ? (
           <ItemList>
             {event.races?.map(race => (
-              <ItemListLink
-                key={race.id}
-                href={`/events/${event.id}/races/${race.id}`}
-              >
+              <ItemListItem key={race.id}>
                 <span>Race {race.number}</span>
-                <IconButton
-                  title="Delete"
-                  onClick={() => {
-                    handleDeleteRace(race);
-                  }}
-                >
-                  <FaXmark />
-                </IconButton>
-              </ItemListLink>
+                <div className={styles.actionButtonContainer}>
+                  <Link href={`/events/${event.id}/races/${race.id}`}>
+                    <IconButton title="Edit">
+                      <FaPenToSquare />
+                    </IconButton>
+                  </Link>
+                  <IconButton
+                    title="Delete"
+                    onClick={() => {
+                      handleDeleteRace(race);
+                    }}
+                  >
+                    <FaXmark />
+                  </IconButton>
+                </div>
+              </ItemListItem>
             ))}
           </ItemList>
         ) : (
@@ -175,6 +180,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
 }
 
 const styles = {
+  actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
   error: clsx('text-red-500'),
   raceAdd: clsx(
     'border-t-2',
