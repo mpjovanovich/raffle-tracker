@@ -33,11 +33,13 @@ app.use(
 import healthcheckRouter from './routes/healthcheck.js';
 import eventsRouter from './routes/events.js';
 import racesRouter from './routes/races.js';
+import horsesRouter from './routes/horses.js';
 
 // Routes (implement)
 app.use('/api/healthcheck', healthcheckRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/races', racesRouter);
+app.use('/api/horses', horsesRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
