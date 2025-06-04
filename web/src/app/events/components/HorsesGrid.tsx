@@ -1,16 +1,16 @@
 'use client';
 
+import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import Card from '@/app/ui/Card';
 import IconButton from '@/app/ui/IconButton';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
-import clsx from 'clsx';
-// import { addHorses, deleteHorse } from '@/services/events';
-import { useInitializedForm } from '@/app/hooks/useInitializedForm';
+import { deleteHorse, toggleWinner } from '@/services/horseService';
 import { Horse, Race } from '@horse-race-raffle-tracker/dto';
+import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FaXmark } from 'react-icons/fa6';
+import { useEffect, useState } from 'react';
+import { FaCheck, FaCircleCheck, FaXmark } from 'react-icons/fa6';
 
 interface HorsesGridProps {
   race: Race;
@@ -18,7 +18,6 @@ interface HorsesGridProps {
 
 export default function HorsesGrid({ race }: HorsesGridProps) {
   const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   const maxHorseNumber =
@@ -43,34 +42,17 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     mode: 'onBlur',
   });
 
-  // // Whenever new horses are added and the component is re-rendered,
-  // // the horse number should be set to the highest horse number + 1.
-  // useEffect(() => {
-  //   setValue('horseNumber', maxHorseNumber + 1);
-  // }, [maxHorseNumber, setValue]);
-
-  // const onSubmit = async (data: CreateHorsesRequest) => {
-  //   try {
-  //     setIsSaving(true);
-  //     setError(null);
-  //     await addHorses(event.id, data.horseNumber, data.numberOfHorses);
-  //     router.push(`/events/${event.id}`);
-  //   } catch (error) {
-  //     setError(
-  //       error instanceof Error
-  //         ? error.message
-  //         : 'An error occurred. Please contact an administrator.'
-  //     );
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
+  // Whenever new races are added and the component is re-rendered,
+  // the race number should be set to the highest race number + 1.
+  useEffect(() => {
+    setValue('number', maxHorseNumber + 1);
+  }, [maxHorseNumber, setValue]);
 
   const handleDeleteHorse = async (horse: Horse) => {
     if (confirm(`Are you sure you want to delete Horse ${horse.number}?`)) {
       try {
-        // await deleteHorse(event.id, horse.id);
-        // router.push(`/events/${event.id}`);
+        await deleteHorse(horse.id);
+        router.push(`/events/${race.eventId}/races/${race.id}`);
       } catch (error) {
         setError(
           error instanceof Error
@@ -81,81 +63,18 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     }
   };
 
-  // interface DeleteButtonProps {
-  //   horse: Horse;
-  // }
-  // const DeleteButton = ({ horse }: DeleteButtonProps) => {
-  //   return (
-  //     <IconButton
-  //       title="Delete"
-  //       onClick={() => {
-  //         handleDeleteHorse(horse);
-  //       }}
-  //     >
-  //       <FaXmark />
-  //     </IconButton>
-  //   );
-  // };
-
-  //   const HorseAdd = () => {
-  //     return (
-  //       <form
-  //         className={styles.horseAdd}
-  //         onSubmit={e => {
-  //           e.preventDefault();
-  //           handleSubmit(onSubmit)(e);
-  //         }}
-  //       >
-  //         <LabeledField
-  //           label="Horse Number:"
-  //           htmlFor="horseNumber"
-  //           className={styles.horseAddLabeledField}
-  //           error={errors.horseNumber?.message}
-  //         >
-  //           <Input
-  //             type="number"
-  //             id="horseNumber"
-  //             className={styles.horseAddLabeledFieldNumber}
-  //             {...register('horseNumber', {
-  //               required: 'Horse number is required',
-  //               min: {
-  //                 value: 1,
-  //                 message: 'Horse number must be at least 1',
-  //               },
-  //               valueAsNumber: true,
-  //             })}
-  //           />
-  //         </LabeledField>
-  //         <LabeledField
-  //           label="Number of Horses:"
-  //           htmlFor="numberOfHorses"
-  //           className={styles.horseAddLabeledField}
-  //           error={errors.numberOfHorses?.message}
-  //         >
-  //           <Input
-  //             type="number"
-  //             id="numberOfHorses"
-  //             className={styles.horseAddLabeledFieldNumber}
-  //             {...register('numberOfHorses', {
-  //               required: 'Number of horses is required',
-  //               min: {
-  //                 value: 1,
-  //                 message: 'Number of horses must be at least 1',
-  //               },
-  //               valueAsNumber: true,
-  //             })}
-  //           />
-  //         </LabeledField>
-  //         <SimpleButton
-  //           className={styles.horseAddButton}
-  //           type="submit"
-  //           disabled={isSaving}
-  //         >
-  //           Add
-  //         </SimpleButton>
-  //       // </form>
-  //     );
-  //   };
+  const handleToggleWinner = async (horse: Horse) => {
+    try {
+      await toggleWinner(horse.id);
+      router.push(`/events/${race.eventId}/races/${race.id}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
 
   return (
     <div className={styles.horseContainer}>
@@ -167,6 +86,15 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
               <ItemListItem key={horse.id}>
                 <span>Horse {horse.number}</span>
                 <div className={styles.actionButtonContainer}>
+                  <IconButton
+                    title="Winner"
+                    className={clsx(horse.winner && styles.winnerButton)}
+                    onClick={() => {
+                      handleToggleWinner(horse);
+                    }}
+                  >
+                    {horse.winner ? <FaCircleCheck /> : <FaCheck />}
+                  </IconButton>
                   <IconButton
                     title="Delete"
                     onClick={() => {
@@ -203,4 +131,5 @@ const styles = {
   horseAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   horseAddLabeledFieldNumber: clsx('w-1/4'),
   horseContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
+  winnerButton: clsx('text-green-500', 'text-xl'),
 };
