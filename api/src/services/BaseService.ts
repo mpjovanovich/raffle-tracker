@@ -36,9 +36,7 @@ export abstract class BaseService<Repo extends BaseRepository<any, any>> {
     return this.repo.insert(item);
   }
 
-  async insertMany(
-    items: RepositoryTypes<Repo>['dto'][]
-  ): Promise<RepositoryTypes<Repo>['dto'][]> {
+  async insertMany(items: RepositoryTypes<Repo>['dto'][]): Promise<number> {
     return this.repo.insertMany(items);
   }
 

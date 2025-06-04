@@ -1,3 +1,4 @@
+export * from './models/CreateHorseRequest.js';
 export * from './models/CreateRaceRequest.js';
 export * from './models/Event.js';
 export * from './models/Horse.js';
