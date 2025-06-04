@@ -1,17 +1,17 @@
 'use client';
 
-import clsx from 'clsx';
+import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import Card from '@/app/ui/Card';
-import ItemList from '@/app/ui/ItemList';
-import LabeledField from '@/app/ui/LabeledField';
-import Input from '@/app/ui/Input';
 import IconButton from '@/app/ui/IconButton';
+import Input from '@/app/ui/Input';
+import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
-import Link from 'next/link';
+import LabeledField from '@/app/ui/LabeledField';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { addRace, deleteRace } from '@/services/raceService';
 import { CreateRaceRequest, Event, Race } from '@horse-race-raffle-tracker/dto';
-import { useInitializedForm } from '@/app/hooks/useInitializedForm';
+import clsx from 'clsx';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaPenToSquare, FaXmark } from 'react-icons/fa6';

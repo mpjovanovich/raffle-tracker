@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { config } from './config/config.js';
 import logger from './utility/logger.js';
@@ -30,10 +30,10 @@ app.use(
 );
 
 // Routes (import)
-import healthcheckRouter from './routes/healthcheck.js';
 import eventsRouter from './routes/events.js';
-import racesRouter from './routes/races.js';
+import healthcheckRouter from './routes/healthcheck.js';
 import horsesRouter from './routes/horses.js';
+import racesRouter from './routes/races.js';
 
 // Routes (implement)
 app.use('/api/healthcheck', healthcheckRouter);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useForm, UseFormProps, FieldValues } from 'react-hook-form';
+import { FieldValues, useForm, UseFormProps } from 'react-hook-form';
 
 /*
  * This is a wrapper around useForm that exposes a boolean flag indicating

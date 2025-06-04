@@ -1,5 +1,5 @@
-import EventsPage from './components/EventsPage';
 import { getEvents } from '@/services/eventService';
+import EventsPage from './components/EventsPage';
 
 export default async function Page() {
   const events = await getEvents();

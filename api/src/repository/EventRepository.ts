@@ -1,6 +1,6 @@
-import { BaseRepository } from './BaseRepository.js';
+import { Event, PrismaClient } from '.prisma/client';
 import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
-import { PrismaClient, Event } from '.prisma/client';
+import { BaseRepository } from './BaseRepository.js';
 import { HorseRepository } from './HorseRepository.js';
 import { RaceRepository } from './RaceRepository.js';
 

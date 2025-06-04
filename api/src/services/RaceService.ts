@@ -1,11 +1,11 @@
-import { BaseService } from './BaseService.js';
-import { HorseService } from './HorseService.js';
+import { RaceRepository } from '@/repository/RaceRepository.js';
 import {
   CreateRaceRequest,
-  Race as RaceDTO,
   Horse as HorseDTO,
+  Race as RaceDTO,
 } from '@horse-race-raffle-tracker/dto';
-import { RaceRepository } from '@/repository/RaceRepository.js';
+import { BaseService } from './BaseService.js';
+import { HorseService } from './HorseService.js';
 
 export class RaceService extends BaseService<RaceRepository> {
   constructor(

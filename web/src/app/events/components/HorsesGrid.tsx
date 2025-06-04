@@ -1,15 +1,15 @@
 'use client';
 
-import clsx from 'clsx';
 import Card from '@/app/ui/Card';
+import IconButton from '@/app/ui/IconButton';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
-import IconButton from '@/app/ui/IconButton';
+import clsx from 'clsx';
 // import { addHorses, deleteHorse } from '@/services/events';
-import { Race, Horse } from '@horse-race-raffle-tracker/dto';
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
+import { Horse, Race } from '@horse-race-raffle-tracker/dto';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 
 interface HorsesGridProps {

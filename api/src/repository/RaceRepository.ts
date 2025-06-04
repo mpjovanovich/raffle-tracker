@@ -1,6 +1,6 @@
-import { BaseRepository } from './BaseRepository.js';
-import { Race as RaceDTO } from '@horse-race-raffle-tracker/dto';
 import { PrismaClient, Race } from '.prisma/client';
+import { Race as RaceDTO } from '@horse-race-raffle-tracker/dto';
+import { BaseRepository } from './BaseRepository.js';
 import { HorseRepository } from './HorseRepository.js';
 
 export class RaceRepository extends BaseRepository<Race, RaceDTO> {

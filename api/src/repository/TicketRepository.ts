@@ -1,9 +1,9 @@
-import { BaseRepository } from './BaseRepository.js';
+import { PrismaClient, Ticket } from '.prisma/client';
 import {
   Ticket as TicketDTO,
   TicketStatus,
 } from '@horse-race-raffle-tracker/dto';
-import { PrismaClient, Ticket } from '.prisma/client';
+import { BaseRepository } from './BaseRepository.js';
 
 export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
   constructor(prisma: PrismaClient) {

@@ -1,5 +1,4 @@
 import { PrismaClient } from '.prisma/client';
-import { count } from 'console';
 
 export abstract class BaseRepository<
   PrismaType extends { id: number },

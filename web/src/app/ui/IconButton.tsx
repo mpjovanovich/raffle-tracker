@@ -1,5 +1,5 @@
-import BaseButton, { type BaseButtonProps } from './BaseButton';
 import clsx from 'clsx';
+import BaseButton, { type BaseButtonProps } from './BaseButton';
 
 interface IconButtonProps extends BaseButtonProps {
   suppressNavigation?: boolean;

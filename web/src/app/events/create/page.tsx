@@ -1,5 +1,5 @@
-import EventPage from '../components/EventPage';
 import { Event } from '@horse-race-raffle-tracker/dto';
+import EventPage from '../components/EventPage';
 
 export default async function Page() {
   const new_event: Event = {
@@ -8,6 +8,7 @@ export default async function Page() {
     location: '',
     startDate: '',
     endDate: '',
+    closed: 0,
   };
   return (
     <EventPage

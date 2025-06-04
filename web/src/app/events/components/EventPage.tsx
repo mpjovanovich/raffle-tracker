@@ -1,7 +1,7 @@
 import Card from '@/app/ui/Card';
+import { Event } from '@horse-race-raffle-tracker/dto';
 import EventDetails from './EventDetails';
 import RacesGrid from './RacesGrid';
-import { Event } from '@horse-race-raffle-tracker/dto';
 
 interface EventPageProps {
   mode: 'create' | 'edit' | 'view';

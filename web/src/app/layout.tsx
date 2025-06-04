@@ -1,7 +1,7 @@
-import Navigation from './components/Navigation';
-import './globals.css';
 import { Metadata } from 'next';
+import Navigation from './components/Navigation';
 import { mainFont } from './fonts';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Raffle Tracker',

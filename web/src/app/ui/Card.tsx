@@ -1,5 +1,5 @@
-import CardTitle from './CardTitle';
 import clsx from 'clsx';
+import CardTitle from './CardTitle';
 
 interface CardProps {
   children?: React.ReactNode;

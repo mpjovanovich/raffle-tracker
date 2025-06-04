@@ -1,6 +1,6 @@
-import { bodyFont } from '../fonts';
-import { forwardRef } from 'react';
 import clsx from 'clsx';
+import { forwardRef } from 'react';
+import { bodyFont } from '../fonts';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;

@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import { APIResponse } from '../utility/APIResponse.js';
-import { asyncHandler } from '../utility/asyncHandler.js';
-import { prisma } from '../db.js';
+import { HorseRepository } from '@/repository/HorseRepository.js';
+import { RaceRepository } from '@/repository/RaceRepository.js';
+import { HorseService } from '@/services/HorseService.js';
+import { RaceService } from '@/services/RaceService.js';
 import {
   CreateRaceRequest,
   Race as RaceDTO,
 } from '@horse-race-raffle-tracker/dto';
-import { HorseRepository } from '@/repository/HorseRepository.js';
-import { HorseService } from '@/services/HorseService.js';
-import { RaceRepository } from '@/repository/RaceRepository.js';
-import { RaceService } from '@/services/RaceService.js';
+import { Request, Response } from 'express';
+import { prisma } from '../db.js';
+import { APIResponse } from '../utility/APIResponse.js';
+import { asyncHandler } from '../utility/asyncHandler.js';
 
 class RaceController {
   private raceService: RaceService;

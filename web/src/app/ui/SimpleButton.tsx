@@ -1,6 +1,6 @@
-import BaseButton, { type BaseButtonProps } from './BaseButton';
-import { bodyFont } from '../fonts';
 import clsx from 'clsx';
+import { bodyFont } from '../fonts';
+import BaseButton, { type BaseButtonProps } from './BaseButton';
 
 export default function SimpleButton(props: BaseButtonProps) {
   return (
