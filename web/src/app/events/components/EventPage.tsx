@@ -1,7 +1,7 @@
 import Card from '@/app/ui/Card';
 import { Event } from '@raffle-tracker/dto';
+import ContestsGrid from './ContestsGrid';
 import EventDetails from './EventDetails';
-import RacesGrid from './RacesGrid';
 
 interface EventPageProps {
   mode: 'create' | 'edit' | 'view';
@@ -17,7 +17,7 @@ export default function EventPage({ mode, event }: EventPageProps) {
           mode={mode}
         />
       </Card>
-      {mode === 'view' && <RacesGrid event={event} />}
+      {mode === 'view' && <ContestsGrid event={event} />}
     </>
   );
 }

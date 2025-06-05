@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 const keys = {
   corsOrigin: 'CORS_ORIGIN',
   databaseUrl: 'DATABASE_URL',
+  logDir: 'LOG_DIR',
   nodeEnv: 'NODE_ENV',
   port: 'PORT',
-  logDir: 'LOG_DIR',
 } as const;
 
 // Only load .env file in development

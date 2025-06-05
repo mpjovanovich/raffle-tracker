@@ -1,4 +1,5 @@
 const keys = {
+  nextPublicApiBaseUrl: 'NEXT_PUBLIC_API_BASE_URL',
   nodeEnv: 'NODE_ENV',
   port: 'PORT',
 } as const;

@@ -26,6 +26,31 @@ export class ContestRepository extends BaseRepository<Contest, ContestDTO> {
     };
   }
 
+  public async createContest(
+    contest: ContestDTO,
+    numberOfHorses: number
+  ): Promise<void> {
+    let { id, ...contestData } = this.toPrisma(contest);
+    return this.prisma.$transaction(async tx => {
+      const newContest = await tx.contest.create({
+        data: contestData,
+      });
+
+      const horses = [];
+      for (let i = 1; i <= numberOfHorses; i++) {
+        horses.push({
+          contest_id: newContest.id,
+          number: i,
+          winner: false,
+          scratch: false,
+        });
+      }
+      await tx.horse.createMany({
+        data: horses,
+      });
+    });
+  }
+
   public async delete(id: number): Promise<void> {
     await this.prisma.contest.delete({ where: { id } });
   }

@@ -68,6 +68,7 @@ export default function ContestsGrid({ event }: ContestsGridProps) {
 
   const onSubmit = async (data: CreateContestRequest) => {
     try {
+      console.log('onSubmit', data);
       setIsSaving(true);
       setError(null);
       await addContest(event.id, data.contestNumber, data.numberOfHorses);
