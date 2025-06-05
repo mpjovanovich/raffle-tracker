@@ -32,6 +32,9 @@ export class HorseService extends BaseService<HorseRepository> {
     if (!horse) {
       throw new Error('Horse not found');
     }
+    if (horse.winner === 1) {
+      throw new Error('Winner horse cannot be scratched');
+    }
     horse.scratch = horse.scratch === 0 ? 1 : 0;
     horse = await this.horseRepository.update(id, horse);
     return horse;
@@ -39,6 +42,7 @@ export class HorseService extends BaseService<HorseRepository> {
 
   public async toggleWinner(id: number): Promise<HorseDTO> {
     let horse = await this.horseRepository.getById(id);
+    console.error('horse', horse);
     if (!horse) {
       throw new Error('Horse not found');
     }
