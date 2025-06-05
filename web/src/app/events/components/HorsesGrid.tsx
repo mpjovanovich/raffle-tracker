@@ -115,6 +115,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
                   </IconButton>
                   <IconButton
                     title="Scratch"
+                    disabled={horse.winner === 1}
                     className={clsx(horse.scratch && styles.scratch)}
                     onClick={() => {
                       handleToggleScratch(horse);
