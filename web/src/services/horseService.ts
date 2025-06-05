@@ -16,7 +16,8 @@ export async function addHorse(raceId: number, number: number) {
   });
 
   if (!res.ok) {
-    throw new Error('Failed to add horse');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to add horse');
   }
 
   const data = await res.json();
@@ -28,7 +29,8 @@ export async function deleteHorse(id: number) {
     method: 'DELETE',
   });
   if (!res.ok) {
-    throw new Error('Failed to delete horse');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to delete horse');
   }
 }
 
@@ -37,7 +39,8 @@ export async function toggleScratch(id: number) {
     method: 'PATCH',
   });
   if (!res.ok) {
-    throw new Error('Failed to toggle scratch');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to toggle scratch');
   }
 }
 
@@ -46,6 +49,7 @@ export async function toggleWinner(id: number) {
     method: 'PATCH',
   });
   if (!res.ok) {
-    throw new Error('Failed to toggle winner');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to toggle winner');
   }
 }

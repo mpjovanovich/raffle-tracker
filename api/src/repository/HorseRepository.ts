@@ -27,6 +27,13 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
     };
   }
 
+  public async clearWinner(raceId: number): Promise<void> {
+    await this.prisma.horse.updateMany({
+      where: { race_id: raceId },
+      data: { winner: false },
+    });
+  }
+
   public async delete(id: number): Promise<void> {
     await this.prisma.horse.delete({ where: { id } });
   }

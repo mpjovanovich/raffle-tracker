@@ -42,8 +42,12 @@ export class HorseService extends BaseService<HorseRepository> {
     if (!horse) {
       throw new Error('Horse not found');
     }
+    if (horse.scratch === 1) {
+      throw new Error('Scratched horse cannot be winner');
+    }
+    await this.horseRepository.clearWinner(horse.raceId);
     horse.winner = horse.winner === 0 ? 1 : 0;
     horse = await this.horseRepository.update(id, horse);
-    return horse;
+    return this.horseRepository.getById(id);
   }
 }

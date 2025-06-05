@@ -21,7 +21,8 @@ export async function addRace(
   });
 
   if (!res.ok) {
-    throw new Error('Failed to add race');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to add race');
   }
 
   const data = await res.json();
@@ -33,7 +34,8 @@ export async function deleteRace(id: number) {
     method: 'DELETE',
   });
   if (!res.ok) {
-    throw new Error('Failed to delete race');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to delete race');
   }
 }
 
@@ -43,7 +45,8 @@ export async function getRace(id: number, includeChildren: boolean) {
   );
 
   if (!res.ok) {
-    throw new Error('Failed to fetch race');
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to fetch race');
   }
 
   const data = await res.json();
