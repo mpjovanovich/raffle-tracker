@@ -27,14 +27,25 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
     };
   }
 
-  public async clearWinner(raceId: number): Promise<void> {
-    await this.prisma.horse.updateMany({
-      where: { race_id: raceId },
-      data: { winner: false },
-    });
-  }
-
   public async delete(id: number): Promise<void> {
     await this.prisma.horse.delete({ where: { id } });
+  }
+
+  public async setWinner(horse: HorseDTO): Promise<HorseDTO> {
+    return this.prisma.$transaction(async tx => {
+      // Clear all winners in the race
+      await tx.horse.updateMany({
+        where: { race_id: horse.raceId },
+        data: { winner: false },
+      });
+
+      // Set this horse as winner
+      const updatedHorse = await tx.horse.update({
+        where: { id: horse.id },
+        data: { winner: !horse.winner },
+      });
+
+      return this.toDTO(updatedHorse);
+    });
   }
 }
