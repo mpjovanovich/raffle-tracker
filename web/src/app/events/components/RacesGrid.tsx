@@ -86,7 +86,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
   const RaceAdd = () => {
     return (
       <form
-        className={styles.raceAdd}
+        className={styles.itemAdd}
         onSubmit={e => {
           e.preventDefault();
           handleSubmit(onSubmit)(e);
@@ -95,13 +95,13 @@ export default function RacesGrid({ event }: RacesGridProps) {
         <LabeledField
           label="Race Number:"
           htmlFor="raceNumber"
-          className={styles.raceAddLabeledField}
+          className={styles.itemAddLabeledField}
           error={errors.raceNumber?.message}
         >
           <Input
             type="number"
             id="raceNumber"
-            className={styles.raceAddLabeledFieldNumber}
+            className={styles.itemAddLabeledFieldNumber}
             {...register('raceNumber', {
               required: 'Race number is required',
               min: {
@@ -115,13 +115,13 @@ export default function RacesGrid({ event }: RacesGridProps) {
         <LabeledField
           label="Number of Horses:"
           htmlFor="numberOfHorses"
-          className={styles.raceAddLabeledField}
+          className={styles.itemAddLabeledField}
           error={errors.numberOfHorses?.message}
         >
           <Input
             type="number"
             id="numberOfHorses"
-            className={styles.raceAddLabeledFieldNumber}
+            className={styles.itemAddLabeledFieldNumber}
             {...register('numberOfHorses', {
               required: 'Number of horses is required',
               min: {
@@ -133,7 +133,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
           />
         </LabeledField>
         <SimpleButton
-          className={styles.raceAddButton}
+          className={styles.itemAddButton}
           type="submit"
           disabled={isSaving}
         >
@@ -182,7 +182,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
 const styles = {
   actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
   error: clsx('text-red-500'),
-  raceAdd: clsx(
+  itemAdd: clsx(
     'border-t-2',
     'border-light-accent2',
     'flex',
@@ -190,8 +190,8 @@ const styles = {
     'gap-4',
     'px-8'
   ),
-  raceAddButton: clsx('my-2', 'h-fit'),
-  raceAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
-  raceAddLabeledFieldNumber: clsx('w-1/4'),
+  itemAddButton: clsx('my-2', 'h-fit'),
+  itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
+  itemAddLabeledFieldNumber: clsx('w-1/4'),
   raceContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
 };
