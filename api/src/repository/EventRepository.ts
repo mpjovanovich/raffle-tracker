@@ -1,8 +1,8 @@
 import { Event, PrismaClient } from '.prisma/client';
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import { Event as EventDTO } from '@raffle-tracker/dto';
 import { BaseRepository } from './BaseRepository.js';
+import { ContestRepository } from './ContestRepository.js';
 import { HorseRepository } from './HorseRepository.js';
-import { RaceRepository } from './RaceRepository.js';
 
 export class EventRepository extends BaseRepository<Event, EventDTO> {
   constructor(prisma: PrismaClient) {
@@ -32,10 +32,10 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
   }
 
   public async getWithChildren(id: number): Promise<EventDTO | null> {
-    const eventWithRaces = await this.prisma.event.findUnique({
+    const eventWithContests = await this.prisma.event.findUnique({
       where: { id },
       include: {
-        race: {
+        contest: {
           include: {
             horse: true,
           },
@@ -43,33 +43,34 @@ export class EventRepository extends BaseRepository<Event, EventDTO> {
       },
     });
 
-    if (!eventWithRaces) {
+    if (!eventWithContests) {
       return null;
     }
 
     // Breaking down this syntax, b/c... yeah. Lots of TS:
     return {
       // Spread the properties of the Prisma event type using the "..." (spread) operator.
-      // This has additional properties for races, but since TS is structurally typed it doesn't care;
+      // This has additional properties for contests, but since TS is structurally typed it doesn't care;
       // it will ignore them in the "toDTO" call.
-      ...this.toDTO(eventWithRaces),
-      // Now assign the races property via map call
-      races:
-        // Use "optional chaining" to continue the map call if there are any races.
+      ...this.toDTO(eventWithContests),
+      // Now assign the contests property via map call
+      contests:
+        // Use "optional chaining" to continue the map call if there are any contests.
         // If not, the optional chaining operator will return undefined, which we
         // will catch with our nullish coalescing operator.
-        eventWithRaces.race?.map(race => ({
-          // Use the toDTO method from the race repository to convert the races
+        eventWithContests.contest?.map(contest => ({
+          // Use the toDTO method from the contest repository to convert the contests
           // from this event to a DTO.
-          // ...this.raceRepository.toDTO(race),
-          ...RaceRepository.toDTO(race),
+          // ...this.contestRepository.toDTO(contest),
+          ...ContestRepository.toDTO(contest),
           // Now assign the horses property, still within the outer map call.
           // Use the toDTO method from the horse repository to convert the
-          // horses from this race to a DTO.gg
-          horses: race.horse?.map(horse => HorseRepository.toDTO(horse)) ?? [],
+          // horses from this contest to a DTO.gg
+          horses:
+            contest.horse?.map(horse => HorseRepository.toDTO(horse)) ?? [],
           // Finally, use the nullish coalescing operator to return an empty array
-          // if there are no races. That way we don't ever have an undefined
-          // value for the races property. We did the same above for the horses.
+          // if there are no contests. That way we don't ever have an undefined
+          // value for the contests property. We did the same above for the horses.
         })) ?? [],
     };
   }

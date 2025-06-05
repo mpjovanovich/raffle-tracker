@@ -1,4 +1,4 @@
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

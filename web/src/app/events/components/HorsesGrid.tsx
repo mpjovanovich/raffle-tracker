@@ -14,27 +14,23 @@ import {
   toggleScratch,
   toggleWinner,
 } from '@/services/horseService';
-import {
-  CreateHorseRequest,
-  Horse,
-  Race,
-} from '@horse-race-raffle-tracker/dto';
+import { Contest, CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaBan, FaCheck, FaCircleCheck, FaXmark } from 'react-icons/fa6';
 
 interface HorsesGridProps {
-  race: Race;
+  contest: Contest;
 }
 
-export default function HorsesGrid({ race }: HorsesGridProps) {
+export default function HorsesGrid({ contest }: HorsesGridProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   const maxHorseNumber =
-    race.horses?.reduce(
+    contest.horses?.reduce(
       (max, horse) => (horse.number > max ? horse.number : max),
       1
     ) ?? 1;
@@ -47,14 +43,14 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     setValue,
   } = useInitializedForm<CreateHorseRequest>({
     defaultValues: {
-      raceId: race.id,
+      contestId: contest.id,
       number: maxHorseNumber + 1,
     },
     mode: 'onBlur',
   });
 
-  // Whenever new races are added and the component is re-rendered,
-  // the race number should be set to the highest race number + 1.
+  // Whenever new contests are added and the component is re-rendered,
+  // the contest number should be set to the highest contest number + 1.
   useEffect(() => {
     setValue('number', maxHorseNumber + 1);
   }, [maxHorseNumber, setValue]);
@@ -63,7 +59,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     if (confirm(`Are you sure you want to delete Horse ${horse.number}?`)) {
       try {
         await deleteHorse(horse.id);
-        router.push(`/events/${race.eventId}/races/${race.id}`);
+        router.push(`/events/${contest.eventId}/contests/${contest.id}`);
       } catch (error) {
         setError(
           error instanceof Error
@@ -77,7 +73,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
   const handleToggleScratch = async (horse: Horse) => {
     try {
       await toggleScratch(horse.id);
-      router.push(`/events/${race.eventId}/races/${race.id}`);
+      router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
         error instanceof Error
@@ -90,7 +86,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
   const handleToggleWinner = async (horse: Horse) => {
     try {
       await toggleWinner(horse.id);
-      router.push(`/events/${race.eventId}/races/${race.id}`);
+      router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
         error instanceof Error
@@ -104,8 +100,8 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
     try {
       setIsSaving(true);
       setError(null);
-      await addHorse(race.id, data.number);
-      router.push(`/events/${race.eventId}/races/${race.id}`);
+      await addHorse(contest.id, data.number);
+      router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
         error instanceof Error
@@ -163,7 +159,7 @@ export default function HorsesGrid({ race }: HorsesGridProps) {
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
           <ItemList>
-            {race.horses?.map(horse => (
+            {contest.horses?.map(horse => (
               <ItemListItem key={horse.id}>
                 <span>Horse {horse.number}</span>
                 <div className={styles.actionButtonContainer}>

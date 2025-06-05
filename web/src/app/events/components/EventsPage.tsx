@@ -5,7 +5,7 @@ import IconButton from '@/app/ui/IconButton';
 import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { FaPenToSquare } from 'react-icons/fa6';

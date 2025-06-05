@@ -1,6 +1,6 @@
 import { HorseRepository } from '@/repository/HorseRepository.js';
 import { HorseService } from '@/services/HorseService.js';
-import { CreateHorseRequest } from '@horse-race-raffle-tracker/dto';
+import { CreateHorseRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 import { prisma } from '../db.js';
 import { APIResponse } from '../utility/APIResponse.js';

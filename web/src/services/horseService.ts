@@ -1,10 +1,10 @@
-import { CreateHorseRequest, Horse } from '@horse-race-raffle-tracker/dto';
+import { CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function addHorse(raceId: number, number: number) {
+export async function addHorse(contestId: number, number: number) {
   const createHorseRequest: CreateHorseRequest = {
-    raceId,
+    contestId,
     number,
   };
   const res = await fetch(`${API_BASE_URL}/horses`, {

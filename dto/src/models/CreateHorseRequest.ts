@@ -1,4 +1,4 @@
 export interface CreateHorseRequest {
-  raceId: number;
+  contestId: number;
   number: number;
 }

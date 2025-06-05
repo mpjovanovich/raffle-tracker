@@ -1,5 +1,5 @@
 {
-  "name": "@horse-race-raffle-tracker/web",
+  "name": "@raffle-tracker/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@horse-race-raffle-tracker/dto": "file:../dto",
+    "@raffle-tracker/dto": "file:../dto",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

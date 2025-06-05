@@ -5,7 +5,7 @@ import IconButton from '@/app/ui/IconButton';
 import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
 import { upsertEvent } from '@/services/eventService';
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

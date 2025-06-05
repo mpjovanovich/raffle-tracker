@@ -1,4 +1,4 @@
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event } from '@raffle-tracker/dto';
 import EventPage from '../components/EventPage';
 
 export default async function Page() {

@@ -1,6 +1,6 @@
 import { TicketRepository } from '@/repository/TicketRepository.js';
 import { TicketService } from '@/services/TicketService.js';
-import { CreateTicketsRequest } from '@horse-race-raffle-tracker/dto';
+import { CreateTicketsRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 import { prisma } from '../db.js';
 import { APIResponse } from '../utility/APIResponse.js';

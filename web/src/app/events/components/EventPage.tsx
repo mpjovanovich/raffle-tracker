@@ -1,5 +1,5 @@
 import Card from '@/app/ui/Card';
-import { Event } from '@horse-race-raffle-tracker/dto';
+import { Event } from '@raffle-tracker/dto';
 import EventDetails from './EventDetails';
 import RacesGrid from './RacesGrid';
 

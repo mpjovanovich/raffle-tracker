@@ -3,7 +3,7 @@ import { TicketStatus } from './TicketStatus.js';
 export interface Ticket {
   id: number;
   eventId: number;
-  raceId: number;
+  contestId: number;
   horseId: number;
   createdDttm: string;
   redeemedDttm: string | null;

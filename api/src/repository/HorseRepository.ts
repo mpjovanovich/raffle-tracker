@@ -1,5 +1,5 @@
 import { Horse, PrismaClient } from '.prisma/client';
-import { Horse as HorseDTO } from '@horse-race-raffle-tracker/dto';
+import { Horse as HorseDTO } from '@raffle-tracker/dto';
 import { BaseRepository } from './BaseRepository.js';
 
 export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
@@ -10,7 +10,7 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
   public static toDTO(horse: Horse): HorseDTO {
     return {
       id: horse.id,
-      raceId: horse.race_id,
+      contestId: horse.contest_id,
       number: horse.number,
       winner: horse.winner ? 1 : 0,
       scratch: horse.scratch ? 1 : 0,
@@ -20,7 +20,7 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
   protected static toPrisma(horse: HorseDTO): Horse {
     return {
       id: horse.id,
-      race_id: horse.raceId,
+      contest_id: horse.contestId,
       number: horse.number,
       winner: horse.winner === 1,
       scratch: horse.scratch === 1,
@@ -33,9 +33,9 @@ export class HorseRepository extends BaseRepository<Horse, HorseDTO> {
 
   public async setWinner(horse: HorseDTO): Promise<HorseDTO> {
     return this.prisma.$transaction(async tx => {
-      // Clear all winners in the race
+      // Clear all winners in the contest
       await tx.horse.updateMany({
-        where: { race_id: horse.raceId },
+        where: { contest_id: horse.contestId },
         data: { winner: false },
       });
 

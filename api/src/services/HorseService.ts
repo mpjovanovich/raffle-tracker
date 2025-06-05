@@ -1,8 +1,5 @@
 import { HorseRepository } from '@/repository/HorseRepository.js';
-import {
-  CreateHorseRequest,
-  Horse as HorseDTO,
-} from '@horse-race-raffle-tracker/dto';
+import { CreateHorseRequest, Horse as HorseDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
 export class HorseService extends BaseService<HorseRepository> {
@@ -15,7 +12,7 @@ export class HorseService extends BaseService<HorseRepository> {
   ): Promise<HorseDTO> {
     const horse = await this.horseRepository.insert({
       id: 0,
-      raceId: createHorseRequest.raceId,
+      contestId: createHorseRequest.contestId,
       number: createHorseRequest.number,
       winner: 0,
       scratch: 0,

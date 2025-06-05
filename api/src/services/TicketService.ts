@@ -1,23 +1,20 @@
 import { TicketRepository } from '@/repository/TicketRepository.js';
-import {
-  CreateTicketsRequest,
-  Ticket as TicketDTO,
-} from '@horse-race-raffle-tracker/dto';
+import { CreateTicketsRequest, Ticket as TicketDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
 export class TicketService extends BaseService<TicketRepository> {
-  constructor(private raceRepository: TicketRepository) {
-    super(raceRepository);
+  constructor(private ticketRepository: TicketRepository) {
+    super(ticketRepository);
   }
 
   public async createTickets(
     createTicketRequests: CreateTicketsRequest[]
   ): Promise<TicketDTO[] | null> {
-    // // Create new race with defaults
-    // const race = await this.repo.insert({
+    // // Create new contest with defaults
+    // const contest = await this.repo.insert({
     //   id: 0,
     //   eventId: createTicketRequest.eventId,
-    //   number: createTicketRequest.raceNumber,
+    //   number: createTicketRequest.contestNumber,
     //   closed: 0,
     // });
     // // Create new horses with defaults
@@ -25,14 +22,14 @@ export class TicketService extends BaseService<TicketRepository> {
     // for (let i = 1; i < createTicketRequest.numberOfHorses + 1; i++) {
     //   horses.push({
     //     id: 0,
-    //     raceId: race.id,
+    //     contestId: contest.id,
     //     number: i,
     //     winner: 0,
     //     scratch: 0,
     //   });
     // }
     // await this.horseService.insertMany(horses);
-    // return this.getWithChildren(race.id);
+    // return this.getWithChildren(contest.id);
     return null;
   }
 }

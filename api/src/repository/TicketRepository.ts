@@ -1,8 +1,5 @@
 import { PrismaClient, Ticket } from '.prisma/client';
-import {
-  Ticket as TicketDTO,
-  TicketStatus,
-} from '@horse-race-raffle-tracker/dto';
+import { Ticket as TicketDTO, TicketStatus } from '@raffle-tracker/dto';
 import { BaseRepository } from './BaseRepository.js';
 
 export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
@@ -14,7 +11,7 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
     return {
       id: ticket.id,
       eventId: ticket.event_id,
-      raceId: ticket.race_id,
+      contestId: ticket.contest_id,
       horseId: ticket.horse_id,
       createdDttm: ticket.created_dttm.toISOString(),
       redeemedDttm: ticket.redeemed_dttm
@@ -31,7 +28,7 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
     return {
       id: ticket.id,
       event_id: ticket.eventId,
-      race_id: ticket.raceId,
+      contest_id: ticket.contestId,
       horse_id: ticket.horseId,
       created_dttm: new Date(ticket.createdDttm),
       redeemed_dttm: ticket.redeemedDttm ? new Date(ticket.redeemedDttm) : null,

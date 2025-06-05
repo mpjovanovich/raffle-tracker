@@ -30,15 +30,15 @@ app.use(
 );
 
 // Routes (import)
+import contestsRouter from './routes/contests.js';
 import eventsRouter from './routes/events.js';
 import healthcheckRouter from './routes/healthcheck.js';
 import horsesRouter from './routes/horses.js';
-import racesRouter from './routes/races.js';
 
 // Routes (implement)
 app.use('/api/healthcheck', healthcheckRouter);
 app.use('/api/events', eventsRouter);
-app.use('/api/races', racesRouter);
+app.use('/api/contests', contestsRouter);
 app.use('/api/horses', horsesRouter);
 
 // Global error handler

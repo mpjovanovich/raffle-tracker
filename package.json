@@ -1,5 +1,5 @@
 {
-  "name": "horse-race-raffle-tracker",
+  "name": "raffle-tracker",
   "private": true,
   "workspaces": [
     "api",

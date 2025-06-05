@@ -1,6 +1,6 @@
 import { Horse } from './Horse.js';
 
-export interface Race {
+export interface Contest {
   id: number;
   eventId: number;
   number: number;

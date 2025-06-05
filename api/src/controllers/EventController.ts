@@ -1,4 +1,4 @@
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import { Event as EventDTO } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 import { prisma } from '../db.js';
 import { EventRepository } from '../repository/EventRepository.js';

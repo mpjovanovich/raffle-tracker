@@ -1,5 +1,5 @@
 import { EventRepository } from '@/repository/EventRepository.js';
-import { Event as EventDTO } from '@horse-race-raffle-tracker/dto';
+import { Event as EventDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
 export class EventService extends BaseService<EventRepository> {

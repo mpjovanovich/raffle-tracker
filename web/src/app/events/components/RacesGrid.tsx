@@ -8,26 +8,26 @@ import ItemList from '@/app/ui/ItemList';
 import ItemListItem from '@/app/ui/ItemListItem';
 import LabeledField from '@/app/ui/LabeledField';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { addRace, deleteRace } from '@/services/raceService';
-import { CreateRaceRequest, Event, Race } from '@horse-race-raffle-tracker/dto';
+import { addContest, deleteContest } from '@/services/contestService';
+import { Contest, CreateContestRequest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaPenToSquare, FaXmark } from 'react-icons/fa6';
 
-interface RacesGridProps {
+interface ContestsGridProps {
   event: Event;
 }
 
-export default function RacesGrid({ event }: RacesGridProps) {
+export default function ContestsGrid({ event }: ContestsGridProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
-  const maxRaceNumber =
-    event.races?.reduce(
-      (max, race) => (race.number > max ? race.number : max),
+  const maxContestNumber =
+    event.contests?.reduce(
+      (max, contest) => (contest.number > max ? contest.number : max),
       0
     ) ?? 0;
 
@@ -37,24 +37,24 @@ export default function RacesGrid({ event }: RacesGridProps) {
     isInitialized,
     register,
     setValue,
-  } = useInitializedForm<CreateRaceRequest>({
+  } = useInitializedForm<CreateContestRequest>({
     defaultValues: {
-      raceNumber: 1,
+      contestNumber: 1,
       numberOfHorses: 1,
     },
     mode: 'onBlur',
   });
 
-  // Whenever new races are added and the component is re-rendered,
-  // the race number should be set to the highest race number + 1.
+  // Whenever new contests are added and the component is re-rendered,
+  // the contest number should be set to the highest contest number + 1.
   useEffect(() => {
-    setValue('raceNumber', maxRaceNumber + 1);
-  }, [maxRaceNumber, setValue]);
+    setValue('contestNumber', maxContestNumber + 1);
+  }, [maxContestNumber, setValue]);
 
-  const handleDeleteRace = async (race: Race) => {
-    if (confirm(`Are you sure you want to delete Race ${race.number}?`)) {
+  const handleDeleteContest = async (contest: Contest) => {
+    if (confirm(`Are you sure you want to delete Contest ${contest.number}?`)) {
       try {
-        await deleteRace(race.id);
+        await deleteContest(contest.id);
         router.push(`/events/${event.id}`);
       } catch (error) {
         setError(
@@ -66,11 +66,11 @@ export default function RacesGrid({ event }: RacesGridProps) {
     }
   };
 
-  const onSubmit = async (data: CreateRaceRequest) => {
+  const onSubmit = async (data: CreateContestRequest) => {
     try {
       setIsSaving(true);
       setError(null);
-      await addRace(event.id, data.raceNumber, data.numberOfHorses);
+      await addContest(event.id, data.contestNumber, data.numberOfHorses);
       router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
@@ -83,7 +83,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
     }
   };
 
-  const RaceAdd = () => {
+  const ContestAdd = () => {
     return (
       <form
         className={styles.itemAdd}
@@ -93,20 +93,20 @@ export default function RacesGrid({ event }: RacesGridProps) {
         }}
       >
         <LabeledField
-          label="Race Number:"
-          htmlFor="raceNumber"
+          label="Contest Number:"
+          htmlFor="contestNumber"
           className={styles.itemAddLabeledField}
-          error={errors.raceNumber?.message}
+          error={errors.contestNumber?.message}
         >
           <Input
             type="number"
-            id="raceNumber"
+            id="contestNumber"
             className={styles.itemAddLabeledFieldNumber}
-            {...register('raceNumber', {
-              required: 'Race number is required',
+            {...register('contestNumber', {
+              required: 'Contest number is required',
               min: {
                 value: 1,
-                message: 'Race number must be at least 1',
+                message: 'Contest number must be at least 1',
               },
               valueAsNumber: true,
             })}
@@ -144,16 +144,16 @@ export default function RacesGrid({ event }: RacesGridProps) {
   };
 
   return (
-    <div className={styles.raceContainer}>
-      <Card title="Races">
+    <div className={styles.contestContainer}>
+      <Card title="Contests">
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
           <ItemList>
-            {event.races?.map(race => (
-              <ItemListItem key={race.id}>
-                <span>Race {race.number}</span>
+            {event.contests?.map(contest => (
+              <ItemListItem key={contest.id}>
+                <span>Contest {contest.number}</span>
                 <div className={styles.actionButtonContainer}>
-                  <Link href={`/events/${event.id}/races/${race.id}`}>
+                  <Link href={`/events/${event.id}/contests/${contest.id}`}>
                     <IconButton title="Edit">
                       <FaPenToSquare />
                     </IconButton>
@@ -161,7 +161,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
                   <IconButton
                     title="Delete"
                     onClick={() => {
-                      handleDeleteRace(race);
+                      handleDeleteContest(contest);
                     }}
                   >
                     <FaXmark />
@@ -174,7 +174,7 @@ export default function RacesGrid({ event }: RacesGridProps) {
           <div>Loading...</div>
         )}
       </Card>
-      <RaceAdd />
+      <ContestAdd />
     </div>
   );
 }
@@ -193,5 +193,10 @@ const styles = {
   itemAddButton: clsx('my-2', 'h-fit'),
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-1/4'),
-  raceContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
+  contestContainer: clsx(
+    'border-2',
+    'border-light-accent2',
+    'rounded-sm',
+    'm-6'
+  ),
 };
