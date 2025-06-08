@@ -1,4 +1,3 @@
-import { HorseRepository } from '@/repository/HorseRepository.js';
 import { HorseService } from '@/services/HorseService.js';
 import { CreateHorseRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
@@ -10,8 +9,7 @@ class HorseController {
   private horseService: HorseService;
 
   constructor() {
-    const horseRepository = new HorseRepository(prisma);
-    this.horseService = new HorseService(horseRepository);
+    this.horseService = new HorseService(prisma);
   }
 
   createHorse = asyncHandler(async (req: Request, res: Response) => {

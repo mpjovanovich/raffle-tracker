@@ -6,9 +6,9 @@ import {
   Ticket as TicketDTO,
   TicketStatus,
 } from '@raffle-tracker/dto';
-import { BaseServiceNew } from './BaseServiceNew.js';
+import { BaseService } from './BaseService.js';
 
-export class TicketService extends BaseServiceNew<Ticket, TicketDTO> {
+export class TicketService extends BaseService<Ticket, TicketDTO> {
   constructor(prisma: PrismaClient) {
     super(prisma, 'ticket');
   }

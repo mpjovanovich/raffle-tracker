@@ -1,5 +1,3 @@
-import { ContestRepository } from '@/repository/ContestRepository.js';
-import { HorseRepository } from '@/repository/HorseRepository.js';
 import { ContestService } from '@/services/ContestService.js';
 import { HorseService } from '@/services/HorseService.js';
 import {
@@ -15,9 +13,7 @@ class ContestController {
   private contestService: ContestService;
 
   constructor() {
-    const contestRepository = new ContestRepository(prisma);
-    const horseService = new HorseService(new HorseRepository(prisma));
-    this.contestService = new ContestService(contestRepository, horseService);
+    this.contestService = new ContestService(prisma, new HorseService(prisma));
   }
 
   createContest = asyncHandler(async (req: Request, res: Response) => {

@@ -9,8 +9,6 @@ class TicketController {
   private ticketService: TicketService;
 
   constructor() {
-    // const ticketRepository = new TicketRepository(prisma);
-    // this.ticketService = new TicketService(ticketRepository);
     this.ticketService = new TicketService(prisma);
   }
 

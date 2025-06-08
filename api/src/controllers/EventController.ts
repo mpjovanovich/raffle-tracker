@@ -1,7 +1,6 @@
 import { Event as EventDTO } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 import { prisma } from '../db.js';
-import { EventRepository } from '../repository/EventRepository.js';
 import { EventService } from '../services/EventService.js';
 import { APIResponse } from '../utility/APIResponse.js';
 import { asyncHandler } from '../utility/asyncHandler.js';
@@ -11,8 +10,7 @@ class EventController {
   private eventService: EventService;
 
   constructor() {
-    const eventRepository = new EventRepository(prisma);
-    this.eventService = new EventService(eventRepository);
+    this.eventService = new EventService(prisma);
   }
 
   // EVENT

@@ -1,49 +1,72 @@
-import { BaseRepository } from '../repository/BaseRepository.js';
+import { PrismaClient } from '.prisma/client';
 
-// This makes it easier to access the types on the BaseRepository.
-// It will create a "type object", which is just like any other object,
-// but it holds types and is used for TS typing.
-
-// Create a new type named RepositoryType that takes a Repo type parameter.
-// Repo must be type that extends (inherits from) BaseRepository.
-type RepositoryTypes<Repo extends BaseRepository<any, any>> =
-  // Now to define the type:
-  // Use the "extands" conditional to access the type parameter from
-  // BaseRepository - P and D. Because we can get these types by using this
-  // conditional, we have to cover the "else" with a "never" type. In other
-  // words - it's a useless type put in to satisfy the TS compiler.
-  Repo extends BaseRepository<infer P, infer D> ? { prisma: P; dto: D } : never;
-
-export abstract class BaseService<Repo extends BaseRepository<any, any>> {
-  constructor(protected repo: Repo) {}
-
-  // To break this down:
-  // RepositoryTypes<Repo> = a type object, { prisma: P; dto: D }
-  // RepositoryTypes<Repo>["dto"] = The DTO type from this object
-  // RepositoryTypes<Repo>["dto"][] = an array of these.
-  // E.g. - Event[]
-  async getAll(): Promise<RepositoryTypes<Repo>['dto'][]> {
-    return this.repo.getAll();
+export abstract class BaseService<
+  PrismaType extends { id: number },
+  DTO extends { id: number },
+> {
+  constructor(
+    protected prisma: PrismaClient,
+    protected modelName: string
+  ) {
+    // Runtime check for static methods
+    if (
+      !(this.constructor as any).toDTO ||
+      !(this.constructor as any).toPrisma
+    ) {
+      throw new Error(
+        'Service must implement static toDTO and toPrisma methods'
+      );
+    }
   }
 
-  async getById(id: number): Promise<RepositoryTypes<Repo>['dto']> {
-    return this.repo.getById(id);
+  protected getModel() {
+    return this.prisma[this.modelName as keyof PrismaClient] as any;
   }
 
-  async insert(
-    item: RepositoryTypes<Repo>['dto']
-  ): Promise<RepositoryTypes<Repo>['dto']> {
-    return this.repo.insert(item);
+  async getAll(): Promise<DTO[]> {
+    const items = await this.getModel().findMany();
+    return items.map((item: PrismaType) => this.toDTO(item));
   }
 
-  async insertMany(items: RepositoryTypes<Repo>['dto'][]): Promise<number> {
-    return this.repo.insertMany(items);
+  async getById(id: number): Promise<DTO> {
+    const item = await this.getModel().findUnique({ where: { id } });
+    return this.toDTO(item);
   }
 
-  async update(
-    id: number,
-    item: Partial<RepositoryTypes<Repo>['dto']>
-  ): Promise<RepositoryTypes<Repo>['dto']> {
-    return this.repo.update(id, item);
+  async insert(item: DTO): Promise<DTO> {
+    const { id, ...prismaItem } = this.toPrisma(item);
+    const newItem = await this.getModel().create({
+      data: prismaItem,
+    });
+    return this.toDTO(newItem);
+  }
+
+  async insertMany(items: DTO[]): Promise<number> {
+    const prismaItems = items.map(item => {
+      const { id, ...prismaItem } = this.toPrisma(item);
+      return prismaItem;
+    });
+
+    const count = await this.getModel().createMany({
+      data: prismaItems,
+    });
+    return count;
+  }
+
+  async update(id: number, item: Partial<DTO>): Promise<DTO> {
+    const prismaItem = this.toPrisma(item as DTO);
+    const updatedItem = await this.getModel().update({
+      where: { id },
+      data: prismaItem,
+    });
+    return this.toDTO(updatedItem);
+  }
+
+  protected toDTO(item: PrismaType): DTO {
+    return (this.constructor as any).toDTO(item);
+  }
+
+  protected toPrisma(item: DTO): PrismaType {
+    return (this.constructor as any).toPrisma(item);
   }
 }
