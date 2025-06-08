@@ -25,20 +25,7 @@ export class ContestService extends BaseService<ContestRepository> {
       closed: 0,
     };
 
-    // // Create new horses with defaults
-    // const horses: HorseDTO[] = [];
-    // for (let i = 1; i < createContestRequest.numberOfHorses + 1; i++) {
-    //   horses.push({
-    //     id: 0,
-    //     contestId: contest.id,
-    //     number: i,
-    //     winner: 0,
-    //     scratch: 0,
-    //   });
-    // }
-
     await this.repo.createContest(contest, createContestRequest.numberOfHorses);
-
     return this.getWithChildren(contest.id);
   }
 

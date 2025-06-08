@@ -4,7 +4,6 @@ import {
   Ticket as TicketDTO,
   TicketStatus,
 } from '@raffle-tracker/dto';
-import EphemeralLock from '../utility/EphemeralLock.js';
 import { BaseRepository } from './BaseRepository.js';
 
 export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
@@ -45,54 +44,62 @@ export class TicketRepository extends BaseRepository<Ticket, TicketDTO> {
   public async createTickets(
     requests: CreateTicketsRequest[]
   ): Promise<TicketDTO[]> {
-    return this.prisma.$transaction(async tx => {
-      const createdTickets: Ticket[] = [];
-      const now = new Date();
-
-      for (const request of requests) {
-        const contest = await tx.contest.findUnique({
-          where: { id: request.contestId },
-        });
-        if (!contest) {
-          throw new Error('Contest not found');
-        }
-
-        // We have to lock to make sure the round robin horse assignment is
-        // consistent. Otherwise we could hit a race condition.
-        await EphemeralLock.withLock('createTicketsForContest', async () => {
-          // Get current ticket count for this contest
-          const ticketCount = await tx.ticket.count({
-            where: { contest_id: request.contestId },
-          });
-
-          // Get number of active horses (not scratched)
-          const activeHorses = await tx.horse.findMany({
-            where: { contest_id: request.contestId, scratch: false },
-          });
-          if (activeHorses.length === 0) {
-            throw new Error('No active horses available for ticket assignment');
-          }
-
-          // Create tickets for this contest
-          for (let i = 0; i < request.numberOfTickets; i++) {
-            const horseIndex = (ticketCount + i) % activeHorses.length;
-            const selectedHorse = activeHorses[horseIndex];
-
-            const ticket = await tx.ticket.create({
-              data: {
-                event_id: contest.event_id,
-                contest_id: request.contestId,
-                horse_id: selectedHorse.number,
-                created_dttm: now,
-                status: 'CREATED',
-              },
-            });
-            createdTickets.push(ticket);
-          }
-        });
-      }
-
-      return createdTickets.map(ticket => TicketRepository.toDTO(ticket));
-    });
+    const tickets: TicketDTO[] = [];
+    // return this.prisma.$transaction(async tx => {});
+    return tickets;
   }
+
+  // public async createTickets(
+  //   requests: CreateTicketsRequest[]
+  // ): Promise<TicketDTO[]> {
+  //   return this.prisma.$transaction(async tx => {
+  //     const createdTickets: Ticket[] = [];
+  //     const now = new Date();
+
+  //     for (const request of requests) {
+  //       const contest = await tx.contest.findUnique({
+  //         where: { id: request.contestId },
+  //       });
+  //       if (!contest) {
+  //         throw new Error('Contest not found');
+  //       }
+
+  //       // We have to lock to make sure the round robin horse assignment is
+  //       // consistent. Otherwise we could hit a race condition.
+  //       await EphemeralLock.withLock('createTicketsForContest', async () => {
+  //         // Get current ticket count for this contest
+  //         const ticketCount = await tx.ticket.count({
+  //           where: { contest_id: request.contestId },
+  //         });
+
+  //         // Get number of active horses (not scratched)
+  //         const activeHorses = await tx.horse.findMany({
+  //           where: { contest_id: request.contestId, scratch: false },
+  //         });
+  //         if (activeHorses.length === 0) {
+  //           throw new Error('No active horses available for ticket assignment');
+  //         }
+
+  //         // Create tickets for this contest
+  //         let horseIndex = (ticketCount + 1) % activeHorses.length;
+  //         for (let i = 0; i < request.numberOfTickets; i++) {
+  //           const selectedHorse = activeHorses[horseIndex];
+  //           const ticket = await tx.ticket.create({
+  //             data: {
+  //               event_id: contest.event_id,
+  //               contest_id: request.contestId,
+  //               horse_id: selectedHorse.number,
+  //               created_dttm: now,
+  //               status: 'CREATED',
+  //             },
+  //           });
+  //           createdTickets.push(ticket);
+  //           horseIndex = (horseIndex + 1) % activeHorses.length;
+  //         }
+  //       });
+  //     }
+
+  //     return createdTickets.map(ticket => TicketRepository.toDTO(ticket));
+  //   });
+  // }
 }

@@ -1,4 +1,3 @@
-import { TicketRepository } from '@/repository/TicketRepository.js';
 import { TicketService } from '@/services/TicketService.js';
 import { CreateTicketsRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
@@ -10,8 +9,9 @@ class TicketController {
   private ticketService: TicketService;
 
   constructor() {
-    const ticketRepository = new TicketRepository(prisma);
-    this.ticketService = new TicketService(ticketRepository);
+    // const ticketRepository = new TicketRepository(prisma);
+    // this.ticketService = new TicketService(ticketRepository);
+    this.ticketService = new TicketService(prisma);
   }
 
   createTickets = asyncHandler(async (req: Request, res: Response) => {
