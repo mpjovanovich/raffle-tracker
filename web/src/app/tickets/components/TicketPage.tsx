@@ -3,6 +3,7 @@
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import Card from '@/app/ui/Card';
 import Input from '@/app/ui/Input';
+import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
@@ -18,6 +19,7 @@ interface TicketPageProps {
 export default function TicketPage({ contests, event }: TicketPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
 
   const maxContestNumber =
     event.contests?.reduce(
@@ -38,8 +40,8 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     mode: 'onBlur',
   });
 
-  const onTicketAdd = (data: CreateTicketsRequest) => {
-    console.log(data);
+  const onTicketAdd = (request: CreateTicketsRequest) => {
+    setTickets([...tickets, request]);
   };
 
   const TicketsAdd = () => {
@@ -115,7 +117,32 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         className={styles.card}
       >
         <h2 className={styles.addTicketsTitle}>Shopping Cart</h2>
-        <div className={styles.orderScreen}></div>
+
+        <div className={styles.orderScreen}>
+          <div className={styles.itemListContainer}>
+            <span className={styles.itemListHeader}>Contest</span>
+            <span className={styles.itemListHeader}>Quantity</span>
+          </div>
+          <ItemList className={styles.itemList}>
+            {tickets.map(ticket => (
+              <div
+                key={ticket.contestId}
+                className={styles.itemListContainer}
+              >
+                <span>{ticket.contestId}</span>
+                <span>{ticket.quantity}</span>
+              </div>
+            ))}
+          </ItemList>
+          <div className={styles.itemListContainer}>
+            <span className={styles.itemListSpacer}></span>
+            <div className={styles.itemListTotal}>
+              <span>Total</span>
+              <span>{tickets.length}</span>
+            </div>
+          </div>
+        </div>
+
         <TicketsAdd />
         {/* Cancel / Confirm */}
       </Card>
@@ -137,10 +164,28 @@ const styles = {
   itemAddButton: clsx('my-2', 'h-fit'),
   itemAddLabeledField: clsx('flex', 'flex-row', 'items-center', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-20'),
-  orderScreen: clsx(
+  itemList: clsx('w-full', 'flex-grow'),
+  itemListContainer: clsx('flex', 'flex-row', 'justify-around', 'w-full'),
+  itemListHeader: clsx(
+    'w-24',
+    'px-4',
+    'mb-2',
+    'border-b-2',
+    'border-light-accent2'
+  ),
+  itemListSpacer: clsx('w-24', 'px-4', 'mb-2'),
+  itemListTotal: clsx(
+    'px-4',
     'flex',
     'flex-row',
-    'justify-between',
+    'justify-end',
+    'gap-4',
+    'border-t-2',
+    'border-light-accent2'
+  ),
+  orderScreen: clsx(
+    'flex',
+    'flex-col',
     'items-center',
     'border-2',
     'border-light-accent2',

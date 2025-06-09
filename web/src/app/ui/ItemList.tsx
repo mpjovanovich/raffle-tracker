@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { bodyFont } from '../fonts';
 
 interface ItemListProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
