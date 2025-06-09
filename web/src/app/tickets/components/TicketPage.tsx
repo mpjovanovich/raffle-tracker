@@ -4,6 +4,7 @@ import { useInitializedForm } from '@/app/hooks/useInitializedForm';
 import Card from '@/app/ui/Card';
 import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
+import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { Contest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
@@ -54,19 +55,22 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           className={styles.itemAddLabeledField}
           error={errors.contestNumber?.message}
         >
-          <Input
-            type="number"
+          <Select
             id="contestNumber"
             className={styles.itemAddLabeledFieldNumber}
             {...register('contestNumber', {
               required: 'Contest number is required',
-              min: {
-                value: 1,
-                message: 'Contest number must be at least 1',
-              },
-              valueAsNumber: true,
             })}
-          />
+          >
+            {contests.map(contest => (
+              <option
+                key={contest.id}
+                value={contest.id}
+              >
+                {contest.number}
+              </option>
+            ))}
+          </Select>
         </LabeledField>
         <LabeledField
           label="Quantity:"
