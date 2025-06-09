@@ -59,13 +59,21 @@ export class EventService extends BaseService<Event, EventDTO> {
   }
 
   public getEventValidContests(event: EventDTO): ContestDTO[] {
+    // Must not be closed and must have at least one horse that is not scratched
     const contests =
-      event.contests?.filter(contest => contest.closed === 0) ?? [];
+      event.contests?.filter(
+        contest =>
+          contest.closed === 0 &&
+          contest.horses &&
+          contest.horses.some(h => h.scratch === 0)
+      ) ?? [];
+
     // Currently no use cases require horses, so we can just return the contests.
     // The ticket page consumes these results.
     contests.forEach(contest => {
       contest.horses = [];
     });
+
     return contests;
   }
 }
