@@ -8,8 +8,12 @@ import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
 import { printTickets } from '@/app/utils/printTickets';
-import { createTickets } from '@/services/ticketService';
-import { Contest, CreateTicketsRequest, Event } from '@raffle-tracker/dto';
+import {
+  Contest,
+  CreateTicketsRequest,
+  CreateTicketsResponse,
+  Event,
+} from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
 
@@ -46,8 +50,23 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       setError(null);
       setIsSaving(true);
 
-      const createdTickets = await createTickets(tickets);
-      printTickets(createdTickets);
+      //   const createdTickets = await createTickets(tickets);
+      // DEBUG - fake some tickets
+      const createdTickets: CreateTicketsResponse[] = [
+        {
+          date: new Date().toISOString().split('T')[0],
+          contest: '1',
+          horse: '1',
+          ref: '00001',
+        },
+        {
+          date: new Date().toISOString().split('T')[0],
+          contest: '1',
+          horse: '1',
+          ref: '00002',
+        },
+      ];
+      printTickets({ eventName: event.name, tickets: createdTickets });
 
       // Reset the form
       setTickets([]);
