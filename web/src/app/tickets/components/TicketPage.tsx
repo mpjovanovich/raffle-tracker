@@ -6,7 +6,7 @@ import Input from '@/app/ui/Input';
 import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { Contest, Event } from '@raffle-tracker/dto';
+import { Contest, CreateTicketsRequest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
 
@@ -30,15 +30,17 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     handleSubmit,
     isInitialized,
     register,
-    setValue,
-    //   } = useInitializedForm<CreateContestRequest>({
-  } = useInitializedForm({
+  } = useInitializedForm<CreateTicketsRequest>({
     defaultValues: {
-      contestNumber: 1,
+      contestId: 1,
       quantity: 1,
     },
     mode: 'onBlur',
   });
+
+  const onTicketAdd = (data: CreateTicketsRequest) => {
+    console.log(data);
+  };
 
   const TicketsAdd = () => {
     return (
@@ -46,19 +48,19 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         className={styles.itemAdd}
         onSubmit={e => {
           e.preventDefault();
-          //   handleSubmit(onSubmit)(e);
+          handleSubmit(onTicketAdd)(e);
         }}
       >
         <LabeledField
           label="Contest Number:"
           htmlFor="contestNumber"
           className={styles.itemAddLabeledField}
-          error={errors.contestNumber?.message}
+          error={errors.contestId?.message}
         >
           <Select
             id="contestNumber"
             className={styles.itemAddLabeledFieldNumber}
-            {...register('contestNumber', {
+            {...register('contestId', {
               required: 'Contest number is required',
             })}
           >
@@ -87,6 +89,10 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
               min: {
                 value: 1,
                 message: 'Quantity must be at least 1',
+              },
+              max: {
+                value: 20,
+                message: 'Maximum quantity is 20',
               },
               valueAsNumber: true,
             })}

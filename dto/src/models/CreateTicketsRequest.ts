@@ -1,4 +1,4 @@
 export interface CreateTicketsRequest {
   contestId: number;
-  numberOfTickets: number;
+  quantity: number;
 }

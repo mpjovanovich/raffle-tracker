@@ -93,7 +93,7 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
           }
 
           // Create tickets for this contest
-          for (let i = 0; i < request.numberOfTickets; i++) {
+          for (let i = 0; i < request.quantity; i++) {
             const horse = this.getNextHorse(ticketCount++, activeHorses);
             const ticket = await tx.ticket.create({
               data: {
