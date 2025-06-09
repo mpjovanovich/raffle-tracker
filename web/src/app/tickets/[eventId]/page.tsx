@@ -1,5 +1,7 @@
 import { getValidContestsByEvent } from '@/services/contestService';
+import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
+import TicketPage from '../components/TicketPage';
 
 interface PageProps {
   params: { eventId: string };
@@ -7,14 +9,18 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { eventId } = await params;
-  // TODO: more consistent validation of URL params
   const eventIdNumber = parseInt(eventId);
   if (isNaN(eventIdNumber)) {
     notFound();
   }
 
+  const event = await getEvent(eventIdNumber, true);
   const contests = await getValidContestsByEvent(eventIdNumber);
-  console.log(contests);
 
-  return <div>Tickets</div>;
+  return (
+    <TicketPage
+      contests={contests}
+      event={event}
+    />
+  );
 }

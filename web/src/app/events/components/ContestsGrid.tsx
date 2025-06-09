@@ -187,12 +187,13 @@ const styles = {
     'border-light-accent2',
     'flex',
     'flex-row',
+    'justify-end',
     'gap-4',
     'px-8'
   ),
   itemAddButton: clsx('my-2', 'h-fit'),
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
-  itemAddLabeledFieldNumber: clsx('w-1/4'),
+  itemAddLabeledFieldNumber: clsx('w-20'),
   contestContainer: clsx(
     'border-2',
     'border-light-accent2',
