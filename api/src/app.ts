@@ -2,7 +2,7 @@ import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { config } from './config/config.js';
-import logger from './utility/logger.js';
+import logger from './utils/logger.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 

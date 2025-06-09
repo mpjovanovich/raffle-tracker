@@ -1,5 +1,5 @@
 import { Contest, Horse, PrismaClient, Ticket } from '.prisma/client';
-import EphemeralLock from '@/utility/EphemeralLock.js';
+import EphemeralLock from '@/utils/EphemeralLock.js';
 import {
   CreateTicketsRequest,
   CreateTicketsResponse,
