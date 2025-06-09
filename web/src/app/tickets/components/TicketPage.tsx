@@ -66,7 +66,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           ref: '00002',
         },
       ];
-      printTickets({ eventName: event.name, tickets: createdTickets });
+      printTickets(event.name, createdTickets);
 
       // Reset the form
       setTickets([]);
