@@ -7,6 +7,7 @@ import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
+import { createTickets } from '@/services/ticketService';
 import { Contest, CreateTicketsRequest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -39,9 +40,25 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     setTickets([...tickets, request]);
   };
 
-  const onTicketSubmit = (request: CreateTicketsRequest) => {
-    console.log('onTicketSubmit', tickets);
-    // setTickets([...tickets, request]);
+  const onTicketSubmit = async () => {
+    try {
+      setError(null);
+      setIsSaving(true);
+
+      const createdTickets = await createTickets(tickets);
+      // TODO: bring up the tickets form
+
+      // Reset the form
+      setTickets([]);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const TicketSubmit = () => {
@@ -89,6 +106,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
             className={styles.itemAddLabeledFieldNumber}
             {...register('contestId', {
               required: 'Contest number is required',
+              valueAsNumber: true,
             })}
           >
             {contests.map(contest => (
