@@ -2,7 +2,7 @@ import TicketPrintout from '@/app/tickets/components/TicketPrintout';
 import { CreateTicketsResponse } from '@raffle-tracker/dto';
 import { renderToString } from 'react-dom/server';
 
-export const printTicket = (tickets: CreateTicketsResponse[]) => {
+export const printTickets = (tickets: CreateTicketsResponse[]) => {
   const ticketHTML = renderToString(<TicketPrintout tickets={tickets} />);
 
   const html = `

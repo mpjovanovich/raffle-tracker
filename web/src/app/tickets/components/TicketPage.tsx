@@ -7,7 +7,7 @@ import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { printTicket } from '@/app/utils/renderTicket';
+import { printTickets } from '@/app/utils/printTickets';
 import { createTickets } from '@/services/ticketService';
 import { Contest, CreateTicketsRequest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
@@ -46,9 +46,8 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       setError(null);
       setIsSaving(true);
 
-      // DEBUG - commented for testing
       const createdTickets = await createTickets(tickets);
-      printTicket(createdTickets);
+      printTickets(createdTickets);
 
       // Reset the form
       setTickets([]);
