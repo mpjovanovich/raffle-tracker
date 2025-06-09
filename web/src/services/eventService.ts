@@ -2,7 +2,7 @@ import { Event } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function getEvents() {
+export async function getEvents(): Promise<Event[]> {
   const res = await fetch(`${API_BASE_URL}/events`);
   if (!res.ok) {
     const errorData = await res.json();
@@ -15,11 +15,10 @@ export async function getEvents() {
 
 export async function getEvent(
   id: number,
-  includeChildren: boolean,
-  includeClosed: boolean
-) {
+  includeChildren: boolean
+): Promise<Event> {
   const res = await fetch(
-    `${API_BASE_URL}/events/${id}/?includeChildren=${includeChildren ? 'true' : 'false'}&includeClosed=${includeClosed ? 'true' : 'false'}`
+    `${API_BASE_URL}/events/${id}/?includeChildren=${includeChildren ? 'true' : 'false'}`
   );
 
   if (!res.ok) {
@@ -31,7 +30,7 @@ export async function getEvent(
   return data.data as Event;
 }
 
-export async function upsertEvent(event: Event) {
+export async function upsertEvent(event: Event): Promise<Event> {
   const url =
     event.id === 0
       ? `${API_BASE_URL}/events`

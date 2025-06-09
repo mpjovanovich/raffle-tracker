@@ -1,4 +1,4 @@
-import { getEvent } from '@/services/eventService';
+import { getValidContestsByEvent } from '@/services/contestService';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
@@ -13,8 +13,8 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  let event = await getEvent(eventIdNumber, true, false);
-  console.log(event);
+  const contests = await getValidContestsByEvent(eventIdNumber);
+  console.log(contests);
 
   return <div>Tickets</div>;
 }

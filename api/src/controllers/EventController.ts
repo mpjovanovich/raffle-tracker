@@ -20,28 +20,37 @@ class EventController {
   });
 
   getById = asyncHandler(async (req: Request, res: Response) => {
-    const id = parseInt(req.params.eventId);
-    if (isNaN(id)) {
+    const eventId = parseInt(req.params.eventId);
+    if (isNaN(eventId)) {
       throw new Error(`Invalid ID format: ${req.params.eventId}`);
     }
 
     // Check for the include parameter
     let item: EventDTO | null = null;
     const includeChildren = req.query.includeChildren === 'true';
-    const includeClosed = req.query.includeClosed === 'true';
 
     if (includeChildren) {
-      item = await this.eventService.getWithChildren(id);
+      item = await this.eventService.getWithChildren(eventId);
     } else {
-      item = await this.eventService.getById(id);
-    }
-
-    // This is to strip out closed contests and horses from the response
-    if (item && !includeClosed) {
-      item = this.eventService.getEventValidTicketItems(item);
+      item = await this.eventService.getById(eventId);
     }
 
     res.status(200).json(new APIResponse(200, item));
+  });
+
+  getValidContests = asyncHandler(async (req: Request, res: Response) => {
+    const eventId = parseInt(req.params.eventId);
+    if (isNaN(eventId)) {
+      throw new Error(`Invalid ID format: ${req.params.eventId}`);
+    }
+
+    const event = await this.eventService.getWithChildren(eventId);
+    if (!event) {
+      res.status(404).json(new APIResponse(404, 'Event not found'));
+    }
+
+    const contests = this.eventService.getEventValidContests(event!);
+    res.status(200).json(new APIResponse(200, contests));
   });
 
   insert = asyncHandler(async (req: Request, res: Response) => {

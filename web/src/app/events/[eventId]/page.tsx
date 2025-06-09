@@ -14,7 +14,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const event = await getEvent(eventIdNumber, true, true);
+  const event = await getEvent(eventIdNumber, true);
   return (
     <EventPage
       event={event}

@@ -6,7 +6,7 @@ export async function addContest(
   eventId: number,
   contestNumber: number,
   numberOfHorses: number
-) {
+): Promise<Event> {
   const createContestRequest: CreateContestRequest = {
     eventId,
     contestNumber,
@@ -29,7 +29,7 @@ export async function addContest(
   return data.data as Event;
 }
 
-export async function deleteContest(id: number) {
+export async function deleteContest(id: number): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/contests/${id}`, {
     method: 'DELETE',
   });
@@ -39,7 +39,10 @@ export async function deleteContest(id: number) {
   }
 }
 
-export async function getContest(id: number, includeChildren: boolean) {
+export async function getContest(
+  id: number,
+  includeChildren: boolean
+): Promise<Contest> {
   const res = await fetch(
     `${API_BASE_URL}/contests/${id}${includeChildren ? '?includeChildren=true' : ''}`
   );
@@ -51,4 +54,17 @@ export async function getContest(id: number, includeChildren: boolean) {
 
   const data = await res.json();
   return data.data as Contest;
+}
+
+export async function getValidContestsByEvent(
+  eventId: number
+): Promise<Contest[]> {
+  const res = await fetch(`${API_BASE_URL}/events/${eventId}/races`);
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || 'Failed to fetch contests');
+  }
+
+  const data = await res.json();
+  return data.data as Contest[];
 }

@@ -1,6 +1,6 @@
 // api/src/services/EventService.ts
 import { Event, PrismaClient } from '.prisma/client';
-import { Event as EventDTO } from '@raffle-tracker/dto';
+import { Contest as ContestDTO, Event as EventDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 import { ContestService } from './ContestService.js';
 import { HorseService } from './HorseService.js';
@@ -58,14 +58,14 @@ export class EventService extends BaseService<Event, EventDTO> {
     };
   }
 
-  public getEventValidTicketItems(event: EventDTO): EventDTO {
-    const validEvent = { ...event };
-    validEvent.contests = validEvent.contests?.filter(
-      contest => contest.closed === 0
-    );
-    validEvent.contests?.forEach(contest => {
-      contest.horses = contest.horses?.filter(horse => horse.scratch === 0);
+  public getEventValidContests(event: EventDTO): ContestDTO[] {
+    const contests =
+      event.contests?.filter(contest => contest.closed === 0) ?? [];
+    // Currently no use cases require horses, so we can just return the contests.
+    // The ticket page consumes these results.
+    contests.forEach(contest => {
+      contest.horses = [];
     });
-    return validEvent;
+    return contests;
   }
 }

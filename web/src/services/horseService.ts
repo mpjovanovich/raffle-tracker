@@ -2,7 +2,10 @@ import { CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function addHorse(contestId: number, number: number) {
+export async function addHorse(
+  contestId: number,
+  number: number
+): Promise<Horse> {
   const createHorseRequest: CreateHorseRequest = {
     contestId,
     number,
@@ -24,7 +27,7 @@ export async function addHorse(contestId: number, number: number) {
   return data.data as Horse;
 }
 
-export async function deleteHorse(id: number) {
+export async function deleteHorse(id: number): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/horses/${id}`, {
     method: 'DELETE',
   });
@@ -34,7 +37,7 @@ export async function deleteHorse(id: number) {
   }
 }
 
-export async function toggleScratch(id: number) {
+export async function toggleScratch(id: number): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleScratch`, {
     method: 'PATCH',
   });
@@ -44,7 +47,7 @@ export async function toggleScratch(id: number) {
   }
 }
 
-export async function toggleWinner(id: number) {
+export async function toggleWinner(id: number): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleWinner`, {
     method: 'PATCH',
   });
