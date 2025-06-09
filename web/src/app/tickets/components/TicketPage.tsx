@@ -35,7 +35,38 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
   });
 
   const onTicketAdd = (request: CreateTicketsRequest) => {
+    setError(null);
     setTickets([...tickets, request]);
+  };
+
+  const onTicketSubmit = (request: CreateTicketsRequest) => {
+    console.log('onTicketSubmit', tickets);
+    // setTickets([...tickets, request]);
+  };
+
+  const TicketSubmit = () => {
+    return (
+      <form
+        onSubmit={handleSubmit(onTicketSubmit)}
+        className={styles.submitContainer}
+      >
+        <SimpleButton
+          type="button"
+          onClick={() => {
+            setTickets([]);
+            setError(null);
+          }}
+        >
+          Cancel
+        </SimpleButton>
+        <SimpleButton
+          type="submit"
+          disabled={isSaving || tickets.length === 0}
+        >
+          Confirm
+        </SimpleButton>
+      </form>
+    );
   };
 
   const TicketsAdd = () => {
@@ -115,6 +146,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         title={`Tickets: ${event.name}`}
         className={styles.card}
       >
+        {error && <p className={styles.error}>{error}</p>}
         <h2 className={styles.addTicketsTitle}>Shopping Cart</h2>
 
         <div className={styles.orderScreen}>
@@ -123,15 +155,19 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
             <span className={styles.itemListHeader}>Quantity</span>
           </div>
           <ItemList className={styles.itemList}>
-            {tickets.map(ticket => (
-              <div
-                key={ticket.contestId}
-                className={styles.itemListContainer}
-              >
-                <span>{ticket.contestId}</span>
-                <span>{ticket.quantity}</span>
-              </div>
-            ))}
+            {tickets.map((ticket, index) => {
+              const contest = contests.find(c => c.id === ticket.contestId);
+              return (
+                <div
+                  // This is here so that react doesn't complain if the same contest is added to the list multiple times.
+                  key={`${ticket.contestId}-${index}`}
+                  className={styles.itemListContainer}
+                >
+                  <span>{contest?.number || ticket.contestId}</span>
+                  <span>{ticket.quantity}</span>
+                </div>
+              );
+            })}
           </ItemList>
           <div className={styles.itemListContainer}>
             <span className={styles.itemListSpacer}></span>
@@ -143,6 +179,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         </div>
 
         <TicketsAdd />
+        <TicketSubmit />
       </Card>
     </>
   );
@@ -151,6 +188,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 const styles = {
   addTicketsTitle: clsx('text-xl', 'px-4'),
   card: clsx('flex', 'flex-col', 'gap-4'),
+  error: clsx('text-red-500'),
   itemAdd: clsx(
     'flex',
     'flex-row',
@@ -195,4 +233,5 @@ const styles = {
     'h-[40vh]',
     'overflow-hidden'
   ),
+  submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
 };
