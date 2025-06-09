@@ -21,12 +21,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
 
-  const maxContestNumber =
-    event.contests?.reduce(
-      (max, contest) => (contest.number > max ? contest.number : max),
-      0
-    ) ?? 0;
-
   const {
     formState: { errors },
     handleSubmit,
@@ -110,6 +104,11 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       </form>
     );
   };
+
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Card
@@ -144,7 +143,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         </div>
 
         <TicketsAdd />
-        {/* Cancel / Confirm */}
       </Card>
     </>
   );
@@ -164,11 +162,12 @@ const styles = {
   itemAddButton: clsx('my-2', 'h-fit'),
   itemAddLabeledField: clsx('flex', 'flex-row', 'items-center', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-20'),
-  itemList: clsx('w-full', 'flex-grow'),
+  itemList: clsx('w-full', 'flex-grow', 'overflow-y-auto'),
   itemListContainer: clsx('flex', 'flex-row', 'justify-around', 'w-full'),
   itemListHeader: clsx(
     'w-24',
     'px-4',
+    'pb-2',
     'mb-2',
     'border-b-2',
     'border-light-accent2'
@@ -176,6 +175,7 @@ const styles = {
   itemListSpacer: clsx('w-24', 'px-4', 'mb-2'),
   itemListTotal: clsx(
     'px-4',
+    'pt-2',
     'flex',
     'flex-row',
     'justify-end',
@@ -192,6 +192,7 @@ const styles = {
     'rounded-sm',
     'p-4',
     'min-h-[200px]',
-    'h-[40vh]'
+    'h-[40vh]',
+    'overflow-hidden'
   ),
 };
