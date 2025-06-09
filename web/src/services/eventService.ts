@@ -13,9 +13,13 @@ export async function getEvents() {
   return data.data as Event[];
 }
 
-export async function getEvent(id: number, includeChildren: boolean) {
+export async function getEvent(
+  id: number,
+  includeChildren: boolean,
+  includeClosed: boolean
+) {
   const res = await fetch(
-    `${API_BASE_URL}/events/${id}${includeChildren ? '?includeChildren=true' : ''}`
+    `${API_BASE_URL}/events/${id}/?includeChildren=${includeChildren ? 'true' : 'false'}&includeClosed=${includeClosed ? 'true' : 'false'}`
   );
 
   if (!res.ok) {

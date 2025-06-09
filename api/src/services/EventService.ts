@@ -57,4 +57,15 @@ export class EventService extends BaseService<Event, EventDTO> {
         })) ?? [],
     };
   }
+
+  public getEventValidTicketItems(event: EventDTO): EventDTO {
+    const validEvent = { ...event };
+    validEvent.contests = validEvent.contests?.filter(
+      contest => contest.closed === 0
+    );
+    validEvent.contests?.forEach(contest => {
+      contest.horses = contest.horses?.filter(horse => horse.scratch === 0);
+    });
+    return validEvent;
+  }
 }

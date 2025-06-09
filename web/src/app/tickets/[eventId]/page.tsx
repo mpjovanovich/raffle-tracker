@@ -1,6 +1,5 @@
 import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
-import EventPage from '../components/EventPage';
 
 interface PageProps {
   params: { eventId: string };
@@ -14,11 +13,8 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const event = await getEvent(eventIdNumber, true, true);
-  return (
-    <EventPage
-      event={event}
-      mode="view"
-    />
-  );
+  let event = await getEvent(eventIdNumber, true, false);
+  console.log(event);
+
+  return <div>Tickets</div>;
 }

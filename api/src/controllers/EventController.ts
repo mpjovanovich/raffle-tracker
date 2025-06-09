@@ -28,11 +28,19 @@ class EventController {
     // Check for the include parameter
     let item: EventDTO | null = null;
     const includeChildren = req.query.includeChildren === 'true';
+    const includeClosed = req.query.includeClosed === 'true';
+
     if (includeChildren) {
       item = await this.eventService.getWithChildren(id);
     } else {
       item = await this.eventService.getById(id);
     }
+
+    // This is to strip out closed contests and horses from the response
+    if (item && !includeClosed) {
+      item = this.eventService.getEventValidTicketItems(item);
+    }
+
     res.status(200).json(new APIResponse(200, item));
   });
 
