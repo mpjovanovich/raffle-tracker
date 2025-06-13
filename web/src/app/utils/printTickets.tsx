@@ -5,19 +5,72 @@ import { renderToString } from 'react-dom/server';
 export const printTickets = (
   eventName: string,
   tickets: CreateTicketsResponse[]
-) => {
-  const DEV_MODE = true;
+): Promise<boolean> => {
+  return new Promise(resolve => {
+    const DEV_MODE = true;
 
-  const ticketHTML = renderToString(
-    <OrderSummary
-      eventName={eventName}
-      tickets={tickets}
-    />
-  );
+    const ticketHTML = renderToString(
+      <OrderSummary
+        eventName={eventName}
+        tickets={tickets}
+      />
+    );
 
-  // We can't use tailwind here because this is being generated on the client.
-  const styles = `
-.ticket-container {
+    const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            ${styles}
+        </style>
+    </head>
+    <body>
+        <div class="ticket-container">
+            ${ticketHTML}
+            ${DEV_MODE ? '<div class="perforation-line"></div>' : ''}
+            ${ticketHTML}
+        </div>
+    </body>
+    </html>
+    `;
+
+    let printCompleted = false;
+    let windowClosed = false;
+    const printWindow = window.open('', '_blank');
+
+    if (!printWindow) {
+      console.log('printWindow is null');
+      resolve(false);
+      return;
+    }
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.print();
+
+    // If print is completed...
+    printWindow.addEventListener('afterprint', () => {
+      printCompleted = true;
+      if (windowClosed) {
+        resolve(true);
+      }
+    });
+
+    // If print was not completed at time of window close...
+    printWindow.addEventListener('beforeunload', () => {
+      windowClosed = true;
+      if (!printCompleted) {
+        resolve(false);
+      }
+    });
+  });
+};
+
+// We can't use tailwind here because this is being generated on the client.
+const styles = `.ticket-container {
   width: 100%;
 }
 
@@ -49,7 +102,7 @@ export const printTickets = (
     width: 8.5in;
     min-height: 5.5in;
     height: auto;
-    padding: 0.5in;
+    padding: 1in;
     box-sizing: border-box;
     page-break-inside: avoid;
   }
@@ -62,31 +115,3 @@ export const printTickets = (
   width: 100%;
 }
   `;
-
-  const html = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <style>
-            ${styles}
-        </style>
-    </head>
-    <body>
-        <div class="ticket-container">
-            ${ticketHTML}
-            ${DEV_MODE ? '<div class="perforation-line"></div>' : ''}
-            ${ticketHTML}
-        </div>
-    </body>
-    </html>
-    `;
-
-  const printWindow = window.open('', '_blank');
-  printWindow?.document.write(html);
-  printWindow?.document.close();
-  printWindow?.print();
-  printWindow?.close();
-};

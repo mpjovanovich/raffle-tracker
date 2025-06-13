@@ -66,7 +66,9 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           ref: '00002',
         },
       ];
-      printTickets(event.name, createdTickets);
+      console.log('printTickets');
+      const printSuccess = await printTickets(event.name, createdTickets);
+      console.log('printSuccess', printSuccess);
 
       // Reset the form
       setTickets([]);
