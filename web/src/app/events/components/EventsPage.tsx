@@ -40,8 +40,8 @@ export default function EventsPage({ events }: EventsPageProps) {
                   <FaReceipt />
                 </IconButton>
               </Link>
-              <Link href={`/reports/${event.id}`}>
-                <IconButton title="Reports">
+              <Link href={`/report/${event.id}`}>
+                <IconButton title="Report">
                   <FaFileContract />
                 </IconButton>
               </Link>
