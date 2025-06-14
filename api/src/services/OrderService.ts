@@ -57,6 +57,57 @@ export class OrderService extends BaseService<Order, OrderDTO> {
     return ticketRefs;
   }
 
+  private async refundOrder(orderId: number): Promise<string[]> {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+    if (!order) {
+      throw new Error(`Order not found: ${orderId}`);
+    }
+
+    let orderDTO: OrderDTO = OrderService.toDTO(order);
+    orderDTO.status = ORDER_STATUS.REFUNDED;
+
+    await this.prisma.order.update({
+      where: { id: orderId },
+      data: { status: ORDER_STATUS.REFUNDED },
+    });
+
+    const ticketRefs = (await this.getTicketsByOrderId(orderId)).map(ticket =>
+      TicketService.formatRef(ticket.id)
+    );
+
+    return ticketRefs;
+  }
+
+  private async redeemOrder(orderId: number): Promise<string[]> {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+    if (!order) {
+      throw new Error(`Order not found: ${orderId}`);
+    }
+
+    const ticketRefs = (await this.getWinningTicketByOrderId(orderId)).map(
+      ticket => TicketService.formatRef(ticket.id)
+    );
+
+    // If no winning tickets, do not update order status
+    if (ticketRefs.length === 0) {
+      return [];
+    }
+
+    let orderDTO: OrderDTO = OrderService.toDTO(order);
+    orderDTO.status = ORDER_STATUS.REDEEMED;
+
+    await this.prisma.order.update({
+      where: { id: orderId },
+      data: { status: ORDER_STATUS.REDEEMED },
+    });
+
+    return ticketRefs;
+  }
+
   private async getTicketsByOrderId(orderId: number): Promise<TicketDTO[]> {
     const tickets = await this.prisma.ticket.findMany({
       where: { order_id: orderId },
@@ -100,11 +151,21 @@ export class OrderService extends BaseService<Order, OrderDTO> {
       throw new Error(`Order not found: ${id}`);
     }
     if (order.status !== ORDER_STATUS.ISSUED) {
-      throw new Error(`Orders in ${order.status} status cannot be modified`);
+      throw new Error(`Order already in ${order.status} status`);
     }
 
-    if (status === ORDER_STATUS.CANCELLED) {
-      refs = await this.cancelOrder(id);
+    switch (status) {
+      case ORDER_STATUS.CANCELLED:
+        refs = await this.cancelOrder(id);
+        break;
+      case ORDER_STATUS.REFUNDED:
+        refs = await this.refundOrder(id);
+        break;
+      case ORDER_STATUS.REDEEMED:
+        refs = await this.redeemOrder(id);
+        break;
+      default:
+        throw new Error(`Invalid status: ${status}`);
     }
 
     return {
