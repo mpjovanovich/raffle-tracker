@@ -8,7 +8,12 @@ import SimpleButton from '@/app/ui/SimpleButton';
 import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { FaPenToSquare, FaTicket } from 'react-icons/fa6';
+import {
+  FaFileContract,
+  FaPenToSquare,
+  FaReceipt,
+  FaTicket,
+} from 'react-icons/fa6';
 
 interface EventsPageProps {
   events: Event[];
@@ -28,6 +33,16 @@ export default function EventsPage({ events }: EventsPageProps) {
               <Link href={`/tickets/${event.id}`}>
                 <IconButton title="Tickets">
                   <FaTicket />
+                </IconButton>
+              </Link>
+              <Link href={`/cashier/${event.id}`}>
+                <IconButton title="Cashier">
+                  <FaReceipt />
+                </IconButton>
+              </Link>
+              <Link href={`/reports/${event.id}`}>
+                <IconButton title="Reports">
+                  <FaFileContract />
                 </IconButton>
               </Link>
               <Link href={`/events/${event.id}`}>
@@ -52,7 +67,7 @@ export default function EventsPage({ events }: EventsPageProps) {
 }
 
 const styles = {
-  actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
+  actionButtonContainer: clsx('flex', 'flex-row'),
   itemListLink: clsx('w-full', 'px-6', 'py-1'),
   newButton: clsx('my-4', 'mx-4', 'cursor-pointer'),
 };
