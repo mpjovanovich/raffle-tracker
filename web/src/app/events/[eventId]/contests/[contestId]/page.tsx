@@ -12,6 +12,11 @@ export default async function Page({ params }: PageProps) {
   if (isNaN(contestIdNumber)) {
     notFound();
   }
+
   const contest = await getContest(contestIdNumber, true);
+  if (!contest) {
+    notFound();
+  }
+
   return <HorsesGrid contest={contest} />;
 }
