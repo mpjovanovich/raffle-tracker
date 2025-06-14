@@ -46,6 +46,7 @@ model Horse {
 model Order {
   id            Int     @id @default(autoincrement())
   created_dttm  DateTime  @default(now())
+  status        String
   ticket    Ticket[]
 }
 
@@ -55,7 +56,6 @@ model Ticket {
   contest_id    Int
   horse_id      Int
   order_id      Int
-  status        String
   horse         Horse   @relation(fields: [horse_id], references: [id])
   contest       Contest    @relation(fields: [contest_id], references: [id])
   event         Event   @relation(fields: [event_id], references: [id])

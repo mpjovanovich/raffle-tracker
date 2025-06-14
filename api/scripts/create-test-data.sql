@@ -23,38 +23,38 @@ VALUES
     (2, 5, 1, 0),
     (2, 6, 0, 0);
 
--- Create orders first
-INSERT INTO "Order" (created_dttm)
+-- Create orders first with status
+INSERT INTO "Order" (created_dttm, status)
 VALUES 
-    (CURRENT_TIMESTAMP),
-    (CURRENT_TIMESTAMP),
-    (CURRENT_TIMESTAMP),
-    (CURRENT_TIMESTAMP),
-    (CURRENT_TIMESTAMP);
+    (CURRENT_TIMESTAMP, 'ISSUED'),
+    (CURRENT_TIMESTAMP, 'ISSUED'),
+    (CURRENT_TIMESTAMP, 'ISSUED'),
+    (CURRENT_TIMESTAMP, 'ISSUED'),
+    (CURRENT_TIMESTAMP, 'ISSUED');
 
--- Insert tickets with order associations
-INSERT INTO ticket (event_id, contest_id, horse_id, order_id, status)
+-- Insert tickets without status field
+INSERT INTO ticket (event_id, contest_id, horse_id, order_id)
 VALUES 
-    (1, 1, 1, 1, 'ISSUED'),
-    (1, 1, 1, 1, 'ISSUED'),
-    (1, 1, 2, 1, 'ISSUED'),
-    (1, 1, 2, 2, 'ISSUED'),
-    (1, 1, 3, 2, 'ISSUED'),
-    (1, 1, 3, 2, 'ISSUED'),
-    (1, 1, 4, 3, 'ISSUED'),
-    (1, 1, 4, 3, 'ISSUED'),
-    (1, 1, 1, 4, 'ISSUED'),
-    (1, 1, 2, 4, 'ISSUED');
+    (1, 1, 1, 1),
+    (1, 1, 1, 1),
+    (1, 1, 2, 1),
+    (1, 1, 2, 2),
+    (1, 1, 3, 2),
+    (1, 1, 3, 2),
+    (1, 1, 4, 3),
+    (1, 1, 4, 3),
+    (1, 1, 1, 4),
+    (1, 1, 2, 4);
 
-INSERT INTO ticket (event_id, contest_id, horse_id, order_id, status)
+INSERT INTO ticket (event_id, contest_id, horse_id, order_id)
 VALUES 
-    (1, 2, 5, 5, 'ISSUED'),
-    (1, 2, 6, 5, 'ISSUED'),
-    (1, 2, 7, 5, 'ISSUED'),
-    (1, 2, 8, 5, 'ISSUED'),
-    (1, 2, 9, 5, 'ISSUED'),
-    (1, 2, 5, 5, 'ISSUED'),
-    (1, 2, 6, 5, 'ISSUED'),
-    (1, 2, 7, 5, 'ISSUED'),
-    (1, 2, 8, 5, 'ISSUED'),
-    (1, 2, 9, 5, 'ISSUED');
+    (1, 2, 5, 5),
+    (1, 2, 6, 5),
+    (1, 2, 7, 5),
+    (1, 2, 8, 5),
+    (1, 2, 9, 5),
+    (1, 2, 5, 5),
+    (1, 2, 6, 5),
+    (1, 2, 7, 5),
+    (1, 2, 8, 5),
+    (1, 2, 9, 5);

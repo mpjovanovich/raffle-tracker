@@ -3,8 +3,8 @@ import EphemeralLock from '@/utils/EphemeralLock.js';
 import {
   CreateTicketsRequest,
   CreateTicketsResponse,
+  ORDER_STATUS,
   Ticket as TicketDTO,
-  TicketStatus,
 } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
@@ -20,7 +20,6 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
       contestId: ticket.contest_id,
       horseId: ticket.horse_id,
       orderId: ticket.order_id,
-      status: ticket.status as TicketStatus,
     };
   }
 
@@ -31,7 +30,6 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
       contest_id: ticket.contestId,
       horse_id: ticket.horseId,
       order_id: ticket.orderId,
-      status: ticket.status as TicketStatus,
     };
   }
 
@@ -71,6 +69,7 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
       const order = await tx.order.create({
         data: {
           created_dttm: now,
+          status: ORDER_STATUS.ISSUED,
         },
       });
 
@@ -107,7 +106,6 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
                 contest_id: request.contestId,
                 horse_id: horse.id,
                 order_id: order.id,
-                status: 'CREATED',
               },
             });
 
