@@ -7,6 +7,7 @@ import {
   Ticket as TicketDTO,
 } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
+import { OrderService } from './OrderService.js';
 
 export class TicketService extends BaseService<Ticket, TicketDTO> {
   constructor(prisma: PrismaClient) {
@@ -33,6 +34,10 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
     };
   }
 
+  public static formatRef(ref: number): string {
+    return ref.toString().padStart(5, '0');
+  }
+
   private formatTicketResponse(
     createdDttm: Date,
     orderId: number,
@@ -42,10 +47,10 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
   ): CreateTicketsResponse {
     return {
       date: createdDttm.toLocaleDateString(),
-      orderId: orderId.toString().padStart(5, '0'),
+      orderId: OrderService.formatOrderNumber(orderId),
       contest: contest.number.toString().padStart(2, '0'),
       horse: horse.number.toString().padStart(2, '0'),
-      ref: ticket.id.toString().padStart(5, '0'),
+      ref: TicketService.formatRef(ticket.id),
     };
   }
 

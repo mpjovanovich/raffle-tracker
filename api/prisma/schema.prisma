@@ -47,7 +47,7 @@ model Order {
   id            Int     @id @default(autoincrement())
   created_dttm  DateTime  @default(now())
   status        String
-  ticket    Ticket[]
+  ticket        Ticket[]
 }
 
 model Ticket {

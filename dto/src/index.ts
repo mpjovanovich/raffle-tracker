@@ -5,5 +5,8 @@ export * from './models/CreateTicketsRequest.js';
 export * from './models/CreateTicketsResponse.js';
 export * from './models/Event.js';
 export * from './models/Horse.js';
+export * from './models/Order.js';
 export * from './models/OrderStatus.js';
 export * from './models/Ticket.js';
+export * from './models/UpdateOrderRequest.js';
+export * from './models/UpdateOrderResponse.js';
