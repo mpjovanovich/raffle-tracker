@@ -43,7 +43,7 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
     ticket: Ticket
   ): CreateTicketsResponse {
     return {
-      date: createdDttm.toISOString().split('T')[0],
+      date: createdDttm.toLocaleDateString(),
       orderId: orderId.toString().padStart(5, '0'),
       contest: contest.number.toString().padStart(2, '0'),
       horse: horse.number.toString().padStart(2, '0'),

@@ -6,38 +6,55 @@ interface OrderSummaryProps {
   tickets: CreateTicketsResponse[];
 }
 const OrderSummary = ({ eventName, tickets }: OrderSummaryProps) => {
-  console.log('tickets', tickets);
   const orderId = tickets[0]?.orderId;
   return (
     <div className={styles.orderSummary}>
-      <h1 className={styles.title}>{eventName}</h1>
-      <h1 className={styles.orderId}>Order ID: {orderId}</h1>
-      {tickets.map(ticket => (
-        <p
-          key={ticket.ref}
-          className={styles.ticketRef}
-        >
-          <span className={styles.ticketRaffleNumber}>Raffle #: </span>
-          <span className={styles.ticketRefNumber}>{ticket.ref}</span>
-        </p>
-      ))}
+      <div className={styles.header}>
+        <h1>{eventName}</h1>
+        <h1>Order ID: {orderId}</h1>
+      </div>
+      <ul className={styles.tickets}>
+        {tickets.map(ticket => (
+          <li
+            key={ticket.ref}
+            className={styles.ticket}
+          >
+            <span>{ticket.date}</span>
+            <span>Contest: {ticket.contest}</span>
+            <span>Horse: {ticket.horse}</span>
+            <span>Ref #: {ticket.ref}</span>
+          </li>
+        ))}
+      </ul>
+      <div className={styles.footer}>footer</div>
     </div>
   );
 };
 
 const styles = {
-  orderId: clsx('font-size-2xl', 'font-bold', 'mb-4'),
+  footer: clsx('text-center'),
+  header: clsx(
+    'flex',
+    'flex-row',
+    'justify-between',
+    'text-xl',
+    'font-bold',
+    'mb-4',
+    'gap-4',
+    'px-4'
+  ),
   orderSummary: clsx(
-    'w-[4.25in]',
+    'flex',
+    'flex-col',
     'min-h-[5.5in]',
-    'p-8',
+    'px-[1.5in]',
+    'py-[0.5in]',
     'box-border',
     'print:break-inside-avoid'
   ),
-  ticketRef: clsx('font-size-2xl', 'mb-4'),
-  title: clsx('font-size-2xl', 'font-bold', 'mb-4'),
-  ticketRaffleNumber: clsx(),
-  ticketRefNumber: clsx(),
+  ticket: clsx('flex', 'flex-row', 'gap-4', 'justify-between'),
+  tickets: clsx('flex-grow'),
+  title: clsx('text-xl', 'font-bold', 'mb-4'),
 };
 
 export default OrderSummary;

@@ -24,8 +24,6 @@ interface TicketPageProps {
 }
 
 export default function TicketPage({ contests, event }: TicketPageProps) {
-  const DEV_MODE = true;
-
   const [error, setError] = useState<string | null>(null);
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
   const [createdTickets, setCreatedTickets] = useState<CreateTicketsResponse[]>(
@@ -77,6 +75,20 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           horse: '1',
           ref: '00002',
         },
+        {
+          date: new Date().toISOString().split('T')[0],
+          orderId: '00059',
+          contest: '1',
+          horse: '1',
+          ref: '00003',
+        },
+        {
+          date: new Date().toISOString().split('T')[0],
+          orderId: '00059',
+          contest: '1',
+          horse: '1',
+          ref: '00004',
+        },
       ];
 
       // Wait for state update to complete
@@ -86,10 +98,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       });
 
       printTickets();
-
-      // TODO - toast success
       toast.success('Tickets created successfully');
-
       setTickets([]);
     } catch (error) {
       setError(
@@ -243,7 +252,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           eventName={event.name}
           tickets={createdTickets}
         />
-        {DEV_MODE && <div className={styles.perforationLine}></div>}
         <OrderSummary
           eventName={event.name}
           tickets={createdTickets}
@@ -311,9 +319,10 @@ const styles = {
     'print:w-[8.5in]',
     'print:h-[11in]',
     'print:bg-white',
-    'print:size-auto',
-    'print:m-[1in]'
+    'print:size-auto'
+    // 'print:m-[0.25in]'
+    // 'print:mx-[1in]',
+    // 'print:my-[0.5in]'
   ),
-  perforationLine: clsx('border-b', 'border-dashed', 'border-black'),
   submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
 };
