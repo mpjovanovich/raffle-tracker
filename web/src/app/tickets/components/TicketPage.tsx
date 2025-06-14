@@ -1,11 +1,11 @@
 'use client';
 
 import { useInitializedForm } from '@/app/hooks/useInitializedForm';
+import OrderSummary from '@/app/tickets/components/OrderSummary';
 import Card from '@/app/ui/Card';
 import Input from '@/app/ui/Input';
 import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
-import OrderSummary from '@/app/tickets/components/OrderSummary';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
 import {
@@ -16,6 +16,7 @@ import {
 } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface TicketPageProps {
   contests: Contest[];
@@ -87,7 +88,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       printTickets();
 
       // TODO - toast success
-      // toast.success('Tickets printed successfully');
+      toast.success('Tickets created successfully');
 
       setTickets([]);
     } catch (error) {
@@ -197,6 +198,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   return (
     <>
+      <Toaster />
       <Card
         title={`Tickets: ${event.name}`}
         className={styles.card}
