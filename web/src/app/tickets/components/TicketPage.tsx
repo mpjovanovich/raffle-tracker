@@ -55,20 +55,22 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       const createdTickets: CreateTicketsResponse[] = [
         {
           date: new Date().toISOString().split('T')[0],
+          orderId: '00059',
           contest: '1',
           horse: '1',
           ref: '00001',
         },
         {
           date: new Date().toISOString().split('T')[0],
+          orderId: '00059',
           contest: '1',
           horse: '1',
           ref: '00002',
         },
       ];
-      console.log('printTickets');
-      const printSuccess = await printTickets(event.name, createdTickets);
-      console.log('printSuccess', printSuccess);
+      await printTickets(event.name, createdTickets);
+
+      // TODO - toast success
 
       // Reset the form
       setTickets([]);

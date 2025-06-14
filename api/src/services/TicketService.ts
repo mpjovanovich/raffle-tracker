@@ -37,12 +37,14 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
 
   private formatTicketResponse(
     createdDttm: Date,
+    orderId: number,
     contest: Contest,
     horse: Horse,
     ticket: Ticket
   ): CreateTicketsResponse {
     return {
       date: createdDttm.toISOString().split('T')[0],
+      orderId: orderId.toString().padStart(5, '0'),
       contest: contest.number.toString().padStart(2, '0'),
       horse: horse.number.toString().padStart(2, '0'),
       ref: ticket.id.toString().padStart(5, '0'),
@@ -111,7 +113,7 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
 
             // Add to response
             createdTickets.push(
-              this.formatTicketResponse(now, contest, horse, ticket)
+              this.formatTicketResponse(now, order.id, contest, horse, ticket)
             );
           }
         });

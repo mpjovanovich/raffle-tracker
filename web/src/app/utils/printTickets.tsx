@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server';
 export const printTickets = (
   eventName: string,
   tickets: CreateTicketsResponse[]
-): Promise<boolean> => {
+): Promise<void> => {
   return new Promise(resolve => {
     const DEV_MODE = true;
 
@@ -37,35 +37,19 @@ export const printTickets = (
     </html>
     `;
 
-    let printCompleted = false;
-    let windowClosed = false;
     const printWindow = window.open('', '_blank');
-
     if (!printWindow) {
-      console.log('printWindow is null');
-      resolve(false);
+      resolve();
       return;
     }
 
     printWindow.document.write(html);
     printWindow.document.close();
-    printWindow.print();
-
-    // If print is completed...
-    printWindow.addEventListener('afterprint', () => {
-      printCompleted = true;
-      if (windowClosed) {
-        resolve(true);
-      }
-    });
-
-    // If print was not completed at time of window close...
     printWindow.addEventListener('beforeunload', () => {
-      windowClosed = true;
-      if (!printCompleted) {
-        resolve(false);
-      }
+      resolve();
     });
+    printWindow.print();
+    printWindow.close();
   });
 };
 
@@ -80,6 +64,12 @@ const styles = `.ticket-container {
 }
 
 .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.order-id {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
