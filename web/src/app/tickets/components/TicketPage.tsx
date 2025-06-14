@@ -16,7 +16,6 @@ import {
 } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 
 interface TicketPageProps {
   contests: Contest[];
@@ -25,6 +24,9 @@ interface TicketPageProps {
 
 export default function TicketPage({ contests, event }: TicketPageProps) {
   const [error, setError] = useState<string | null>(null);
+  const [latestOrderNumber, setLatestOrderNumber] = useState<string | null>(
+    null
+  );
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
   const [createdTickets, setCreatedTickets] = useState<CreateTicketsResponse[]>(
     []
@@ -58,7 +60,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   const onTicketSubmit = async () => {
     try {
-      //   const createdTickets = await createTickets(tickets);
       // DEBUG - fake some tickets
       const createdTickets: CreateTicketsResponse[] = [
         {
@@ -90,15 +91,17 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           ref: '00004',
         },
       ];
+      // UNCOMMENT WHEN DESIGN WORK IS DONE
+      //   const createdTickets: CreateTicketsResponse[] = await createTickets(tickets);
 
       // Wait for state update to complete
       await new Promise<void>(resolve => {
         setCreatedTickets(createdTickets);
+        setLatestOrderNumber(createdTickets[0]?.orderId);
         resolve();
       });
 
       printTickets();
-      toast.success('Tickets created successfully');
       setTickets([]);
     } catch (error) {
       setError(
@@ -207,7 +210,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   return (
     <>
-      <Toaster />
       <Card
         title={`Tickets: ${event.name}`}
         className={styles.card}
@@ -246,6 +248,11 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
         <TicketsAdd />
         <TicketSubmit />
+        <p className={styles.cancelWarning}>
+          *Note: Tickets cancelled from print preview will not be removed from
+          the system. To cancel most recent tickets, use the following Order ID:
+          {' ' + latestOrderNumber}
+        </p>
       </Card>
       <div className={styles.printTarget}>
         <OrderSummary
@@ -263,6 +270,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
 const styles = {
   addTicketsTitle: clsx('text-xl', 'px-4'),
+  cancelWarning: clsx('text-sm', 'px-4', 'mt-4'),
   card: clsx('flex', 'flex-col', 'gap-4'),
   error: clsx('text-red-500'),
   itemAdd: clsx(
@@ -320,9 +328,6 @@ const styles = {
     'print:h-[11in]',
     'print:bg-white',
     'print:size-auto'
-    // 'print:m-[0.25in]'
-    // 'print:mx-[1in]',
-    // 'print:my-[0.5in]'
   ),
   submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
 };
