@@ -24,3 +24,13 @@
     --foreground: #ededed;
   }
 } */
+
+@page {
+  margin: 0;
+}
+
+@media print {
+  body.print-mode * {
+    visibility: hidden;
+  }
+}

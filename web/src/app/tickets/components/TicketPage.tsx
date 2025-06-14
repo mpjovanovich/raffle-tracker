@@ -7,7 +7,8 @@ import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
-import { printTickets } from '@/app/utils/printTickets';
+// import { printTickets } from '@/app/utils/printTickets';
+// import TicketPrintout from './TicketPrintout';
 import {
   Contest,
   CreateTicketsRequest,
@@ -24,7 +25,6 @@ interface TicketPageProps {
 
 export default function TicketPage({ contests, event }: TicketPageProps) {
   const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
 
   const {
@@ -40,6 +40,14 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     mode: 'onBlur',
   });
 
+  const printTickets = async (): Promise<void> => {
+    document.body.classList.add('print-mode');
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('print-mode');
+    });
+    window.print();
+  };
+
   const onTicketAdd = (request: CreateTicketsRequest) => {
     setError(null);
     setTickets([...tickets, request]);
@@ -47,9 +55,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   const onTicketSubmit = async () => {
     try {
-      setError(null);
-      setIsSaving(true);
-
       //   const createdTickets = await createTickets(tickets);
       // DEBUG - fake some tickets
       const createdTickets: CreateTicketsResponse[] = [
@@ -68,11 +73,11 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           ref: '00002',
         },
       ];
-      await printTickets(event.name, createdTickets);
 
+      await printTickets();
+
+      // await printTickets(event.name, createdTickets);
       // TODO - toast success
-
-      // Reset the form
       setTickets([]);
     } catch (error) {
       setError(
@@ -80,8 +85,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
           ? error.message
           : 'An error occurred. Please contact an administrator.'
       );
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -102,7 +105,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         </SimpleButton>
         <SimpleButton
           type="submit"
-          disabled={isSaving || tickets.length === 0}
+          disabled={tickets.length === 0}
         >
           Confirm
         </SimpleButton>
@@ -170,7 +173,6 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         <SimpleButton
           className={styles.itemAddButton}
           type="submit"
-          disabled={isSaving}
         >
           Add
         </SimpleButton>
@@ -223,6 +225,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         <TicketsAdd />
         <TicketSubmit />
       </Card>
+      <div className={styles.printTarget}>TEST123</div>
     </>
   );
 }
@@ -275,5 +278,34 @@ const styles = {
     'h-[40vh]',
     'overflow-hidden'
   ),
+  printTarget: clsx(
+    'hidden',
+    'print:block',
+    'print:!visible',
+    'print:absolute',
+    'print:left-0',
+    'print:top-0',
+    'print:w-[8.5in]',
+    'print:h-[11in]',
+    'print:bg-white',
+    'print:size-auto',
+    'print:m-[1in]'
+  ),
+  //   .ticket-ref {
+  //   font-size: 1.125rem;
+  //   margin-bottom: 0.5rem;
+  // }
+
+  // .title {
+  //   font-size: 1.5rem;
+  //   font-weight: bold;
+  //   margin-bottom: 1rem;
+  // }
+
+  // .order-id {
+  //   font-size: 1.5rem;
+  //   font-weight: bold;
+  //   margin-bottom: 1rem;
+  // }
   submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
 };
