@@ -5,8 +5,6 @@ export interface Ticket {
   eventId: number;
   contestId: number;
   horseId: number;
-  createdDttm: string;
-  redeemedDttm: string | null;
-  refundedDttm: string | null;
+  orderId: number;
   status: TicketStatus;
 }

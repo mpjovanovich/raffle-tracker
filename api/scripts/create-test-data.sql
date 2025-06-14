@@ -23,29 +23,38 @@ VALUES
     (2, 5, 1, 0),
     (2, 6, 0, 0);
 
-
-INSERT INTO ticket (event_id, contest_id, horse_id, status)
+-- Create orders first
+INSERT INTO "Order" (created_dttm)
 VALUES 
-    (1, 1, 1, 'ISSUED'),
-    (1, 1, 1, 'ISSUED'),
-    (1, 1, 2, 'ISSUED'),
-    (1, 1, 2, 'ISSUED'),
-    (1, 1, 3, 'ISSUED'),
-    (1, 1, 3, 'ISSUED'),
-    (1, 1, 4, 'ISSUED'),
-    (1, 1, 4, 'ISSUED'),
-    (1, 1, 1, 'ISSUED'),
-    (1, 1, 2, 'ISSUED');
+    (CURRENT_TIMESTAMP),
+    (CURRENT_TIMESTAMP),
+    (CURRENT_TIMESTAMP),
+    (CURRENT_TIMESTAMP),
+    (CURRENT_TIMESTAMP);
 
-INSERT INTO ticket (event_id, contest_id, horse_id, status)
+-- Insert tickets with order associations
+INSERT INTO ticket (event_id, contest_id, horse_id, order_id, status)
 VALUES 
-    (1, 2, 5, 'ISSUED'),
-    (1, 2, 6, 'ISSUED'),
-    (1, 2, 7, 'ISSUED'),
-    (1, 2, 8, 'ISSUED'),
-    (1, 2, 9, 'ISSUED'),
-    (1, 2, 5, 'ISSUED'),
-    (1, 2, 6, 'ISSUED'),
-    (1, 2, 7, 'ISSUED'),
-    (1, 2, 8, 'ISSUED'),
-    (1, 2, 9, 'ISSUED');
+    (1, 1, 1, 1, 'ISSUED'),
+    (1, 1, 1, 1, 'ISSUED'),
+    (1, 1, 2, 1, 'ISSUED'),
+    (1, 1, 2, 2, 'ISSUED'),
+    (1, 1, 3, 2, 'ISSUED'),
+    (1, 1, 3, 2, 'ISSUED'),
+    (1, 1, 4, 3, 'ISSUED'),
+    (1, 1, 4, 3, 'ISSUED'),
+    (1, 1, 1, 4, 'ISSUED'),
+    (1, 1, 2, 4, 'ISSUED');
+
+INSERT INTO ticket (event_id, contest_id, horse_id, order_id, status)
+VALUES 
+    (1, 2, 5, 5, 'ISSUED'),
+    (1, 2, 6, 5, 'ISSUED'),
+    (1, 2, 7, 5, 'ISSUED'),
+    (1, 2, 8, 5, 'ISSUED'),
+    (1, 2, 9, 5, 'ISSUED'),
+    (1, 2, 5, 5, 'ISSUED'),
+    (1, 2, 6, 5, 'ISSUED'),
+    (1, 2, 7, 5, 'ISSUED'),
+    (1, 2, 8, 5, 'ISSUED'),
+    (1, 2, 9, 5, 'ISSUED');

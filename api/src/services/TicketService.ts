@@ -19,13 +19,7 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
       eventId: ticket.event_id,
       contestId: ticket.contest_id,
       horseId: ticket.horse_id,
-      createdDttm: ticket.created_dttm.toISOString(),
-      redeemedDttm: ticket.redeemed_dttm
-        ? ticket.redeemed_dttm.toISOString()
-        : null,
-      refundedDttm: ticket.refunded_dttm
-        ? ticket.refunded_dttm.toISOString()
-        : null,
+      orderId: ticket.order_id,
       status: ticket.status as TicketStatus,
     };
   }
@@ -36,20 +30,19 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
       event_id: ticket.eventId,
       contest_id: ticket.contestId,
       horse_id: ticket.horseId,
-      created_dttm: new Date(ticket.createdDttm),
-      redeemed_dttm: ticket.redeemedDttm ? new Date(ticket.redeemedDttm) : null,
-      refunded_dttm: ticket.refundedDttm ? new Date(ticket.refundedDttm) : null,
+      order_id: ticket.orderId,
       status: ticket.status as TicketStatus,
     };
   }
 
   private formatTicketResponse(
+    createdDttm: Date,
     contest: Contest,
     horse: Horse,
     ticket: Ticket
   ): CreateTicketsResponse {
     return {
-      date: ticket.created_dttm.toISOString().split('T')[0],
+      date: createdDttm.toISOString().split('T')[0],
       contest: contest.number.toString().padStart(2, '0'),
       horse: horse.number.toString().padStart(2, '0'),
       ref: ticket.id.toString().padStart(5, '0'),
@@ -63,10 +56,21 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
   public async createTickets(
     requests: CreateTicketsRequest[]
   ): Promise<CreateTicketsResponse[]> {
+    if (requests.length === 0) {
+      return [];
+    }
+
     // Everything here needs to be atomic.
     return this.prisma.$transaction(async tx => {
       const createdTickets: CreateTicketsResponse[] = [];
       const now = new Date();
+
+      // Create new order
+      const order = await tx.order.create({
+        data: {
+          created_dttm: now,
+        },
+      });
 
       for (const request of requests) {
         const contest = await tx.contest.findUnique({
@@ -100,14 +104,14 @@ export class TicketService extends BaseService<Ticket, TicketDTO> {
                 event_id: contest.event_id,
                 contest_id: request.contestId,
                 horse_id: horse.id,
-                created_dttm: now,
+                order_id: order.id,
                 status: 'CREATED',
               },
             });
 
             // Add to response
             createdTickets.push(
-              this.formatTicketResponse(contest, horse, ticket)
+              this.formatTicketResponse(now, contest, horse, ticket)
             );
           }
         });
