@@ -5,10 +5,9 @@ import Card from '@/app/ui/Card';
 import Input from '@/app/ui/Input';
 import ItemList from '@/app/ui/ItemList';
 import LabeledField from '@/app/ui/LabeledField';
+import OrderSummary from '@/app/tickets/components/OrderSummary';
 import Select from '@/app/ui/Select';
 import SimpleButton from '@/app/ui/SimpleButton';
-// import { printTickets } from '@/app/utils/printTickets';
-// import TicketPrintout from './TicketPrintout';
 import {
   Contest,
   CreateTicketsRequest,
@@ -24,8 +23,13 @@ interface TicketPageProps {
 }
 
 export default function TicketPage({ contests, event }: TicketPageProps) {
+  const DEV_MODE = true;
+
   const [error, setError] = useState<string | null>(null);
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
+  const [createdTickets, setCreatedTickets] = useState<CreateTicketsResponse[]>(
+    []
+  );
 
   const {
     formState: { errors },
@@ -40,7 +44,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     mode: 'onBlur',
   });
 
-  const printTickets = async (): Promise<void> => {
+  const printTickets = () => {
     document.body.classList.add('print-mode');
     window.addEventListener('afterprint', () => {
       document.body.classList.remove('print-mode');
@@ -74,10 +78,17 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         },
       ];
 
-      await printTickets();
+      // Wait for state update to complete
+      await new Promise<void>(resolve => {
+        setCreatedTickets(createdTickets);
+        resolve();
+      });
 
-      // await printTickets(event.name, createdTickets);
+      printTickets();
+
       // TODO - toast success
+      // toast.success('Tickets printed successfully');
+
       setTickets([]);
     } catch (error) {
       setError(
@@ -225,7 +236,17 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         <TicketsAdd />
         <TicketSubmit />
       </Card>
-      <div className={styles.printTarget}>TEST123</div>
+      <div className={styles.printTarget}>
+        <OrderSummary
+          eventName={event.name}
+          tickets={createdTickets}
+        />
+        {DEV_MODE && <div className={styles.perforationLine}></div>}
+        <OrderSummary
+          eventName={event.name}
+          tickets={createdTickets}
+        />
+      </div>
     </>
   );
 }
@@ -281,7 +302,7 @@ const styles = {
   printTarget: clsx(
     'hidden',
     'print:block',
-    'print:!visible',
+    'print:[&_*]:!visible',
     'print:absolute',
     'print:left-0',
     'print:top-0',
@@ -291,21 +312,6 @@ const styles = {
     'print:size-auto',
     'print:m-[1in]'
   ),
-  //   .ticket-ref {
-  //   font-size: 1.125rem;
-  //   margin-bottom: 0.5rem;
-  // }
-
-  // .title {
-  //   font-size: 1.5rem;
-  //   font-weight: bold;
-  //   margin-bottom: 1rem;
-  // }
-
-  // .order-id {
-  //   font-size: 1.5rem;
-  //   font-weight: bold;
-  //   margin-bottom: 1rem;
-  // }
+  perforationLine: clsx('border-b', 'border-dashed', 'border-black'),
   submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
 };
