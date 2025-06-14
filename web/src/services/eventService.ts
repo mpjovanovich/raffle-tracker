@@ -10,7 +10,9 @@ export async function getEvents(): Promise<Event[]> {
   }
 
   const data = await res.json();
-  return data.data as Event[];
+
+  // Sort desc - most recent first
+  return data.data.sort((a: Event, b: Event) => b.id - a.id) as Event[];
 }
 
 export async function getEvent(
