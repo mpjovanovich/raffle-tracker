@@ -54,7 +54,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
 
   const EditButtons = () => {
     return (
-      <div className="flex justify-end mb-2">
+      <div className={styles.editButtons}>
         {mode === 'edit' || mode === 'create' ? (
           <>
             <IconButton
@@ -167,6 +167,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
 }
 
 const styles = {
+  editButtons: clsx('flex', 'justify-end', 'mb-2'),
   error: clsx('text-red-500'),
   formContent: clsx('flex', 'flex-col', 'gap-2'),
 };
