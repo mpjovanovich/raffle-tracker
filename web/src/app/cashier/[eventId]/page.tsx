@@ -1,7 +1,4 @@
-import Card from '@/components/ui/Card';
-import Input from '@/components/ui/Input';
-import LabeledField from '@/components/ui/LabeledField';
-import SimpleButton from '@/components/ui/SimpleButton';
+import CashierPage from '@/components/page/cashier/CashierPage';
 import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
 
@@ -20,41 +17,5 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <Card title="Cashier">
-      <form
-        className={styles.form}
-        // onSubmit={e => {
-        //   e.preventDefault();
-        //     handleSubmit(onTicketAdd)(e);
-        // }}
-      >
-        <LabeledField
-          label="Order ID:"
-          htmlFor="orderId"
-          //   className={styles.itemAddLabeledField}
-          //   error={errors.contestId?.message}
-        >
-          <Input
-            id="orderId"
-            // className={styles.itemAddLabeledFieldNumber}
-            // {...register('contestId', {
-            //   required: 'Contest number is required',
-            //   valueAsNumber: true,
-            // })}
-          ></Input>
-        </LabeledField>
-        <div className={styles.buttonContainer}>
-          <SimpleButton type="submit">Redeem</SimpleButton>
-          {/* TODO: icon button refund */}
-          {/* TODO: icon button cancel  */}
-        </div>
-      </form>
-    </Card>
-  );
+  return <CashierPage event={event} />;
 }
-
-const styles = {
-  form: 'flex flex-col gap-2',
-  buttonContainer: 'flex gap-2 justify-end',
-};

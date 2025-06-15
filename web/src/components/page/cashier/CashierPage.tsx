@@ -1,25 +1,18 @@
+'use client';
+
 import Card from '@/components/ui/Card';
+import IconButton from '@/components/ui/IconButton';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
-import { getEvent } from '@/services/eventService';
-import { notFound } from 'next/navigation';
+import { Event } from '@raffle-tracker/dto';
+import { FaBan, FaXmark } from 'react-icons/fa6';
 
-interface PageProps {
-  params: { eventId: string };
+interface CashierPageProps {
+  event: Event;
 }
 
-export default async function Page({ params }: PageProps) {
-  const { eventId } = await params;
-  const eventIdNumber = parseInt(eventId);
-  if (isNaN(eventIdNumber)) {
-    notFound();
-  }
-  const event = await getEvent(eventIdNumber, true);
-  if (!event) {
-    notFound();
-  }
-
+export default function CashierPage({ event }: CashierPageProps) {
   return (
     <Card title="Cashier">
       <form
@@ -46,8 +39,20 @@ export default async function Page({ params }: PageProps) {
         </LabeledField>
         <div className={styles.buttonContainer}>
           <SimpleButton type="submit">Redeem</SimpleButton>
-          {/* TODO: icon button refund */}
-          {/* TODO: icon button cancel  */}
+          <IconButton
+            className={styles.iconButton}
+            title="Refund"
+            onClick={() => {}}
+          >
+            <FaBan />
+          </IconButton>
+          <IconButton
+            className={styles.iconButton}
+            title="Cancel"
+            onClick={() => {}}
+          >
+            <FaXmark />
+          </IconButton>
         </div>
       </form>
     </Card>
@@ -56,5 +61,6 @@ export default async function Page({ params }: PageProps) {
 
 const styles = {
   form: 'flex flex-col gap-2',
+  iconButton: 'bg-light-accent2',
   buttonContainer: 'flex gap-2 justify-end',
 };
