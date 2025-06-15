@@ -1,13 +1,13 @@
 'use client';
 
-import { useInitializedForm } from '@/app/hooks/useInitializedForm';
-import Card from '@/app/ui/Card';
-import IconButton from '@/app/ui/IconButton';
-import Input from '@/app/ui/Input';
-import ItemList from '@/app/ui/ItemList';
-import ItemListItem from '@/app/ui/ItemListItem';
-import LabeledField from '@/app/ui/LabeledField';
-import SimpleButton from '@/app/ui/SimpleButton';
+import Card from '@/components/ui/Card';
+import IconButton from '@/components/ui/IconButton';
+import Input from '@/components/ui/Input';
+import ItemList from '@/components/ui/ItemList';
+import ItemListItem from '@/components/ui/ItemListItem';
+import LabeledField from '@/components/ui/LabeledField';
+import SimpleButton from '@/components/ui/SimpleButton';
+import { useInitializedForm } from '@/hooks/useInitializedForm';
 import {
   addHorse,
   deleteHorse,

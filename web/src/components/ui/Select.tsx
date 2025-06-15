@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { forwardRef } from 'react';
-import { bodyFont } from '../fonts';
+import { bodyFont } from '../../app/fonts';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   className?: string;

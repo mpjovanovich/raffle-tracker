@@ -1,10 +1,10 @@
 'use client';
 
-import Card from '@/app/ui/Card';
-import IconButton from '@/app/ui/IconButton';
-import ItemList from '@/app/ui/ItemList';
-import ItemListItem from '@/app/ui/ItemListItem';
-import SimpleButton from '@/app/ui/SimpleButton';
+import Card from '@/components/ui/Card';
+import IconButton from '@/components/ui/IconButton';
+import ItemList from '@/components/ui/ItemList';
+import ItemListItem from '@/components/ui/ItemListItem';
+import SimpleButton from '@/components/ui/SimpleButton';
 import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';

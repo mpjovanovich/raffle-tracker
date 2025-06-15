@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { bodyFont } from '../fonts';
+import { bodyFont } from '../../app/fonts';
 
 interface ItemListProps {
   children?: React.ReactNode;

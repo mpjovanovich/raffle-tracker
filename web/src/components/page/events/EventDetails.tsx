@@ -1,9 +1,9 @@
 'use client';
 
-import { useInitializedForm } from '@/app/hooks/useInitializedForm';
-import IconButton from '@/app/ui/IconButton';
-import Input from '@/app/ui/Input';
-import LabeledField from '@/app/ui/LabeledField';
+import IconButton from '@/components/ui/IconButton';
+import Input from '@/components/ui/Input';
+import LabeledField from '@/components/ui/LabeledField';
+import { useInitializedForm } from '@/hooks/useInitializedForm';
 import { upsertEvent } from '@/services/eventService';
 import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';

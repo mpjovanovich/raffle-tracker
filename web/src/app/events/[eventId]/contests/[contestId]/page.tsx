@@ -1,4 +1,4 @@
-import HorsesGrid from '@/app/events/components/HorsesGrid';
+import HorsesGrid from '@/components/page/events/HorsesGrid';
 import { getContest } from '@/services/contestService';
 import { notFound } from 'next/navigation';
 

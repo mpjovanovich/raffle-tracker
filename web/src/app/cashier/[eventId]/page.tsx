@@ -1,7 +1,7 @@
-import Card from '@/app/ui/Card';
-import Input from '@/app/ui/Input';
-import LabeledField from '@/app/ui/LabeledField';
-import SimpleButton from '@/app/ui/SimpleButton';
+import Card from '@/components/ui/Card';
+import Input from '@/components/ui/Input';
+import LabeledField from '@/components/ui/LabeledField';
+import SimpleButton from '@/components/ui/SimpleButton';
 import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
 

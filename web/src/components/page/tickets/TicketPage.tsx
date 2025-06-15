@@ -1,13 +1,13 @@
 'use client';
 
-import { useInitializedForm } from '@/app/hooks/useInitializedForm';
-import OrderSummary from '@/app/tickets/components/OrderSummary';
-import Card from '@/app/ui/Card';
-import Input from '@/app/ui/Input';
-import ItemList from '@/app/ui/ItemList';
-import LabeledField from '@/app/ui/LabeledField';
-import Select from '@/app/ui/Select';
-import SimpleButton from '@/app/ui/SimpleButton';
+import OrderSummary from '@/components/page/tickets/OrderSummary';
+import Card from '@/components/ui/Card';
+import Input from '@/components/ui/Input';
+import ItemList from '@/components/ui/ItemList';
+import LabeledField from '@/components/ui/LabeledField';
+import Select from '@/components/ui/Select';
+import SimpleButton from '@/components/ui/SimpleButton';
+import { useInitializedForm } from '@/hooks/useInitializedForm';
 import {
   Contest,
   CreateTicketsRequest,

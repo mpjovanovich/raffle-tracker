@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Navigation from './components/Navigation';
+import Navigation from '../components/shared/Navigation';
 import { mainFont } from './fonts';
 import './globals.css';
 

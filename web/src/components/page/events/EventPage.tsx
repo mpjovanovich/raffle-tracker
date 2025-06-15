@@ -1,4 +1,4 @@
-import Card from '@/app/ui/Card';
+import Card from '@/components/ui/Card';
 import { Event } from '@raffle-tracker/dto';
 import ContestsGrid from './ContestsGrid';
 import EventDetails from './EventDetails';
