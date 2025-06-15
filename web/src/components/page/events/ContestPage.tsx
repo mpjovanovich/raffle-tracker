@@ -20,11 +20,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaBan, FaCheck, FaCircleCheck, FaXmark } from 'react-icons/fa6';
 
-interface HorsesGridProps {
+interface ContestPageProps {
   contest: Contest;
 }
 
-export default function HorsesGrid({ contest }: HorsesGridProps) {
+export default function ContestPage({ contest }: ContestPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();

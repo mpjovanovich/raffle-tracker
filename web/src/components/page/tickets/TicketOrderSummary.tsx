@@ -1,11 +1,15 @@
 import { CreateTicketsResponse } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 
-interface OrderSummaryProps {
+interface TicketOrderSummaryProps {
   eventName: string;
   tickets: CreateTicketsResponse[];
 }
-const OrderSummary = ({ eventName, tickets }: OrderSummaryProps) => {
+
+const TicketOrderSummary = ({
+  eventName,
+  tickets,
+}: TicketOrderSummaryProps) => {
   const orderId = tickets[0]?.orderId;
   return (
     <div className={styles.orderSummary}>
@@ -57,4 +61,4 @@ const styles = {
   title: clsx('text-xl', 'font-bold', 'mb-4'),
 };
 
-export default OrderSummary;
+export default TicketOrderSummary;

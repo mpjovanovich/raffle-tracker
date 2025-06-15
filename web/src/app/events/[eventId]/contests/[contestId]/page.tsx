@@ -1,4 +1,4 @@
-import HorsesGrid from '@/components/page/events/HorsesGrid';
+import ContestPage from '@/components/page/events/ContestPage';
 import { getContest } from '@/services/contestService';
 import { notFound } from 'next/navigation';
 
@@ -18,5 +18,5 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return <HorsesGrid contest={contest} />;
+  return <ContestPage contest={contest} />;
 }

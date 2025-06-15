@@ -1,6 +1,5 @@
 'use client';
 
-import OrderSummary from '@/components/page/tickets/OrderSummary';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import ItemList from '@/components/ui/ItemList';
@@ -16,6 +15,7 @@ import {
 } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
+import TicketOrderSummary from './TicketOrderSummary';
 
 interface TicketPageProps {
   contests: Contest[];
@@ -255,11 +255,11 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         </p>
       </Card>
       <div className={styles.printTarget}>
-        <OrderSummary
+        <TicketOrderSummary
           eventName={event.name}
           tickets={createdTickets}
         />
-        <OrderSummary
+        <TicketOrderSummary
           eventName={event.name}
           tickets={createdTickets}
         />

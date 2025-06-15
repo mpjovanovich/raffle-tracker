@@ -16,11 +16,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaPenToSquare, FaXmark } from 'react-icons/fa6';
 
-interface ContestsGridProps {
+interface EventContestsProps {
   event: Event;
 }
 
-export default function ContestsGrid({ event }: ContestsGridProps) {
+export default function EventContests({ event }: EventContestsProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();

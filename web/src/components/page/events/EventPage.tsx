@@ -1,6 +1,6 @@
 import Card from '@/components/ui/Card';
 import { Event } from '@raffle-tracker/dto';
-import ContestsGrid from './ContestsGrid';
+import EventContests from './EventContests';
 import EventDetails from './EventDetails';
 
 interface EventPageProps {
@@ -17,7 +17,7 @@ export default function EventPage({ mode, event }: EventPageProps) {
           mode={mode}
         />
       </Card>
-      {mode === 'view' && <ContestsGrid event={event} />}
+      {mode === 'view' && <EventContests event={event} />}
     </>
   );
 }
