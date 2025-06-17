@@ -1,5 +1,5 @@
 import { OrderService } from '@/services/OrderService.js';
-import { ORDER_STATUS, UpdateOrderRequest } from '@raffle-tracker/dto';
+import { ORDER_STATUS, OrderStatus } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 import { prisma } from '../db.js';
 import { APIResponse } from '../utils/APIResponse.js';
@@ -13,17 +13,15 @@ class OrderController {
   }
 
   updateStatus = asyncHandler(async (req: Request, res: Response) => {
-    const updateOrderRequest: UpdateOrderRequest = req.body;
-    if (isNaN(updateOrderRequest.orderId)) {
-      throw new Error(`Invalid ID format: ${updateOrderRequest.orderId}`);
+    const orderId = parseInt(req.params.orderId);
+    const status: OrderStatus = req.body.status;
+    if (isNaN(orderId)) {
+      throw new Error(`Invalid ID format: ${orderId}`);
     }
-    if (!Object.values(ORDER_STATUS).includes(updateOrderRequest.status)) {
-      throw new Error(`Invalid status: ${updateOrderRequest.status}`);
+    if (!Object.values(ORDER_STATUS).includes(status)) {
+      throw new Error(`Invalid status: ${status}`);
     }
-    const tickets = await this.orderService.updateStatus(
-      updateOrderRequest.orderId,
-      updateOrderRequest.status
-    );
+    const tickets = await this.orderService.updateStatus(orderId, status);
     res.status(200).json(new APIResponse(200, tickets));
   });
 }

@@ -31,6 +31,14 @@ export class OrderService extends BaseService<Order, OrderDTO> {
   }
 
   public static formatOrderNumber(orderId: number): string {
+    // Five digit limit was in per client requirements.
+    // If we ever hit this we'll just have to pad with more zeroes - shouldn't break anything.
+    if (orderId > 99999) {
+      throw new Error(
+        `Order ID has exceeded 5 digits. Please contact an administrator.`
+      );
+    }
+
     return orderId.toString().padStart(5, '0');
   }
 
@@ -92,11 +100,6 @@ export class OrderService extends BaseService<Order, OrderDTO> {
       ticket => TicketService.formatRef(ticket.id)
     );
 
-    // If no winning tickets, do not update order status
-    if (ticketRefs.length === 0) {
-      return [];
-    }
-
     let orderDTO: OrderDTO = OrderService.toDTO(order);
     orderDTO.status = ORDER_STATUS.REDEEMED;
 
@@ -148,7 +151,7 @@ export class OrderService extends BaseService<Order, OrderDTO> {
     });
 
     if (!order) {
-      throw new Error(`Order not found: ${id}`);
+      throw new Error(`Order not found: ${OrderService.formatOrderNumber(id)}`);
     }
     if (order.status !== ORDER_STATUS.ISSUED) {
       throw new Error(`Order already in ${order.status} status`);

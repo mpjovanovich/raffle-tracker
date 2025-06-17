@@ -35,7 +35,7 @@ export default function EventsPage({ events }: EventsPageProps) {
                   <FaTicket />
                 </IconButton>
               </Link>
-              <Link href={`/cashier/${event.id}`}>
+              <Link href={`/cashier`}>
                 <IconButton title="Cashier">
                   <FaReceipt />
                 </IconButton>

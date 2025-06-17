@@ -114,7 +114,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"location\": \"{{$randomCity}}\",\r\n    \"startDate\": \"{{startDate}}\",\r\n    \"endDate\": \"{{endDate}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"{{name}}\",\r\n    \"location\": \"{{$randomCity}}\",\r\n    \"startDate\": \"2025-06-14\",\r\n    \"endDate\": \"2025-06-15\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -383,7 +383,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\": 1,\r\n    \"status\": \"CANCELLED\"\r\n}",
+							"raw": "{\r\n    \"status\": \"CANCELLED\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -391,14 +391,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{api_url}}/api/orders/1",
+							"raw": "{{api_url}}/api/orders/2",
 							"host": [
 								"{{api_url}}"
 							],
 							"path": [
 								"api",
 								"orders",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -411,7 +411,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\": 2,\r\n    \"status\": \"REFUNDED\"\r\n}",
+							"raw": "{\r\n    \"status\": \"REFUNDED\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -439,7 +439,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\": 4,\r\n    \"status\": \"REDEEMED\"\r\n}",
+							"raw": "{\r\n    \"status\": \"REDEEMED\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
