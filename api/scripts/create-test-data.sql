@@ -64,7 +64,8 @@ VALUES
     ('ADMIN'),
     ('CASHIER'),
     ('EVENT_MANAGER'),
-    ('SELLER');
+    ('SELLER'),
+    ('VIEWER');
 
 -- TODO: will need to hash the passwords
 INSERT INTO User (username, password, email, verified)

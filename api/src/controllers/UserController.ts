@@ -15,7 +15,11 @@ class UserController {
   createUser = asyncHandler(async (req: Request, res: Response) => {
     const request: CreateUserRequest = req.body;
     const user = await this.userService.createUser(request);
-    res.status(200).json(new APIResponse(200, user));
+    // TODO: send email to user with verification link
+
+    res
+      .status(200)
+      .json(new APIResponse(200, 'User created. Confirmation email sent.'));
   });
 }
 

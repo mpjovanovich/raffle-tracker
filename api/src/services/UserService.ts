@@ -82,9 +82,11 @@ export class UserService extends BaseService<User, UserDTO> {
           email: userRequest.email,
           verified: false,
           roles: {
-            create: {
-              name: ROLE.VIEWER,
-            },
+            connect: [
+              {
+                name: ROLE.VIEWER,
+              },
+            ],
           },
         },
       });
