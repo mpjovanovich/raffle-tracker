@@ -1,13 +1,13 @@
+import { prisma } from '@/db.js';
 import { ContestService } from '@/services/ContestService.js';
 import { HorseService } from '@/services/HorseService.js';
+import { APIResponse } from '@/utils/APIResponse.js';
+import { asyncHandler } from '@/utils/asyncHandler.js';
 import {
   Contest as ContestDTO,
   CreateContestRequest,
 } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
-import { prisma } from '../db.js';
-import { APIResponse } from '../utils/APIResponse.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
 
 class ContestController {
   private contestService: ContestService;

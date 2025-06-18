@@ -36,6 +36,7 @@ import healthcheckRouter from './routes/healthcheck.js';
 import horsesRouter from './routes/horses.js';
 import ordersRouter from './routes/orders.js';
 import ticketsRouter from './routes/tickets.js';
+import usersRouter from './routes/users.js';
 
 // Routes (implement)
 app.use('/api/events', eventsRouter);
@@ -44,6 +45,7 @@ app.use('/api/healthcheck', healthcheckRouter);
 app.use('/api/horses', horsesRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/tickets', ticketsRouter);
+app.use('/api/users', usersRouter);
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
