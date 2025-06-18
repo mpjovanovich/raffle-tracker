@@ -17,6 +17,8 @@ class UserController {
     const user = await this.userService.createUser(request);
     // TODO: send email to user with verification link
 
+    const validateUrl = `${request.validateUrl}/${user.token}`;
+
     res
       .status(200)
       .json(new APIResponse(200, 'User created. Confirmation email sent.'));
