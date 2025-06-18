@@ -7,5 +7,7 @@ export * from './models/Event.js';
 export * from './models/Horse.js';
 export * from './models/Order.js';
 export * from './models/OrderStatus.js';
+export * from './models/Role.js';
 export * from './models/Ticket.js';
 export * from './models/UpdateOrderResponse.js';
+export * from './models/User.js';

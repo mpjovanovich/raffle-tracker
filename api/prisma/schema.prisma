@@ -32,22 +32,28 @@ model Contest {
 }
 
 model Horse {
-  id        Int      @id @default(autoincrement())
-  contest_id   Int
-  number    Int
-  winner    Boolean @default(false)
-  scratch   Boolean @default(false)
-  contest   Contest     @relation("ContestToHorse", fields: [contest_id], references: [id], onDelete: Cascade)
-  ticket    Ticket[]
+  id          Int      @id @default(autoincrement())
+  contest_id  Int
+  number      Int
+  winner      Boolean @default(false)
+  scratch     Boolean @default(false)
+  contest     Contest @relation("ContestToHorse", fields: [contest_id], references: [id], onDelete: Cascade)
+  ticket      Ticket[]
 
   @@unique([contest_id, number])
 }
 
 model Order {
-  id            Int     @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   created_dttm  DateTime  @default(now())
   status        String
   ticket        Ticket[]
+}
+
+model Role {
+  id            Int     @id @default(autoincrement())
+  name          String
+  users         User[]
 }
 
 model Ticket {
@@ -57,9 +63,20 @@ model Ticket {
   horse_id      Int
   order_id      Int
   horse         Horse   @relation(fields: [horse_id], references: [id])
-  contest       Contest    @relation(fields: [contest_id], references: [id])
+  contest       Contest @relation(fields: [contest_id], references: [id])
   event         Event   @relation(fields: [event_id], references: [id])
-  order         Order @relation(fields: [order_id], references: [id])
+  order         Order   @relation(fields: [order_id], references: [id])
 
   @@index([event_id], map: "idx_ticket_event")
+}
+
+model User {
+  id            Int     @id @default(autoincrement())
+  username      String
+  password      String?
+  email         String
+  verified      Boolean @default(false)
+  token         String?
+  token_expiry  DateTime?
+  roles         Role[]
 }
