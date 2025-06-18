@@ -13,10 +13,9 @@ class UserController {
   }
 
   createUser = asyncHandler(async (req: Request, res: Response) => {
-    const requests: CreateUserRequest = req.body;
-    // const items = await this.userService.createUsers(requests);
-    // res.status(200).json(new APIResponse(200, items));
-    res.status(200).json(new APIResponse(200, 'User created'));
+    const request: CreateUserRequest = req.body;
+    const user = await this.userService.createUser(request);
+    res.status(200).json(new APIResponse(200, user));
   });
 }
 
