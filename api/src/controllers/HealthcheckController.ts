@@ -1,6 +1,6 @@
+import { APIResponse } from '@/utils/APIResponse.js';
+import { asyncHandler } from '@/utils/asyncHandler.js';
 import { Request, Response } from 'express';
-import { APIResponse } from '../utils/APIResponse.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
 
 class Healthcheck {
   healthcheck = asyncHandler(async (req: Request, res: Response) => {

@@ -1,6 +1,6 @@
+import { config } from '@/config/config.js';
 import { mkdir } from 'fs/promises';
 import { createLogger, format, transports } from 'winston';
-import { config } from '../config/config.js';
 
 // Set up the log directory
 await mkdir(config.logDir, { recursive: true });

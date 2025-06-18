@@ -1,5 +1,5 @@
+import horseController from '@/controllers/HorseController.js';
 import { Router } from 'express';
-import horseController from '../controllers/HorseController.js';
 
 const router = Router();
 

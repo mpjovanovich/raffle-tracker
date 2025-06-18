@@ -1,9 +1,9 @@
+import { prisma } from '@/db.js';
 import { TicketService } from '@/services/TicketService.js';
+import { APIResponse } from '@/utils/APIResponse.js';
+import { asyncHandler } from '@/utils/asyncHandler.js';
 import { CreateTicketsRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
-import { prisma } from '../db.js';
-import { APIResponse } from '../utils/APIResponse.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
 
 class TicketController {
   private ticketService: TicketService;

@@ -1,9 +1,9 @@
+import { prisma } from '@/db.js';
 import { HorseService } from '@/services/HorseService.js';
+import { APIResponse } from '@/utils/APIResponse.js';
+import { asyncHandler } from '@/utils/asyncHandler.js';
 import { CreateHorseRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
-import { prisma } from '../db.js';
-import { APIResponse } from '../utils/APIResponse.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
 
 class HorseController {
   private horseService: HorseService;

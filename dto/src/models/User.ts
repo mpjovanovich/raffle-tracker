@@ -6,7 +6,7 @@ export interface User {
   password?: string;
   email: string;
   verified: number; // 0 or 1
-  roles: Role[];
+  roles?: Role[];
   token?: string;
   tokenExpiry?: string;
 }

@@ -1,9 +1,9 @@
+import { prisma } from '@/db.js';
+import { EventService } from '@/services/EventService.js';
+import { APIResponse } from '@/utils/APIResponse.js';
+import { asyncHandler } from '@/utils/asyncHandler.js';
 import { Event as EventDTO } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
-import { prisma } from '../db.js';
-import { EventService } from '../services/EventService.js';
-import { APIResponse } from '../utils/APIResponse.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
 
 // TODO: Validate the request body. Can put this in middleware using Zod.
 class EventController {
