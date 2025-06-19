@@ -1,5 +1,10 @@
 import { PrismaClient, User } from '.prisma/client';
-import { generateToken, verifyToken } from '@/utils/authUtility.js';
+import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
+import {
+  generateToken,
+  hashPassword,
+  verifyToken,
+} from '@/utils/authUtility.js';
 import { CreateUserRequest, ROLE, User as UserDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
@@ -101,7 +106,7 @@ export class UserService extends BaseService<User, UserDTO> {
           },
         },
       });
-      const token = await generateToken(user.id, 'auth');
+      const token = await generateToken(user.id, TOKEN_TYPE.AUTH);
       user = await tx.user.update({
         where: { id: user.id },
         data: { token },
@@ -113,13 +118,27 @@ export class UserService extends BaseService<User, UserDTO> {
 
   public async exchangeToken(
     token: string,
-    tokenType: string
+    tokenType: TokenType
   ): Promise<UserDTO> {
     const user = await this.fetchUserByToken(token);
     const newToken = await generateToken(user.id, tokenType);
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: { token: newToken },
+    });
+    return UserService.toDTO(updatedUser);
+  }
+
+  public async resetPassword(
+    token: string,
+    password: string
+  ): Promise<UserDTO> {
+    const user = await this.fetchUserByToken(token);
+    const newToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    const hashedPassword = await hashPassword(password);
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { token: newToken, password: hashedPassword },
     });
     return UserService.toDTO(updatedUser);
   }

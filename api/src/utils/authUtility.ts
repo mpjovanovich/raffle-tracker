@@ -1,16 +1,17 @@
 import { config } from '@/config/config.js';
+import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const getExpiresIn = (type: string): jwt.SignOptions['expiresIn'] => {
+const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   switch (type) {
-    case 'auth':
+    case TOKEN_TYPE.AUTH:
       return config.jwtAuthTokenExpiresIn as jwt.SignOptions['expiresIn'];
-    case 'refresh':
+    case TOKEN_TYPE.REFRESH:
       return config.jwtRefreshTokenExpiresIn as jwt.SignOptions['expiresIn'];
-    case 'verify':
+    case TOKEN_TYPE.VERIFY:
       return config.jwtVerifyTokenExpiresIn as jwt.SignOptions['expiresIn'];
-    case 'temp':
+    case TOKEN_TYPE.TEMP:
       return config.jwtTempTokenExpiresIn as jwt.SignOptions['expiresIn'];
     default:
       throw new Error('Invalid token type');
@@ -35,7 +36,7 @@ export const verifyPassword = async (
 
 export const generateToken = async (
   userId: number,
-  type: string
+  type: TokenType
 ): Promise<string> => {
   const data = {
     userId: userId.toString(),
