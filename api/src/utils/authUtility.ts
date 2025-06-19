@@ -10,9 +10,15 @@ const getExpiresIn = (type: string): jwt.SignOptions['expiresIn'] => {
       return config.jwtRefreshTokenExpiresIn as jwt.SignOptions['expiresIn'];
     case 'verify':
       return config.jwtVerifyTokenExpiresIn as jwt.SignOptions['expiresIn'];
+    case 'temp':
+      return config.jwtTempTokenExpiresIn as jwt.SignOptions['expiresIn'];
     default:
       throw new Error('Invalid token type');
   }
+};
+
+export const decodeToken = async (token: string): Promise<any> => {
+  return jwt.decode(token);
 };
 
 export const hashPassword = async (password: string): Promise<string> => {

@@ -33,6 +33,12 @@ class UserController {
       .status(200)
       .json(new APIResponse(200, 'User created. Confirmation email sent.'));
   });
+
+  setTempToken = asyncHandler(async (req: Request, res: Response) => {
+    const token = req.params.token;
+    const user = await this.userService.exchangeToken(token, 'temp');
+    res.status(200).json(new APIResponse(200, { token: user.token }));
+  });
 }
 
 const userController = new UserController();

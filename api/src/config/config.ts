@@ -40,6 +40,8 @@ export const config = {
     (process.env.JWT_AUTH_TOKEN_EXPIRES_IN as string) || '15m',
   jwtRefreshTokenExpiresIn:
     (process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string) || '1d',
+  jwtTempTokenExpiresIn:
+    (process.env.JWT_TEMP_TOKEN_EXPIRES_IN as string) || '5m',
   jwtVerifyTokenExpiresIn:
     (process.env.JWT_VERIFY_TOKEN_EXPIRES_IN as string) || '1h',
   logDir: process.env.LOG_DIR!,

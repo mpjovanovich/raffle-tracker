@@ -1,5 +1,5 @@
 import { PrismaClient, User } from '.prisma/client';
-import { generateToken } from '@/utils/authUtility.js';
+import { generateToken, verifyToken } from '@/utils/authUtility.js';
 import { CreateUserRequest, ROLE, User as UserDTO } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
@@ -52,6 +52,17 @@ export class UserService extends BaseService<User, UserDTO> {
     return false;
   }
 
+  private async fetchUserByToken(token: string): Promise<User> {
+    const decoded = await verifyToken(token);
+    const userId = parseInt(decoded.userId);
+
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId, token },
+    });
+    if (!user) throw new Error('User not found');
+    return user;
+  }
+
   private isValidEmail(email: string): boolean {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(email);
   }
@@ -98,5 +109,18 @@ export class UserService extends BaseService<User, UserDTO> {
       return user;
     });
     return UserService.toDTO(createdUser);
+  }
+
+  public async exchangeToken(
+    token: string,
+    tokenType: string
+  ): Promise<UserDTO> {
+    const user = await this.fetchUserByToken(token);
+    const newToken = await generateToken(user.id, tokenType);
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { token: newToken },
+    });
+    return UserService.toDTO(updatedUser);
   }
 }
