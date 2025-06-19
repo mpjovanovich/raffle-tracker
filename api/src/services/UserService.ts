@@ -57,7 +57,7 @@ export class UserService extends BaseService<User, UserDTO> {
     return false;
   }
 
-  private async fetchUserByToken(token: string): Promise<User> {
+  private async fetchUserByToken(token: string): Promise<UserDTO> {
     const decoded = (await verifyToken(token)) as TokenPayload;
     const userId = parseInt(decoded.userId);
 
@@ -65,7 +65,7 @@ export class UserService extends BaseService<User, UserDTO> {
       where: { id: userId, token },
     });
     if (!user) throw new Error('User not found');
-    return user;
+    return UserService.toDTO(user);
   }
 
   private isValidEmail(email: string): boolean {
@@ -122,14 +122,14 @@ export class UserService extends BaseService<User, UserDTO> {
   public async exchangeToken(
     token: string,
     tokenType: TokenType
-  ): Promise<User> {
+  ): Promise<UserDTO> {
     const user = await this.fetchUserByToken(token);
     const newToken = await generateToken(user.id, tokenType);
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: { token: newToken },
     });
-    return updatedUser;
+    return UserService.toDTO(updatedUser);
   }
 
   public async login(
@@ -163,7 +163,7 @@ export class UserService extends BaseService<User, UserDTO> {
 
   public async refreshTokens(
     token: string
-  ): Promise<{ user: User; token: string }> {
+  ): Promise<{ user: UserDTO; token: string }> {
     let user = await this.fetchUserByToken(token);
 
     const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);

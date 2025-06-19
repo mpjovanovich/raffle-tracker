@@ -42,8 +42,6 @@ class UserController {
     const password = req.body.password;
     const user = await this.userService.resetPassword(token, password);
 
-    // TODO: verify
-
     // TODO: login user
 
     // TODO: ???
@@ -53,8 +51,7 @@ class UserController {
   setTempToken = asyncHandler(async (req: Request, res: Response) => {
     const token = req.params.token;
     const user = await this.userService.exchangeToken(token, TOKEN_TYPE.TEMP);
-    const userDTO = UserService.toDTO(user);
-    res.status(200).json(new APIResponse(200, { token: userDTO.token }));
+    res.status(200).json(new APIResponse(200, { token: user.token }));
   });
 }
 

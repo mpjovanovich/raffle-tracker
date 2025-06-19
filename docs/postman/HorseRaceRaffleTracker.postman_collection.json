@@ -8,6 +8,32 @@
 	},
 	"item": [
 		{
+			"name": "Dev",
+			"item": [
+				{
+					"name": "SetTempToken",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/dev/users/5/setTempToken",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"dev",
+								"users",
+								"5",
+								"setTempToken"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Event",
 			"item": [
 				{
@@ -180,6 +206,25 @@
 							"path": [
 								"api",
 								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TestEmail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/healthcheck/email",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"healthcheck",
+								"email"
 							]
 						}
 					},
@@ -491,6 +536,87 @@
 							"path": [
 								"api",
 								"tickets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CreateUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"bddsddslaa\",\r\n    \"email\": \"blsddsddaa@bla.org\",\r\n    \"validateUrl\": \"http://myapp/testValidate\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/users",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SetTempToken",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/users/{{validToken}}/setTempToken",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{validToken}}",
+								"setTempToken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"newPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/users/{{validToken}}/resetPassword",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{validToken}}",
+								"resetPassword"
 							]
 						}
 					},

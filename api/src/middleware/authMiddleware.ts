@@ -31,6 +31,9 @@ export const authenticateToken = async (
       // TODO: propper error type and token refresh
       if (error instanceof Error && error.message.includes('expired')) {
         // Auth token expired, try to refresh using the refresh token
+        // handleTokenRefresh should return a new auth token and a new refresh
+        // token if we're within expiry window. Otherwise clear the token from
+        // the user and return 401
         // return await handleTokenRefresh(req, res, next);
       }
       throw error;
