@@ -22,14 +22,16 @@ class UserController {
     const user = await this.userService.createUser(request);
     const validateUrl = `${request.validateUrl}/${user.token}`;
 
-    await sendEmail(
-      'Confirm your email',
-      createValidationEmail(
-        validateUrl,
-        config.jwtVerifyTokenExpiresIn.toString()
-      ),
-      user.email
-    );
+    if (!config.emailDisabled) {
+      await sendEmail(
+        'Confirm your email',
+        createValidationEmail(
+          validateUrl,
+          config.jwtVerifyTokenExpiresIn.toString()
+        ),
+        user.email
+      );
+    }
 
     res
       .status(200)
@@ -42,13 +44,14 @@ class UserController {
     const user = await this.userService.resetPassword(token, password);
     const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
 
-    // Set cookie with auth token
-    res.cookie('authToken', authToken, {
-      httpOnly: true,
-      // secure: config.nodeEnv === 'production',
-      // maxAge: config.jwtAuthTokenExpiresIn,
-    });
+    // // Set cookie with auth token
+    // res.cookie('authToken', authToken, {
+    //   httpOnly: true,
+    //   // secure: config.nodeEnv === 'production',
+    //   // maxAge: config.jwtAuthTokenExpiresIn,
+    // });
 
+    // TODO: ???
     res.status(200).json(new APIResponse(200, 'Password reset.'));
   });
 

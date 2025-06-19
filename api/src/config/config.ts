@@ -29,6 +29,7 @@ for (const key of Object.values(requiredKeys)) {
 export const config = {
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
+  emailDisabled: process.env.EMAIL_DISABLED === 'true',
   emailFrom: process.env.EMAIL_FROM!,
   emailHost: process.env.EMAIL_HOST!,
   emailPassword: process.env.EMAIL_PASSWORD!,

@@ -31,6 +31,7 @@ app.use(
 
 // Routes (import)
 import contestsRouter from './routes/contests.js';
+import devRouter from './routes/dev.js';
 import eventsRouter from './routes/events.js';
 import healthcheckRouter from './routes/healthcheck.js';
 import horsesRouter from './routes/horses.js';
@@ -46,6 +47,11 @@ app.use('/api/horses', horsesRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/tickets', ticketsRouter);
 app.use('/api/users', usersRouter);
+
+// Dev routes (only register if in development)
+if (config.nodeEnv === 'development') {
+  app.use('/api/dev', devRouter);
+}
 
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
