@@ -3,6 +3,10 @@ import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+export interface TokenPayload {
+  userId: string;
+}
+
 const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   switch (type) {
     case TOKEN_TYPE.AUTH:
@@ -18,8 +22,8 @@ const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   }
 };
 
-export const decodeToken = async (token: string): Promise<any> => {
-  return jwt.decode(token);
+export const decodeToken = async (token: string): Promise<TokenPayload> => {
+  return jwt.decode(token) as TokenPayload;
 };
 
 export const hashPassword = async (password: string): Promise<string> => {
@@ -46,9 +50,9 @@ export const generateToken = async (
   });
 };
 
-export const verifyToken = async (token: string): Promise<any> => {
+export const verifyToken = async (token: string): Promise<TokenPayload> => {
   try {
-    return jwt.verify(token, config.jwtSecretKey as jwt.Secret);
+    return jwt.verify(token, config.jwtSecretKey as jwt.Secret) as TokenPayload;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw new Error('Authentication expired. Please login again.');

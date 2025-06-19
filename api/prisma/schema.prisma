@@ -77,6 +77,5 @@ model User {
   email         String  @unique
   verified      Boolean @default(false)
   token         String?
-  token_expiry  DateTime?
   roles         Role[]
 }

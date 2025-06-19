@@ -3,6 +3,8 @@ import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
 import {
   generateToken,
   hashPassword,
+  TokenPayload,
+  verifyPassword,
   verifyToken,
 } from '@/utils/authUtility.js';
 import { CreateUserRequest, ROLE, User as UserDTO } from '@raffle-tracker/dto';
@@ -21,7 +23,6 @@ export class UserService extends BaseService<User, UserDTO> {
       email: user.email,
       verified: user.verified ? 1 : 0,
       token: user.token ?? undefined,
-      tokenExpiry: user.token_expiry?.toISOString() ?? undefined, // Probably going away, don't think we need this.
     };
   }
 
@@ -33,7 +34,6 @@ export class UserService extends BaseService<User, UserDTO> {
       email: user.email,
       verified: user.verified === 1,
       token: user.token ?? null,
-      token_expiry: user.tokenExpiry ? new Date(user.tokenExpiry) : null, // Probably going away, don't think we need this.
     };
   }
 
@@ -58,7 +58,7 @@ export class UserService extends BaseService<User, UserDTO> {
   }
 
   private async fetchUserByToken(token: string): Promise<User> {
-    const decoded = await verifyToken(token);
+    const decoded = (await verifyToken(token)) as TokenPayload;
     const userId = parseInt(decoded.userId);
 
     const user = await this.prisma.user.findFirst({
@@ -106,29 +106,76 @@ export class UserService extends BaseService<User, UserDTO> {
           },
         },
       });
+
       const token = await generateToken(user.id, TOKEN_TYPE.AUTH);
       user = await tx.user.update({
         where: { id: user.id },
         data: { token },
       });
+
       return user;
     });
+
     return UserService.toDTO(createdUser);
   }
 
   public async exchangeToken(
     token: string,
     tokenType: TokenType
-  ): Promise<UserDTO> {
+  ): Promise<User> {
     const user = await this.fetchUserByToken(token);
     const newToken = await generateToken(user.id, tokenType);
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: { token: newToken },
     });
-    return UserService.toDTO(updatedUser);
+    return updatedUser;
   }
 
+  public async login(
+    username: string,
+    password: string
+  ): Promise<{ user: UserDTO; token: string }> {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+    if (!user) throw new Error('User not found');
+    if (!user.password) throw new Error('User password not set');
+    if (!user.verified) throw new Error('User not verified');
+
+    // TODO: not sure of the cleanest way to handle bad credentials.
+    // May need custom error type.
+    const isPasswordValid = await verifyPassword(password, user.password);
+    if (!isPasswordValid) throw new Error('Invalid password');
+
+    const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    const refreshToken = await generateToken(user.id, TOKEN_TYPE.REFRESH);
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { token: refreshToken },
+    });
+
+    return {
+      user: UserService.toDTO(updatedUser),
+      token: authToken,
+    };
+  }
+
+  public async refreshTokens(
+    token: string
+  ): Promise<{ user: User; token: string }> {
+    let user = await this.fetchUserByToken(token);
+
+    const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    user = await this.exchangeToken(token, TOKEN_TYPE.REFRESH);
+
+    return {
+      user: user,
+      token: authToken,
+    };
+  }
+
+  // This is meant to be called for create new user and reset password functionality
   public async resetPassword(
     token: string,
     password: string
@@ -136,9 +183,11 @@ export class UserService extends BaseService<User, UserDTO> {
     const user = await this.fetchUserByToken(token);
     const newToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
     const hashedPassword = await hashPassword(password);
+
+    // User goes to verified status after password reset
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
-      data: { token: newToken, password: hashedPassword },
+      data: { token: newToken, password: hashedPassword, verified: true },
     });
     return UserService.toDTO(updatedUser);
   }
