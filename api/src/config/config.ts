@@ -48,4 +48,5 @@ export const config = {
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
   port: parseInt(process.env.PORT!),
+  skipAuth: process.env.SKIP_AUTH === 'true',
 } as const;

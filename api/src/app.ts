@@ -1,8 +1,16 @@
+import { config } from '@/config/config.js';
+import { prisma } from '@/db.js';
+import { createAuthMiddleware } from '@/middleware/authMiddleware.js';
+import { UserService } from '@/services/UserService.js';
+import logger from '@/utils/logger.js';
 import cors from 'cors';
-import express, { NextFunction, Request, Response } from 'express';
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from 'express';
 import morgan from 'morgan';
-import { config } from './config/config.js';
-import logger from './utils/logger.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
@@ -39,16 +47,24 @@ import ordersRouter from './routes/orders.js';
 import ticketsRouter from './routes/tickets.js';
 import usersRouter from './routes/users.js';
 
-// Routes (implement)
+// PUBLIC ROUTES
+// app.use('/api/healthcheck', healthcheckRouter);
+
+// AUTHENTICATED ROUTES
+const userService = new UserService(prisma);
+app.use(createAuthMiddleware(userService) as RequestHandler);
+
+// Debug - will be public in production
+app.use('/api/healthcheck', healthcheckRouter);
+
 app.use('/api/events', eventsRouter);
 app.use('/api/contests', contestsRouter);
-app.use('/api/healthcheck', healthcheckRouter);
 app.use('/api/horses', horsesRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/tickets', ticketsRouter);
 app.use('/api/users', usersRouter);
 
-// Dev routes (only register if in development)
+// DEV ROUTES
 if (config.nodeEnv === 'development') {
   app.use('/api/dev', devRouter);
 }

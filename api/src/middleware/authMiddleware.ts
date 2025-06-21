@@ -1,44 +1,64 @@
-import { APIResponse } from '@/utils/APIResponse.js';
+import { config } from '@/config/config.js';
+import { UserService } from '@/services/UserService.js';
 import { TokenPayload, verifyToken } from '@/utils/authUtility.js';
+import { ROLE } from '@raffle-tracker/dto';
 import { NextFunction, Request, Response } from 'express';
 
-// TODO: not sure if I should pass the whole user object or just the id
-interface AuthenticatedRequest extends Request {
-  userId: number;
-}
+const devUser = {
+  id: -1,
+  username: 'dev',
+  password: 'dev-password',
+  email: 'dev@dev.com',
+  verified: 1,
+  token: 'dev-token',
+  roles: [ROLE.ADMIN],
+};
 
-export const authenticateToken = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const authToken =
-      req.cookies?.authToken ||
-      req.headers.authorization?.replace('Bearer ', '');
-
-    if (!authToken) {
-      return res
-        .status(401)
-        .json(new APIResponse(401, 'Access token required'));
+// Factory that returns a middleware function with UserService injected
+export const createAuthMiddleware = (userService: UserService) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    // Skip auth for login routes
+    if (req.path.includes('login')) {
+      return next();
     }
 
+    // Skip auth for devs
+    if (config.nodeEnv === 'development' && config.skipAuth) {
+      req.user = devUser;
+      return next();
+    }
+
+    // Auth header checks
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Access token required' });
+    }
+
+    // Remove 'Bearer ' prefix
+    const token = authHeader.substring(7);
+
     try {
-      const decoded = (await verifyToken(authToken)) as TokenPayload;
-      req.userId = parseInt(decoded.userId);
+      const decoded = (await verifyToken(token)) as TokenPayload;
+      const userId = parseInt(decoded.userId);
+
+      // Now you can use the injected userService
+      const user = await userService.getById(userId);
+      if (!user) {
+        return res.status(401).json({ error: 'User not found' });
+      }
+
+      req.user = user;
+
       return next();
     } catch (error) {
-      // TODO: propper error type and token refresh
       if (error instanceof Error && error.message.includes('expired')) {
-        // Auth token expired, try to refresh using the refresh token
-        // handleTokenRefresh should return a new auth token and a new refresh
-        // token if we're within expiry window. Otherwise clear the token from
-        // the user and return 401
+        // Handle token refresh logic here
         // return await handleTokenRefresh(req, res, next);
       }
       throw error;
     }
-  } catch (error) {
-    return res.status(401).json(new APIResponse(401, 'Invalid token'));
-  }
+  };
 };
+
+// Default export for backward compatibility
+export default createAuthMiddleware;

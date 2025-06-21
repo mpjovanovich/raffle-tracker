@@ -20,6 +20,13 @@ router.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+router.route('/testAuth').get(
+  asyncHandler(async (req: Request, res: Response) => {
+    res.status(200).json(new APIResponse(200, req.user));
+    // res.status(200).json(new APIResponse(200, 'Auth works'));
+  })
+);
+
 // Set temp token for user by ID
 router.route('/users/:id/setTempToken').get(
   asyncHandler(async (req: Request, res: Response) => {
