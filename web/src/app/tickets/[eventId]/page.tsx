@@ -1,7 +1,7 @@
+import TicketPage from '@/components/page/tickets/TicketPage';
 import { getValidContestsByEvent } from '@/services/contestService';
 import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
-import TicketPage from '../../../components/page/tickets/TicketPage';
 
 interface PageProps {
   params: { eventId: string };

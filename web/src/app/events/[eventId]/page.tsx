@@ -1,6 +1,6 @@
+import EventPage from '@/components/page/events/EventPage';
 import { getEvent } from '@/services/eventService';
 import { notFound } from 'next/navigation';
-import EventPage from '../../../components/page/events/EventPage';
 
 interface PageProps {
   params: { eventId: string };

@@ -1,5 +1,5 @@
+import EventPage from '@/components/page/events/EventPage';
 import { Event } from '@raffle-tracker/dto';
-import EventPage from '../../../components/page/events/EventPage';
 
 export default async function Page() {
   const new_event: Event = {
