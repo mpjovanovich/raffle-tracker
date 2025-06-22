@@ -67,13 +67,12 @@ VALUES
     ('SELLER'),
     ('VIEWER');
 
--- TODO: will need to hash the passwords
 INSERT INTO User (username, password, email, verified)
 VALUES 
-    ('admin', 'admin', 'admin@example.com', 1),
-    ('cashier', 'cashier', 'cashier@example.com', 1),
-    ('manager', 'manager', 'manager@example.com', 1),
-    ('seller', 'seller', 'seller@example.com', 1);
+    ('admin', '$2b$10$Ssm85UHNv4K1pcO56sDPS.FJrJpcm2gVGkFtib7mZfYobABPnkQRa', 'admin@example.com', 1),
+    ('cashier', '$2b$10$Pi2bhp2RvfZ7dxBB0hQQ1Okfa6yQqSHn/EZ2tC.u037llLyfYWvB2', 'cashier@example.com', 1),
+    ('manager', '$2b$10$OPPLKayHEVNkNgWEZZTVyO646xRDTfWcRfNSZUc3HUiyh0DYKm4wm', 'manager@example.com', 1),
+    ('seller', '$2b$10$qiPakzEEySRthInEZLXKHOteuDrjClc1Joiw8v0WDMWJbp6xkbHdm', 'seller@example.com', 1);
 
 -- Prisma will auto-generate a junction table with this name
 INSERT INTO "_RoleToUser" ("A", "B")

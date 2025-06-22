@@ -7,7 +7,12 @@ import {
   verifyPassword,
   verifyToken,
 } from '@/utils/authUtility.js';
-import { CreateUserRequest, ROLE, User as UserDTO } from '@raffle-tracker/dto';
+import {
+  CreateUserRequest,
+  ROLE,
+  Role,
+  User as UserDTO,
+} from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
 export class UserService extends BaseService<User, UserDTO> {
@@ -55,17 +60,6 @@ export class UserService extends BaseService<User, UserDTO> {
       return true;
     }
     return false;
-  }
-
-  private async fetchUserByToken(token: string): Promise<UserDTO> {
-    const decoded = (await verifyToken(token)) as TokenPayload;
-    const userId = parseInt(decoded.userId);
-
-    const user = await this.prisma.user.findFirst({
-      where: { id: userId, token },
-    });
-    if (!user) throw new Error('User not found');
-    return UserService.toDTO(user);
   }
 
   private isValidEmail(email: string): boolean {
@@ -132,10 +126,33 @@ export class UserService extends BaseService<User, UserDTO> {
     return UserService.toDTO(updatedUser);
   }
 
+  public async fetchUserByToken(token: string): Promise<UserDTO> {
+    const decoded = (await verifyToken(token)) as TokenPayload;
+    const userId = parseInt(decoded.userId);
+
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId, token },
+    });
+    if (!user) throw new Error('User not found');
+    return UserService.toDTO(user);
+  }
+
+  public async fetchUserWithRoles(userId: number): Promise<UserDTO> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { roles: true },
+    });
+    if (!user) throw new Error('User not found');
+    return {
+      ...UserService.toDTO(user),
+      roles: user.roles.map(role => role.name) as Role[],
+    };
+  }
+
   public async login(
     username: string,
     password: string
-  ): Promise<{ user: UserDTO; token: string }> {
+  ): Promise<{ authToken: string; refreshToken: string }> {
     const user = await this.prisma.user.findUnique({
       where: { username },
     });
@@ -156,8 +173,8 @@ export class UserService extends BaseService<User, UserDTO> {
     });
 
     return {
-      user: UserService.toDTO(updatedUser),
-      token: authToken,
+      authToken,
+      refreshToken,
     };
   }
 

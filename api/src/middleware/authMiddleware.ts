@@ -42,8 +42,7 @@ export const createAuthMiddleware = (userService: UserService) => {
       try {
         const decoded = (await verifyToken(token)) as TokenPayload;
         const userId = parseInt(decoded.userId);
-        const user = await userService.getById(userId);
-
+        const user = await userService.fetchUserWithRoles(userId);
         if (!user) {
           return res.status(401).json({ error: 'User not found' });
         }
@@ -51,15 +50,15 @@ export const createAuthMiddleware = (userService: UserService) => {
 
         return next();
       } catch (error) {
-        // TODO: proper error type and token refresh
+        // TODO: proper error type
         if (error instanceof Error && error.message.includes('expired')) {
-          // Auth token expired, try to refresh using the refresh token
-          // handleTokenRefresh should return a new auth token and a new refresh
-          // token if we're within expiry window. Otherwise clear the token from
-          // the user and return 401
-          // return await handleTokenRefresh(req, res, next);
+          return res.status(401).json({
+            error: 'Access token expired',
+            code: 'TOKEN_EXPIRED',
+          });
         }
-        throw error;
+
+        return res.status(401).json({ error: 'Invalid token' });
       }
     } catch (error) {
       return res

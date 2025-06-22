@@ -48,14 +48,11 @@ import ticketsRouter from './routes/tickets.js';
 import usersRouter from './routes/users.js';
 
 // PUBLIC ROUTES
-// app.use('/api/healthcheck', healthcheckRouter);
+app.use('/api/healthcheck', healthcheckRouter);
 
 // AUTHENTICATED ROUTES
 const userService = new UserService(prisma);
 app.use(createAuthMiddleware(userService) as RequestHandler);
-
-// Debug - will be public in production
-app.use('/api/healthcheck', healthcheckRouter);
 
 app.use('/api/events', eventsRouter);
 app.use('/api/contests', contestsRouter);

@@ -37,6 +37,20 @@ class UserController {
       .json(new APIResponse(200, 'User created. Confirmation email sent.'));
   });
 
+  login = asyncHandler(async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    const loginResponse = await this.userService.login(username, password);
+    res.cookie('refreshToken', loginResponse.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000, // Should match JWT_REFRESH_EXPIRES_IN
+    });
+    res
+      .status(200)
+      .json(new APIResponse(200, { authToken: loginResponse.authToken }));
+  });
+
   resetPassword = asyncHandler(async (req: Request, res: Response) => {
     const token = req.params.token;
     const password = req.body.password;
