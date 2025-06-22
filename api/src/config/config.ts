@@ -27,6 +27,7 @@ for (const key of Object.values(requiredKeys)) {
 
 // Environment variables with defaults
 export const config = {
+  bypassAuth: process.env.BYPASS_AUTH === 'true',
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   emailDisabled: process.env.EMAIL_DISABLED === 'true',
@@ -48,5 +49,4 @@ export const config = {
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
   port: parseInt(process.env.PORT!),
-  skipAuth: process.env.SKIP_AUTH === 'true',
 } as const;

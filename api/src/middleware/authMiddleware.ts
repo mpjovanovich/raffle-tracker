@@ -25,7 +25,7 @@ export const createAuthMiddleware = (userService: UserService) => {
       }
 
       // Skip auth for devs
-      if (config.nodeEnv === 'development' && config.skipAuth) {
+      if (config.nodeEnv === 'development' && config.bypassAuth) {
         req.user = devUser;
         return next();
       }
