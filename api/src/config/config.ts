@@ -27,7 +27,7 @@ for (const key of Object.values(requiredKeys)) {
 
 // Environment variables with defaults
 export const config = {
-  bypassAuth: process.env.BYPASS_AUTH === 'true',
+  // bypassAuth: process.env.BYPASS_AUTH === 'true',
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   emailDisabled: process.env.EMAIL_DISABLED === 'true',

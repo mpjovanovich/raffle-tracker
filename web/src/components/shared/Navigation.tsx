@@ -25,7 +25,7 @@ export default function Navigation() {
         <NavItem href="/events">Events</NavItem>
       </ul>
       <ul className="flex gap-4 mx-4">
-        <NavItem href="/">TODO: Login</NavItem>
+        <NavItem href="/">TODO: Logout</NavItem>
       </ul>
     </nav>
   );

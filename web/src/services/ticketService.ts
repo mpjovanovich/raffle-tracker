@@ -7,6 +7,10 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+// TODO: This is going to need adjusted, because we are not going to expose the
+// API to the client. This will probably need to call a NextJS API route, then
+// the API route will call the API.
+
 export async function createTickets(
   requests: CreateTicketsRequest[]
 ): Promise<CreateTicketsResponse[]> {

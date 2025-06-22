@@ -1,15 +1,7 @@
 import { config } from '@/config/config.js';
-import { prisma } from '@/db.js';
-import { createAuthMiddleware } from '@/middleware/authMiddleware.js';
-import { UserService } from '@/services/UserService.js';
 import logger from '@/utils/logger.js';
 import cors from 'cors';
-import express, {
-  NextFunction,
-  Request,
-  RequestHandler,
-  Response,
-} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
@@ -51,8 +43,8 @@ import usersRouter from './routes/users.js';
 app.use('/api/healthcheck', healthcheckRouter);
 
 // AUTHENTICATED ROUTES
-const userService = new UserService(prisma);
-app.use(createAuthMiddleware(userService) as RequestHandler);
+// const userService = new UserService(prisma);
+// app.use(createAuthMiddleware(userService) as RequestHandler);
 
 app.use('/api/events', eventsRouter);
 app.use('/api/contests', contestsRouter);

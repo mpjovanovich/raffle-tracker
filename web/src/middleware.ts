@@ -1,34 +1,58 @@
-import { NextResponse, type NextRequest } from 'next/server';
+// middleware.js
+import { NextRequest, NextResponse } from 'next/server';
 
-// TODO: may need a bypass flag, like with the API
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-export function middleware(request: NextRequest) {
-  // Get refresh token from cookie
   const refreshToken = request.cookies.get('refreshToken');
-  console.error('Refresh Token: ' + refreshToken);
-
   if (!refreshToken) {
-    // TODO
-    // Redirect to login
-    // return NextResponse.redirect(new URL('/login', request.url));
-    return NextResponse.next();
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Add auth header to all API requests
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('Authorization', `Bearer ${refreshToken.value}`);
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // // Get user data to check roles
+  // try {
+  //   const { user } = await getUserFromRefreshToken(refreshToken.value);
+
+  //   // Check if user has required role for this route
+  //   const requiredRoles = getRequiredRoles(pathname);
+  //   if (requiredRoles && !hasRequiredRole(user.roles, requiredRoles)) {
+  //     return NextResponse.redirect(new URL('/unauthorized', request.url));
+  //   }
+
+  //   return NextResponse.next();
+  // } catch (error) {
+  //   // Invalid refresh token
+  //   const response = NextResponse.redirect(new URL('/login', request.url));
+  //   response.cookies.delete('refreshToken');
+  //   return response;
+  // }
 }
 
+async function getUserFromRefreshToken(refreshToken: string) {
+  // const response = await fetch('http://localhost:3001/auth/refresh', {
+  //   method: 'POST',
+  //   headers: { Authorization: `Bearer ${refreshToken}` },
+  // });
+  // if (!response.ok) throw new Error('Invalid refresh token');
+  // return await response.json();
+}
+
+// TODO: Add role checking.
+function getRequiredRoles(pathname: string) {
+  const roleMap = {
+    '/events': ['admin'],
+    '/contests': ['admin'],
+    '/horses': ['admin'],
+    '/orders': ['admin'],
+    '/tickets': ['admin'],
+    '/users': ['admin'],
+  };
+  return roleMap[pathname as keyof typeof roleMap];
+}
+
+// Everything should be protected except auth routes.
 export const config = {
   matcher: [
-    '/events/:path*',
-    '/tickets/:path*',
-    '/cashier/:path*',
-    '/report/:path*',
+    '/((?!api|_next/static|_next/image|favicon.*|login|signup|resetPassword).*)',
   ],
 };

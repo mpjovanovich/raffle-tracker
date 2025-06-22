@@ -42,6 +42,7 @@ class UserController {
   login = asyncHandler(async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const loginResponse = await this.userService.login(username, password);
+
     res.cookie('refreshToken', loginResponse.refreshToken, {
       httpOnly: true,
       secure: true,
