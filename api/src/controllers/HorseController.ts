@@ -24,7 +24,7 @@ class HorseController {
       throw new Error(`Invalid ID format: ${req.params.horseId}`);
     }
     await this.horseService.delete(id);
-    res.status(200).json(new APIResponse(200, 'Horse deleted'));
+    res.status(200).json(new APIResponse(200, null, 'Horse deleted'));
   });
 
   toggleScratch = asyncHandler(async (req: Request, res: Response) => {

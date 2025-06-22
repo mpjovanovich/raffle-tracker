@@ -34,7 +34,9 @@ class UserController {
 
     res
       .status(200)
-      .json(new APIResponse(200, 'User created. Confirmation email sent.'));
+      .json(
+        new APIResponse(200, null, 'User created. Confirmation email sent.')
+      );
   });
 
   login = asyncHandler(async (req: Request, res: Response) => {
@@ -58,8 +60,7 @@ class UserController {
 
     // TODO: login user
 
-    // TODO: ???
-    res.status(200).json(new APIResponse(200, 'Password reset.'));
+    res.status(200).json(new APIResponse(200, null, 'Password reset.'));
   });
 
   setTempToken = asyncHandler(async (req: Request, res: Response) => {

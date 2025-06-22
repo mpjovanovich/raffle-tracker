@@ -29,7 +29,7 @@ router.route('/users/:id/setTempToken').get(
       where: { id: userId },
     });
     if (!user) {
-      res.status(404).json(new APIResponse(404, 'User not found'));
+      res.status(404).json(new APIResponse(404, null, 'User not found'));
       return;
     }
 

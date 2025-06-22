@@ -28,7 +28,7 @@ class ContestController {
       throw new Error(`Invalid ID format: ${req.params.contestId}`);
     }
     await this.contestService.delete(id);
-    res.status(200).json(new APIResponse(200, 'Contest deleted'));
+    res.status(200).json(new APIResponse(200, null, 'Contest deleted'));
   });
 
   getById = asyncHandler(async (req: Request, res: Response) => {

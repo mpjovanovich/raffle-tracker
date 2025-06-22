@@ -46,7 +46,7 @@ class EventController {
 
     const event = await this.eventService.getWithChildren(eventId);
     if (!event) {
-      res.status(404).json(new APIResponse(404, 'Event not found'));
+      res.status(404).json(new APIResponse(404, null, 'Event not found'));
     }
 
     const contests = this.eventService.getEventValidContests(event!);

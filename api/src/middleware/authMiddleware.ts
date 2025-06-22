@@ -33,7 +33,9 @@ export const createAuthMiddleware = (userService: UserService) => {
       // Auth header checks
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Access token required' });
+        return res
+          .status(401)
+          .json(new APIResponse(401, null, 'Access token required'));
       }
 
       // Remove 'Bearer ' prefix
@@ -44,7 +46,9 @@ export const createAuthMiddleware = (userService: UserService) => {
         const userId = parseInt(decoded.userId);
         const user = await userService.fetchUserWithRoles(userId);
         if (!user) {
-          return res.status(401).json({ error: 'User not found' });
+          return res
+            .status(401)
+            .json(new APIResponse(401, null, 'User not found'));
         }
         req.user = user;
 
@@ -52,10 +56,9 @@ export const createAuthMiddleware = (userService: UserService) => {
       } catch (error) {
         // TODO: proper error type
         if (error instanceof Error && error.message.includes('expired')) {
-          return res.status(401).json({
-            error: 'Access token expired',
-            code: 'TOKEN_EXPIRED',
-          });
+          return res
+            .status(401)
+            .json(new APIResponse(401, null, 'TOKEN_EXPIRED'));
         }
 
         return res.status(401).json({ error: 'Invalid token' });
@@ -63,7 +66,7 @@ export const createAuthMiddleware = (userService: UserService) => {
     } catch (error) {
       return res
         .status(401)
-        .json(new APIResponse(401, 'Failed to authenticate'));
+        .json(new APIResponse(401, null, 'Failed to authenticate'));
     }
   };
 };
