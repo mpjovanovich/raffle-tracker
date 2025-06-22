@@ -30,6 +30,7 @@ app.use(
 );
 
 // Routes (import)
+import authRouter from './routes/auth.js';
 import contestsRouter from './routes/contests.js';
 import devRouter from './routes/dev.js';
 import eventsRouter from './routes/events.js';
@@ -46,6 +47,7 @@ app.use('/api/healthcheck', healthcheckRouter);
 // const userService = new UserService(prisma);
 // app.use(createAuthMiddleware(userService) as RequestHandler);
 
+app.use('/api/auth', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/contests', contestsRouter);
 app.use('/api/horses', horsesRouter);

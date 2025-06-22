@@ -1,7 +1,6 @@
 import { config } from '@/config/config.js';
 import { prisma } from '@/db.js';
 import { UserService } from '@/services/UserService.js';
-import { TOKEN_TYPE } from '@/types/TokenType.js';
 import { APIResponse } from '@/utils/APIResponse.js';
 import { asyncHandler } from '@/utils/asyncHandler.js';
 import { sendEmail } from '@/utils/mailer.js';
@@ -37,37 +36,6 @@ class UserController {
       .json(
         new APIResponse(200, null, 'User created. Confirmation email sent.')
       );
-  });
-
-  login = asyncHandler(async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    const loginResponse = await this.userService.login(username, password);
-
-    res.cookie('refreshToken', loginResponse.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // Should match JWT_REFRESH_EXPIRES_IN
-    });
-    res
-      .status(200)
-      .json(new APIResponse(200, { authToken: loginResponse.authToken }));
-  });
-
-  resetPassword = asyncHandler(async (req: Request, res: Response) => {
-    const token = req.params.token;
-    const password = req.body.password;
-    const user = await this.userService.resetPassword(token, password);
-
-    // TODO: login user
-
-    res.status(200).json(new APIResponse(200, null, 'Password reset.'));
-  });
-
-  setTempToken = asyncHandler(async (req: Request, res: Response) => {
-    const token = req.params.token;
-    const user = await this.userService.exchangeToken(token, TOKEN_TYPE.TEMP);
-    res.status(200).json(new APIResponse(200, { token: user.token }));
   });
 }
 

@@ -9,6 +9,7 @@ import {
 } from '@/utils/authUtility.js';
 import {
   CreateUserRequest,
+  LoginResponse,
   ROLE,
   Role,
   User as UserDTO,
@@ -152,7 +153,7 @@ export class UserService extends BaseService<User, UserDTO> {
   public async login(
     username: string,
     password: string
-  ): Promise<{ authToken: string; refreshToken: string }> {
+  ): Promise<LoginResponse> {
     const user = await this.prisma.user.findUnique({
       where: { username },
     });
@@ -165,17 +166,25 @@ export class UserService extends BaseService<User, UserDTO> {
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) throw new Error('Invalid password');
 
-    const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    const accessToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
     const refreshToken = await generateToken(user.id, TOKEN_TYPE.REFRESH);
-    const updatedUser = await this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id: user.id },
       data: { token: refreshToken },
     });
+    const updatedUser = await this.fetchUserWithRoles(user.id);
 
     return {
-      authToken,
-      refreshToken,
+      accessToken,
+      user: updatedUser,
     };
+  }
+
+  public async logout(userId: number): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { token: null },
+    });
   }
 
   public async refreshTokens(
