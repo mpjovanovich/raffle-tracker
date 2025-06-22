@@ -38,6 +38,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     let updatedEvent: Event = { id, ...data };
 
     try {
+      setError(null);
       setIsSaving(true);
       updatedEvent = await upsertEvent(updatedEvent);
       router.push(`/events/${updatedEvent.id}`);

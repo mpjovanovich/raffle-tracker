@@ -1,3 +1,4 @@
+export * from './models/AuthenticatedUser.js';
 export * from './models/Contest.js';
 export * from './models/CreateContestRequest.js';
 export * from './models/CreateHorseRequest.js';

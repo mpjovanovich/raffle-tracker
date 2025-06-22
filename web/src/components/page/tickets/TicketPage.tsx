@@ -61,6 +61,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   const onTicketSubmit = async () => {
     try {
+      setError(null);
       const createdTickets: CreateTicketsResponse[] =
         await createTickets(tickets);
 

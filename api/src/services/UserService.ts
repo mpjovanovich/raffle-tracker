@@ -3,11 +3,11 @@ import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
 import {
   generateToken,
   hashPassword,
-  TokenPayload,
   verifyPassword,
   verifyToken,
 } from '@/utils/authUtility.js';
 import {
+  AuthenticatedUser,
   CreateUserRequest,
   LoginResponse,
   ROLE,
@@ -40,6 +40,14 @@ export class UserService extends BaseService<User, UserDTO> {
       email: user.email,
       verified: user.verified === 1,
       token: user.token ?? null,
+    };
+  }
+
+  public static toAuthenticatedUser(user: UserDTO): AuthenticatedUser {
+    return {
+      id: user.id,
+      username: user.username,
+      roles: user.roles,
     };
   }
 
@@ -102,7 +110,13 @@ export class UserService extends BaseService<User, UserDTO> {
         },
       });
 
-      const token = await generateToken(user.id, TOKEN_TYPE.AUTH);
+      const authenticatedUser: AuthenticatedUser = {
+        id: user.id,
+        username: user.username,
+        roles: [ROLE.VIEWER],
+      };
+
+      const token = await generateToken(authenticatedUser, TOKEN_TYPE.AUTH);
       user = await tx.user.update({
         where: { id: user.id },
         data: { token },
@@ -119,7 +133,8 @@ export class UserService extends BaseService<User, UserDTO> {
     tokenType: TokenType
   ): Promise<UserDTO> {
     const user = await this.fetchUserByToken(token);
-    const newToken = await generateToken(user.id, tokenType);
+    const authenticatedUser = UserService.toAuthenticatedUser(user);
+    const newToken = await generateToken(authenticatedUser, tokenType);
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: { token: newToken },
@@ -128,8 +143,8 @@ export class UserService extends BaseService<User, UserDTO> {
   }
 
   public async fetchUserByToken(token: string): Promise<UserDTO> {
-    const decoded = (await verifyToken(token)) as TokenPayload;
-    const userId = parseInt(decoded.userId);
+    const decoded = (await verifyToken(token)) as AuthenticatedUser;
+    const userId = decoded.id;
 
     const user = await this.prisma.user.findFirst({
       where: { id: userId, token },
@@ -146,7 +161,7 @@ export class UserService extends BaseService<User, UserDTO> {
     if (!user) throw new Error('User not found');
     return {
       ...UserService.toDTO(user),
-      roles: user.roles.map(role => role.name) as Role[],
+      roles: (user.roles.map(role => role.name) as Role[]) ?? [],
     };
   }
 
@@ -166,17 +181,25 @@ export class UserService extends BaseService<User, UserDTO> {
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) throw new Error('Invalid password');
 
-    const accessToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
-    const refreshToken = await generateToken(user.id, TOKEN_TYPE.REFRESH);
+    const authenticatedUser = UserService.toAuthenticatedUser(
+      await this.fetchUserWithRoles(user.id)
+    );
+
+    const accessToken = await generateToken(authenticatedUser, TOKEN_TYPE.AUTH);
+    const refreshToken = await generateToken(
+      authenticatedUser,
+      TOKEN_TYPE.REFRESH
+    );
+
     await this.prisma.user.update({
       where: { id: user.id },
       data: { token: refreshToken },
     });
-    const updatedUser = await this.fetchUserWithRoles(user.id);
 
     return {
       accessToken,
-      user: updatedUser,
+      refreshToken,
+      user: authenticatedUser,
     };
   }
 
@@ -192,7 +215,8 @@ export class UserService extends BaseService<User, UserDTO> {
   ): Promise<{ user: UserDTO; token: string }> {
     let user = await this.fetchUserByToken(token);
 
-    const authToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    const authenticatedUser = UserService.toAuthenticatedUser(user);
+    const authToken = await generateToken(authenticatedUser, TOKEN_TYPE.AUTH);
     user = await this.exchangeToken(token, TOKEN_TYPE.REFRESH);
 
     return {
@@ -207,7 +231,8 @@ export class UserService extends BaseService<User, UserDTO> {
     password: string
   ): Promise<UserDTO> {
     const user = await this.fetchUserByToken(token);
-    const newToken = await generateToken(user.id, TOKEN_TYPE.AUTH);
+    const authenticatedUser = UserService.toAuthenticatedUser(user);
+    const newToken = await generateToken(authenticatedUser, TOKEN_TYPE.AUTH);
     const hashedPassword = await hashPassword(password);
 
     // User goes to verified status after password reset

@@ -1,6 +1,7 @@
-import { User } from './User.js';
+import { AuthenticatedUser } from './AuthenticatedUser.js';
 
 export interface LoginResponse {
   accessToken: string;
-  user: User;
+  refreshToken: string;
+  user: AuthenticatedUser;
 }

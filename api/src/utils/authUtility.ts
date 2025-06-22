@@ -1,11 +1,8 @@
 import { config } from '@/config/config.js';
 import { TOKEN_TYPE, TokenType } from '@/types/TokenType.js';
+import { AuthenticatedUser } from '@raffle-tracker/dto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-export interface TokenPayload {
-  userId: string;
-}
 
 const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   switch (type) {
@@ -22,8 +19,10 @@ const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   }
 };
 
-export const decodeToken = async (token: string): Promise<TokenPayload> => {
-  return jwt.decode(token) as TokenPayload;
+export const decodeToken = async (
+  token: string
+): Promise<AuthenticatedUser> => {
+  return jwt.decode(token) as AuthenticatedUser;
 };
 
 export const hashPassword = async (password: string): Promise<string> => {
@@ -39,20 +38,22 @@ export const verifyPassword = async (
 };
 
 export const generateToken = async (
-  userId: number,
+  userData: AuthenticatedUser,
   type: TokenType
 ): Promise<string> => {
-  const data = {
-    userId: userId.toString(),
-  };
-  return jwt.sign(data, config.jwtSecretKey as jwt.Secret, {
+  return jwt.sign(userData, config.jwtSecretKey as jwt.Secret, {
     expiresIn: getExpiresIn(type),
   });
 };
 
-export const verifyToken = async (token: string): Promise<TokenPayload> => {
+export const verifyToken = async (
+  token: string
+): Promise<AuthenticatedUser> => {
   try {
-    return jwt.verify(token, config.jwtSecretKey as jwt.Secret) as TokenPayload;
+    return jwt.verify(
+      token,
+      config.jwtSecretKey as jwt.Secret
+    ) as AuthenticatedUser;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw new Error('Authentication expired. Please login again.');

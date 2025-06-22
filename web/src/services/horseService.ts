@@ -1,3 +1,4 @@
+import { getAccessToken } from '@/utils/authUtility';
 import { CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -6,6 +7,11 @@ export async function addHorse(
   contestId: number,
   number: number
 ): Promise<Horse> {
+  const token = await getAccessToken();
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const createHorseRequest: CreateHorseRequest = {
     contestId,
     number,
@@ -14,6 +20,7 @@ export async function addHorse(
     method: 'POST',
     body: JSON.stringify(createHorseRequest),
     headers: {
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
   });
@@ -28,8 +35,14 @@ export async function addHorse(
 }
 
 export async function deleteHorse(id: number): Promise<void> {
+  const token = await getAccessToken();
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const res = await fetch(`${API_BASE_URL}/horses/${id}`, {
     method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) {
     const errorData = await res.json();
@@ -38,8 +51,14 @@ export async function deleteHorse(id: number): Promise<void> {
 }
 
 export async function toggleScratch(id: number): Promise<void> {
+  const token = await getAccessToken();
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleScratch`, {
     method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) {
     const errorData = await res.json();
@@ -48,8 +67,14 @@ export async function toggleScratch(id: number): Promise<void> {
 }
 
 export async function toggleWinner(id: number): Promise<void> {
+  const token = await getAccessToken();
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleWinner`, {
     method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) {
     const errorData = await res.json();
