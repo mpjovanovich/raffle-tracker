@@ -7,6 +7,7 @@ import LabeledField from '@/components/ui/LabeledField';
 import Select from '@/components/ui/Select';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
+import { createTickets } from '@/services/ticketService';
 import {
   Contest,
   CreateTicketsRequest,
@@ -60,39 +61,8 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
 
   const onTicketSubmit = async () => {
     try {
-      // DEBUG - fake some tickets
-      const createdTickets: CreateTicketsResponse[] = [
-        {
-          date: new Date().toISOString().split('T')[0],
-          orderId: '00059',
-          contest: '1',
-          horse: '1',
-          ref: '00001',
-        },
-        {
-          date: new Date().toISOString().split('T')[0],
-          orderId: '00059',
-          contest: '1',
-          horse: '1',
-          ref: '00002',
-        },
-        {
-          date: new Date().toISOString().split('T')[0],
-          orderId: '00059',
-          contest: '1',
-          horse: '1',
-          ref: '00003',
-        },
-        {
-          date: new Date().toISOString().split('T')[0],
-          orderId: '00059',
-          contest: '1',
-          horse: '1',
-          ref: '00004',
-        },
-      ];
-      // UNCOMMENT WHEN DESIGN WORK IS DONE
-      //   const createdTickets: CreateTicketsResponse[] = await createTickets(tickets);
+      const createdTickets: CreateTicketsResponse[] =
+        await createTickets(tickets);
 
       // Wait for state update to complete
       await new Promise<void>(resolve => {
