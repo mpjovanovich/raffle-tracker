@@ -43,12 +43,6 @@ class UserController {
         new APIResponse(200, null, 'User created. Confirmation email sent.')
       );
   });
-
-  verifyUser = asyncHandler(async (req: Request, res: Response) => {
-    const token = req.params.token;
-    const user = await this.userService.verifyUser(token);
-    res.status(200).json(new APIResponse(200, user, 'User verified.'));
-  });
 }
 
 const userController = new UserController();

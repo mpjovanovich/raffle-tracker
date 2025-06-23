@@ -1,6 +1,10 @@
 import { PrismaClient, User } from '.prisma/client';
 import { ResetUserRequest } from '@/types/ResetUserRequest.js';
-import { generateTokenId, verifyResetToken } from '@/utils/authUtility.js';
+import {
+  generateTokenId,
+  hashPassword,
+  verifyResetToken,
+} from '@/utils/authUtility.js';
 import {
   AuthenticatedUser,
   CreateUserRequest,
@@ -244,23 +248,32 @@ export class UserService extends BaseService<User, UserDTO> {
   //   return UserService.toDTO(updatedUser);
   // }
 
-  public async verifyUser(token: string): Promise<UserDTO> {
+  public async resetPassword(
+    token: string,
+    password: string
+  ): Promise<UserDTO> {
     const decoded = (await verifyResetToken(token)) as ResetUserRequest;
     const userId = decoded.userId;
-    console.error(decoded);
-
     const user = await this.prisma.user.findFirst({
       where: {
         id: userId,
         verificationTokenId: decoded.token,
       },
     });
-    if (!user) throw new Error('User not found');
-    if (user.verified) throw new Error('User already verified');
 
+    if (!user) throw new Error('User not found');
+    if (user.verified)
+      // TODO: Logging
+      throw new Error('Please request a new password reset.');
+
+    const hashedPassword = await hashPassword(password);
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
-      data: { verified: true, verificationTokenId: null },
+      data: {
+        password: hashedPassword,
+        verified: true,
+        verificationTokenId: null,
+      },
     });
 
     return UserService.toDTO(updatedUser);

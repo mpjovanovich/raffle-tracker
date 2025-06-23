@@ -29,6 +29,14 @@ class AuthController {
     await this.userService.logout(userId);
     res.status(200).json(new APIResponse(200, null, 'Logged out.'));
   });
+
+  resetPassword = asyncHandler(async (req: Request, res: Response) => {
+    const token = req.params.token;
+    const { password } = req.body;
+    const user = await this.userService.resetPassword(token, password);
+    // We could log the user in here, but for now we'll have to tell the user to login with new creds.
+    res.status(200).json(new APIResponse(200, user, 'User verified.'));
+  });
 }
 
 const authController = new AuthController();
