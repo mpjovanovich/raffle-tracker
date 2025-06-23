@@ -9,7 +9,8 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   await requireAuth([ROLE.EVENT_MANAGER]);
-  const eventIdNumber = parseInt(params.eventId);
+  const { eventId } = await params;
+  const eventIdNumber = parseInt(eventId);
   const event = await getEventAction(eventIdNumber, true);
 
   return (

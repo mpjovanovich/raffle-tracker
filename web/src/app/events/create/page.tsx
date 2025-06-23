@@ -1,7 +1,10 @@
 import EventPage from '@/components/page/events/EventPage';
-import { Event } from '@raffle-tracker/dto';
+import { requireAuth } from '@/utils/authUtility';
+import { Event, ROLE } from '@raffle-tracker/dto';
 
 export default async function Page() {
+  await requireAuth([ROLE.EVENT_MANAGER]);
+
   const new_event: Event = {
     id: 0,
     name: '',
