@@ -33,16 +33,16 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60, // 15 minutes (matches your JWT config)
+      maxAge: 15 * 60, // 15 minutes
     });
 
-    // TODO: figure this out later
-    // cookieStore.set('refreshToken', loginResponse.refreshToken, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === 'production',
-    //   sameSite: 'lax',
-    //   maxAge: 24 * 60 * 60, // 1 day
-    // });
+    // Don't include roles in the refresh token.
+    cookieStore.set('refreshToken', loginResponse.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60, // 1 day
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

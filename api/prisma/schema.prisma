@@ -76,6 +76,7 @@ model User {
   password      String?
   email         String  @unique
   verified      Boolean @default(false)
-  token         String?
+  refreshTokenId  String?
+  verificationTokenId String?
   roles         Role[]
 }
