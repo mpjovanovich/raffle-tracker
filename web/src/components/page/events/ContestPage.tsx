@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  addHorseAction,
+  deleteHorseAction,
+  toggleScratchAction,
+  toggleWinnerAction,
+} from '@/app/actions/horses';
 import Card from '@/components/ui/Card';
 import IconButton from '@/components/ui/IconButton';
 import Input from '@/components/ui/Input';
@@ -8,12 +14,6 @@ import ItemListItem from '@/components/ui/ItemListItem';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import {
-  addHorse,
-  deleteHorse,
-  toggleScratch,
-  toggleWinner,
-} from '@/services/horseService';
 import { Contest, CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -58,7 +58,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
   const handleDeleteHorse = async (horse: Horse) => {
     if (confirm(`Are you sure you want to delete Horse ${horse.number}?`)) {
       try {
-        await deleteHorse(horse.id);
+        await deleteHorseAction(horse.id);
         router.push(`/events/${contest.eventId}/contests/${contest.id}`);
       } catch (error) {
         setError(
@@ -72,7 +72,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
 
   const handleToggleScratch = async (horse: Horse) => {
     try {
-      await toggleScratch(horse.id);
+      await toggleScratchAction(horse.id);
       router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
@@ -85,7 +85,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
 
   const handleToggleWinner = async (horse: Horse) => {
     try {
-      await toggleWinner(horse.id);
+      await toggleWinnerAction(horse.id);
       router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
@@ -100,7 +100,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
     try {
       setIsSaving(true);
       setError(null);
-      await addHorse(contest.id, data.number);
+      await addHorseAction(contest.id, data.number);
       router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(

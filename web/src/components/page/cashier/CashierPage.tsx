@@ -1,12 +1,12 @@
 'use client';
 
+import { updateOrderAction } from '@/app/actions/orders';
 import Card from '@/components/ui/Card';
 import IconButton from '@/components/ui/IconButton';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import { updateOrder } from '@/services/orderService';
 import { ORDER_STATUS, OrderStatus } from '@raffle-tracker/dto';
 import { useState } from 'react';
 import { FaBan, FaXmark } from 'react-icons/fa6';
@@ -41,7 +41,7 @@ export default function CashierPage() {
 
     const orderId = parseInt(getValues('orderId'));
     try {
-      const response = await updateOrder(orderId, status);
+      const response = await updateOrderAction(orderId, status);
       setResults(response.refs);
     } catch (error) {
       setError(

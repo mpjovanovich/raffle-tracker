@@ -1,5 +1,6 @@
 'use client';
 
+import { createTicketsAction } from '@/app/actions/tickets';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import ItemList from '@/components/ui/ItemList';
@@ -7,7 +8,6 @@ import LabeledField from '@/components/ui/LabeledField';
 import Select from '@/components/ui/Select';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import { createTickets } from '@/services/ticketService';
 import {
   Contest,
   CreateTicketsRequest,
@@ -63,7 +63,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     try {
       setError(null);
       const createdTickets: CreateTicketsResponse[] =
-        await createTickets(tickets);
+        await createTicketsAction(tickets);
 
       // Wait for state update to complete
       await new Promise<void>(resolve => {
