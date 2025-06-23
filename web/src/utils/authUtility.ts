@@ -4,20 +4,19 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
+const verifyToken = async (token: string): Promise<AuthenticatedUser> => {
   try {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get('accessToken');
-
-    if (!accessToken) {
-      return null;
+    return jwt.verify(
+      token,
+      config.jwtSecretKey as jwt.Secret
+    ) as AuthenticatedUser;
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('Authentication expired. Please login again.');
     }
-
-    return verifyToken(accessToken.value);
-  } catch {
-    return null;
+    throw new Error('Invalid token');
   }
-}
+};
 
 export async function getAccessToken(): Promise<string | null> {
   try {
@@ -29,30 +28,18 @@ export async function getAccessToken(): Promise<string | null> {
   }
 }
 
-export function getAccessTokenClient(): string | null {
-  if (typeof window === 'undefined') return null;
-
-  const cookies = document.cookie.split(';');
-  const accessTokenCookie = cookies.find(cookie =>
-    cookie.trim().startsWith('accessToken=')
-  );
-
-  if (accessTokenCookie) {
-    return accessTokenCookie.split('=')[1];
-  }
-
-  return null;
-}
-
 export async function requireAuth(
   requiredRoles?: string[]
 ): Promise<AuthenticatedUser> {
-  const user = await getCurrentUser();
-
-  if (!user) {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
     redirect('/login');
   }
+
+  const user = await verifyToken(accessToken);
   if (!user.roles || user.roles.length === 0) {
+    // TODO: Logging
+    // User should never be in this state - someone needs to assign a role to the user.
     redirect('/login');
   }
 
@@ -71,35 +58,3 @@ export async function requireAuth(
 
   return user;
 }
-
-export const verifyToken = async (
-  token: string
-): Promise<AuthenticatedUser> => {
-  try {
-    console.log('verifying token', token);
-    console.log('using secret key:', config.jwtSecretKey);
-
-    // First, let's decode the token without verification to see its structure
-    const decoded = jwt.decode(token);
-    console.log('decoded token (without verification):', decoded);
-
-    // Let's also check if the token is malformed
-    const parts = token.split('.');
-    console.log('token parts count:', parts.length);
-    if (parts.length !== 3) {
-      throw new Error('Invalid token format');
-    }
-
-    return jwt.verify(
-      token,
-      config.jwtSecretKey as jwt.Secret
-    ) as AuthenticatedUser;
-  } catch (error) {
-    console.error('JWT verification error:', error);
-
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Authentication expired. Please login again.');
-    }
-    throw new Error('Invalid token');
-  }
-};

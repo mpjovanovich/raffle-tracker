@@ -36,7 +36,7 @@ export const sendEmail = async (subject: string, html: string, to: string) => {
 
     return await transport.sendMail(mailOptions);
   } catch (error) {
-    // TODO: Error Logging
+    // TODO: Logging
     throw new Error('Failed to send email');
   }
 };

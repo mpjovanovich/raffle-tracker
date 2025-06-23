@@ -29,22 +29,6 @@ class AuthController {
     await this.userService.logout(userId);
     res.status(200).json(new APIResponse(200, null, 'Logged out.'));
   });
-
-  //   resetPassword = asyncHandler(async (req: Request, res: Response) => {
-  //     const token = req.params.token;
-  //     const password = req.body.password;
-  //     const user = await this.userService.resetPassword(token, password);
-
-  //     // TODO: login user
-
-  //     res.status(200).json(new APIResponse(200, null, 'Password reset.'));
-  //   });
-
-  //   setTempToken = asyncHandler(async (req: Request, res: Response) => {
-  //     const token = req.params.token;
-  //     const user = await this.userService.exchangeToken(token, TOKEN_TYPE.TEMP);
-  //     res.status(200).json(new APIResponse(200, { token: user.token }));
-  //   });
 }
 
 const authController = new AuthController();
