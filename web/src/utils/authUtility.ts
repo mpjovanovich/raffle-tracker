@@ -29,6 +29,21 @@ export async function getAccessToken(): Promise<string | null> {
   }
 }
 
+export function getAccessTokenClient(): string | null {
+  if (typeof window === 'undefined') return null;
+
+  const cookies = document.cookie.split(';');
+  const accessTokenCookie = cookies.find(cookie =>
+    cookie.trim().startsWith('accessToken=')
+  );
+
+  if (accessTokenCookie) {
+    return accessTokenCookie.split('=')[1];
+  }
+
+  return null;
+}
+
 export async function requireAuth(
   requiredRoles?: string[]
 ): Promise<AuthenticatedUser> {

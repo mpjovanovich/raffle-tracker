@@ -1,19 +1,17 @@
+import { getEventAction } from '@/app/actions/events';
 import EventPage from '@/components/page/events/EventPage';
-import { getEvent } from '@/services/eventService';
-import { notFound } from 'next/navigation';
+import { requireAuth } from '@/utils/authUtility';
+import { ROLE } from '@raffle-tracker/dto';
 
 interface PageProps {
   params: { eventId: string };
 }
 
 export default async function Page({ params }: PageProps) {
-  const { eventId } = await params;
-  const eventIdNumber = parseInt(eventId);
-  if (isNaN(eventIdNumber)) {
-    notFound();
-  }
+  await requireAuth([ROLE.EVENT_MANAGER]);
+  const eventIdNumber = parseInt(params.eventId);
+  const event = await getEventAction(eventIdNumber, true);
 
-  const event = await getEvent(eventIdNumber, true);
   return (
     <EventPage
       event={event}

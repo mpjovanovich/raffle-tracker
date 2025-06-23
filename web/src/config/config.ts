@@ -11,7 +11,6 @@ const keys = {
 
 // Make sure all required environment variables are set
 for (const key of Object.values(keys)) {
-  console.log(`Checking ${key}:`, process.env[key]);
   if (!process.env[key]) {
     throw new Error(`${key} is required`);
   }

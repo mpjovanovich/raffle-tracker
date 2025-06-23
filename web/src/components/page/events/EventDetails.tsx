@@ -1,10 +1,10 @@
 'use client';
 
+import { upsertEventAction } from '@/app/actions/events';
 import IconButton from '@/components/ui/IconButton';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import { upsertEvent } from '@/services/eventService';
 import { Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -40,7 +40,7 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
     try {
       setError(null);
       setIsSaving(true);
-      updatedEvent = await upsertEvent(updatedEvent);
+      updatedEvent = await upsertEventAction(updatedEvent);
       router.push(`/events/${updatedEvent.id}`);
     } catch (error) {
       setError(

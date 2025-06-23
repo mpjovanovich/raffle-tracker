@@ -1,5 +1,6 @@
 'use client';
 
+import { addContestAction, deleteContestAction } from '@/app/actions/contests';
 import Card from '@/components/ui/Card';
 import IconButton from '@/components/ui/IconButton';
 import Input from '@/components/ui/Input';
@@ -8,7 +9,6 @@ import ItemListItem from '@/components/ui/ItemListItem';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import { addContest, deleteContest } from '@/services/contestService';
 import { Contest, CreateContestRequest, Event } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -54,7 +54,7 @@ export default function EventContests({ event }: EventContestsProps) {
   const handleDeleteContest = async (contest: Contest) => {
     if (confirm(`Are you sure you want to delete Contest ${contest.number}?`)) {
       try {
-        await deleteContest(contest.id);
+        await deleteContestAction(contest.id);
         router.push(`/events/${event.id}`);
       } catch (error) {
         setError(
@@ -70,7 +70,7 @@ export default function EventContests({ event }: EventContestsProps) {
     try {
       setIsSaving(true);
       setError(null);
-      await addContest(event.id, data.contestNumber, data.numberOfHorses);
+      await addContestAction(event.id, data.contestNumber, data.numberOfHorses);
       router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
