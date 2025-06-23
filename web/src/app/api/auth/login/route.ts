@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
     const data = await res.json();
     const loginResponse = data.data as LoginResponse;
 
-    // Store access token in HTTP-only cookie (short-lived)
     const cookieStore = await cookies();
     cookieStore.set('accessToken', loginResponse.accessToken, {
       httpOnly: true,
@@ -37,21 +36,13 @@ export async function POST(request: NextRequest) {
       maxAge: 15 * 60, // 15 minutes (matches your JWT config)
     });
 
-    // Store refresh token in HTTP-only cookie
-    cookieStore.set('refreshToken', loginResponse.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 1 day
-    });
-
-    // Store user info in HTTP-only cookie (for role-based access control)
-    cookieStore.set('user', JSON.stringify(loginResponse.user), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 1 day
-    });
+    // TODO: figure this out later
+    // cookieStore.set('refreshToken', loginResponse.refreshToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'lax',
+    //   maxAge: 24 * 60 * 60, // 1 day
+    // });
 
     return NextResponse.json({ success: true });
   } catch (error) {

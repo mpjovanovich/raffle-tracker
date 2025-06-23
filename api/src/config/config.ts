@@ -1,5 +1,9 @@
 import dotenv from 'dotenv';
 
+/* 
+DO NOT INCLUDE DOLLAR SIGNS IN ENV VARS SUCH AS SECRET KEYS
+ - OMFG YOU WILL HATE YOUR LIFE
+*/
 const requiredKeys = {
   corsOrigin: 'CORS_ORIGIN',
   databaseUrl: 'DATABASE_URL',
