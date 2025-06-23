@@ -1,13 +1,18 @@
 import { PrismaClient, User } from '.prisma/client';
 import { ResetUserRequest } from '@/types/ResetUserRequest.js';
+import { TOKEN_TYPE } from '@/types/TokenType.js';
 import {
+  generateAuthToken,
+  generateResetToken,
   generateTokenId,
   hashPassword,
+  verifyPassword,
   verifyResetToken,
 } from '@/utils/authUtility.js';
 import {
   AuthenticatedUser,
   CreateUserRequest,
+  LoginResponse,
   ROLE,
   Role,
   User as UserDTO,
@@ -159,48 +164,51 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
-  // public async login(
-  //   username: string,
-  //   password: string
-  // ): Promise<LoginResponse> {
-  //   const user = await this.prisma.user.findUnique({
-  //     where: { username },
-  //   });
-  //   if (!user) throw new Error('User not found');
-  //   if (!user.password) throw new Error('User password not set');
-  //   if (!user.verified) throw new Error('User not verified');
+  public async login(
+    username: string,
+    password: string
+  ): Promise<LoginResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+    if (!user) throw new Error('User not found');
+    if (!user.password) throw new Error('User password not set');
+    if (!user.verified) throw new Error('User not verified');
 
-  //   // TODO: not sure of the cleanest way to handle bad credentials.
-  //   // May need custom error type.
-  //   const isPasswordValid = await verifyPassword(password, user.password);
-  //   if (!isPasswordValid) throw new Error('Invalid password');
+    // TODO: not sure of the cleanest way to handle bad credentials.
+    // May need custom error type.
+    const isPasswordValid = await verifyPassword(password, user.password);
+    if (!isPasswordValid) throw new Error('Invalid password');
 
-  //   const authenticatedUser = UserService.toAuthenticatedUser(
-  //     await this.fetchUserWithRoles(user.id)
-  //   );
+    // Get user data and convert to authenticated user
+    const authenticatedUser = UserService.toAuthenticatedUser(
+      await this.fetchUserWithRoles(user.id)
+    );
 
-  //   const accessToken = await generateAccessToken(
-  //     authenticatedUser,
-  //     TOKEN_TYPE.AUTH
-  //   );
+    // Generate auth token with user data
+    const authToken = await generateAuthToken(
+      authenticatedUser,
+      TOKEN_TYPE.AUTH
+    );
 
-  //   const refreshTokenId = await generateTokenId();
-  //   const refreshToken = await generateRefreshToken(
-  //     user.id,
-  //     refreshTokenId,
-  //     TOKEN_TYPE.REFRESH
-  //   );
+    // Create refresh token id and update user
+    const refreshTokenId = await generateTokenId();
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { refreshTokenId },
+    });
 
-  //   await this.prisma.user.update({
-  //     where: { id: user.id },
-  //     data: { refreshTokenId },
-  //   });
+    // Generate refresh token with user data
+    const refreshToken = await generateResetToken(
+      { userId: user.id, token: refreshTokenId },
+      TOKEN_TYPE.REFRESH
+    );
 
-  //   return {
-  //     accessToken,
-  //     refreshToken,
-  //   };
-  // }
+    return {
+      accessToken: authToken,
+      refreshToken: refreshToken,
+    };
+  }
 
   public async logout(userId: number): Promise<void> {
     await this.prisma.user.update({

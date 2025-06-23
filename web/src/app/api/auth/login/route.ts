@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
       maxAge: 15 * 60, // 15 minutes
     });
 
-    // Don't include roles in the refresh token.
     cookieStore.set('refreshToken', loginResponse.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
