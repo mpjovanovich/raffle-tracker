@@ -9,12 +9,8 @@ const getExpiresIn = (type: TokenType): jwt.SignOptions['expiresIn'] => {
   switch (type) {
     case TOKEN_TYPE.AUTH:
       return config.jwtAuthTokenExpiresIn as jwt.SignOptions['expiresIn'];
-    case TOKEN_TYPE.REFRESH:
-      return config.jwtRefreshTokenExpiresIn as jwt.SignOptions['expiresIn'];
     case TOKEN_TYPE.VERIFY:
       return config.jwtVerifyTokenExpiresIn as jwt.SignOptions['expiresIn'];
-    case TOKEN_TYPE.TEMP:
-      return config.jwtTempTokenExpiresIn as jwt.SignOptions['expiresIn'];
     default:
       throw new Error('Invalid token type');
   }

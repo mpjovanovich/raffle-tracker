@@ -20,6 +20,9 @@ class UserController {
   createUser = asyncHandler(async (req: Request, res: Response) => {
     const request: CreateUserRequest = req.body;
     const user = await this.userService.createUser(request);
+
+    // The reset token will be used to look up the user.
+    // It operates like a temporary password.
     const urlToken = await generateResetToken(
       { userId: user.id, token: user.verificationTokenId! },
       TOKEN_TYPE.VERIFY

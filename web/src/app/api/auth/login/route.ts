@@ -33,14 +33,8 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60, // 15 minutes
-    });
-
-    cookieStore.set('refreshToken', loginResponse.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60, // 1 day
+      maxAge: 2 * 60 * 60, // Two hours
+      // TODO: get config to match api?
     });
 
     return NextResponse.json({ success: true });

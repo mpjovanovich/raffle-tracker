@@ -12,8 +12,6 @@ const verifyToken = async (token: string): Promise<AuthenticatedUser> => {
     ) as AuthenticatedUser;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      // TODO: Use refresh token to get a new access token.
-      // ...
       throw new Error('Authentication expired. Please login again.');
     }
     throw new Error('Invalid token');

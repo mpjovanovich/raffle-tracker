@@ -18,6 +18,8 @@ for (const key of Object.values(keys)) {
 
 // Environment variables with defaults
 export const config = {
+  jwtAuthTokenExpiresIn:
+    (process.env.JWT_AUTH_TOKEN_EXPIRES_IN as string) || '2h',
   jwtSecretKey: process.env.JWT_SECRET_KEY,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
   port: parseInt(process.env.PORT as string),

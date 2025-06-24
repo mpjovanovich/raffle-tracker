@@ -43,11 +43,7 @@ export const config = {
   emailUser: process.env.EMAIL_USER!,
   jwtSecretKey: process.env.JWT_SECRET_KEY!,
   jwtAuthTokenExpiresIn:
-    (process.env.JWT_AUTH_TOKEN_EXPIRES_IN as string) || '15m',
-  jwtRefreshTokenExpiresIn:
-    (process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string) || '1d',
-  jwtTempTokenExpiresIn:
-    (process.env.JWT_TEMP_TOKEN_EXPIRES_IN as string) || '5m',
+    (process.env.JWT_AUTH_TOKEN_EXPIRES_IN as string) || '2h',
   jwtVerifyTokenExpiresIn:
     (process.env.JWT_VERIFY_TOKEN_EXPIRES_IN as string) || '1h',
   logDir: process.env.LOG_DIR!,

@@ -1,6 +1,5 @@
 export const TOKEN_TYPE = {
   AUTH: 'AUTH',
-  REFRESH: 'REFRESH',
   TEMP: 'TEMP',
   VERIFY: 'VERIFY',
 } as const;
