@@ -1,9 +1,10 @@
 'use server';
 
 import { getAccessToken } from '@/utils/cookieUtility';
+import { config } from '@raffle-tracker/config';
 import { Event } from '@raffle-tracker/dto';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = config.apiBaseUrl;
 
 export async function getEventsAction(): Promise<Event[]> {
   const token = await getAccessToken();

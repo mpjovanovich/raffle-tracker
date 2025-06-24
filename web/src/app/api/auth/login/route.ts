@@ -1,8 +1,9 @@
 import { setAccessTokenCookie } from '@/utils/cookieUtility';
+import { config } from '@raffle-tracker/config';
 import { LoginResponse } from '@raffle-tracker/dto';
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = config.apiBaseUrl;
 
 export async function POST(request: NextRequest) {
   try {

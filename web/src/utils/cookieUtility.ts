@@ -3,6 +3,7 @@ import {
   TOKEN_TYPE,
   verifyAuthToken,
 } from '@raffle-tracker/auth';
+import { config } from '@raffle-tracker/config';
 import { AuthenticatedUser, ROLE } from '@raffle-tracker/dto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -56,12 +57,12 @@ export async function requireAuth(
 }
 
 export async function setAccessTokenCookie(token: string): Promise<void> {
+  // Can't use config object here because Next.js doesn't support it.
   const cookieStore = await cookies();
   cookieStore.set('accessToken', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: 2 * 60 * 60, // Two hours
-    // TODO: get config to match api?
+    maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds,
   });
 }

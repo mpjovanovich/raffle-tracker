@@ -6,6 +6,7 @@ DO NOT INCLUDE DOLLAR SIGNS IN ENV VARS SUCH AS SECRET KEYS
 */
 const requiredKeys = {
   apiPort: 'API_PORT',
+  apiBaseUrl: 'API_BASE_URL',
   corsOrigin: 'CORS_ORIGIN',
   databaseUrl: 'DATABASE_URL',
   emailFrom: 'EMAIL_FROM',
@@ -14,15 +15,14 @@ const requiredKeys = {
   emailProvider: 'EMAIL_PROVIDER',
   jwtSecretKey: 'JWT_SECRET_KEY',
   logDir: 'LOG_DIR',
-  nextPublicApiBaseUrl: 'NEXT_PUBLIC_API_BASE_URL',
   nodeEnv: 'NODE_ENV',
   webPort: 'WEB_PORT',
 } as const;
 
 // Only load .env file in development
-if (process.env.NODE_ENV === 'development') {
-  dotenv.config({ path: '../.env' });
-}
+// if (process.env.NODE_ENV === 'development') {
+dotenv.config({ path: '../.env' });
+// }
 
 // Make sure all required environment variables are set
 for (const key of Object.values(requiredKeys)) {
@@ -34,6 +34,7 @@ for (const key of Object.values(requiredKeys)) {
 // Environment variables with defaults
 export const config = {
   apiPort: parseInt(process.env.API_PORT!),
+  apiBaseUrl: process.env.API_BASE_URL!,
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   emailDisabled: process.env.EMAIL_DISABLED === 'true',

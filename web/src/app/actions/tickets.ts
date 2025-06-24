@@ -1,12 +1,13 @@
 'use server';
 
 import { getAccessToken } from '@/utils/cookieUtility';
+import { config } from '@raffle-tracker/config';
 import {
   CreateTicketsRequest,
   CreateTicketsResponse,
 } from '@raffle-tracker/dto';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = config.apiBaseUrl;
 
 export async function createTicketsAction(
   tickets: CreateTicketsRequest[]
