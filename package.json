@@ -3,8 +3,10 @@
   "private": true,
   "workspaces": [
     "api",
-    "web",
-    "dto"
+    "auth",
+    "config",
+    "dto",
+    "web"
   ],
   "scripts": {
     "build": "npm run build --workspaces",

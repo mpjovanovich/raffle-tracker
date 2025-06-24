@@ -1,4 +1,4 @@
-import { config } from '@/config/config.js';
+import { config } from '@raffle-tracker/config';
 import { NextFunction, Request, Response, Router } from 'express';
 
 /*

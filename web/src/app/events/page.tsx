@@ -1,6 +1,6 @@
 import { getEventsAction } from '@/app/actions/events';
 import EventsPage from '@/components/page/events/EventsPage';
-import { requireAuth } from '@/utils/authUtility';
+import { requireAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 
 export default async function Page() {

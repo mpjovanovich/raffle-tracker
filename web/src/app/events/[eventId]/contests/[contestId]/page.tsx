@@ -1,6 +1,6 @@
 import { getContestAction } from '@/app/actions/contests';
 import ContestPage from '@/components/page/events/ContestPage';
-import { requireAuth } from '@/utils/authUtility';
+import { requireAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 import { notFound } from 'next/navigation';
 

@@ -1,4 +1,4 @@
-import { config } from '@/config/config.js';
+import { config } from '@raffle-tracker/config';
 import nodemailer from 'nodemailer';
 
 export const sendEmail = async (subject: string, html: string, to: string) => {

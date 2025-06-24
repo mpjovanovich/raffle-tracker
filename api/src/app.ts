@@ -1,5 +1,5 @@
-import { config } from '@/config/config.js';
 import logger from '@/utils/logger.js';
+import { config } from '@raffle-tracker/config';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';

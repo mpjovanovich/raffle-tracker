@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/utils/authUtility';
+import { getAccessToken } from '@/utils/cookieUtility';
 import {
   CreateTicketsRequest,
   CreateTicketsResponse,

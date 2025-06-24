@@ -1,17 +1,16 @@
 import { PrismaClient, User } from '.prisma/client';
-import { ResetUserRequest } from '@/types/ResetUserRequest.js';
-import { TOKEN_TYPE } from '@/types/TokenType.js';
+import { hashPassword, verifyPassword } from '@/utils/passwordUtility.js';
 import {
   generateAuthToken,
   generateTokenId,
-  hashPassword,
-  verifyPassword,
+  TOKEN_TYPE,
   verifyResetToken,
-} from '@/utils/authUtility.js';
+} from '@raffle-tracker/auth';
 import {
   AuthenticatedUser,
   CreateUserRequest,
   LoginResponse,
+  ResetUserRequest,
   ROLE,
   Role,
   User as UserDTO,

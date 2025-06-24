@@ -5,21 +5,23 @@ DO NOT INCLUDE DOLLAR SIGNS IN ENV VARS SUCH AS SECRET KEYS
  - OMFG YOU WILL HATE YOUR LIFE
 */
 const requiredKeys = {
+  apiPort: 'API_PORT',
   corsOrigin: 'CORS_ORIGIN',
   databaseUrl: 'DATABASE_URL',
-  jwtSecretKey: 'JWT_SECRET_KEY',
-  logDir: 'LOG_DIR',
-  nodeEnv: 'NODE_ENV',
-  port: 'PORT',
   emailFrom: 'EMAIL_FROM',
   emailUser: 'EMAIL_USER',
   emailPassword: 'EMAIL_PASSWORD',
   emailProvider: 'EMAIL_PROVIDER',
+  jwtSecretKey: 'JWT_SECRET_KEY',
+  logDir: 'LOG_DIR',
+  nextPublicApiBaseUrl: 'NEXT_PUBLIC_API_BASE_URL',
+  nodeEnv: 'NODE_ENV',
+  webPort: 'WEB_PORT',
 } as const;
 
 // Only load .env file in development
 if (process.env.NODE_ENV === 'development') {
-  dotenv.config();
+  dotenv.config({ path: '../.env' });
 }
 
 // Make sure all required environment variables are set
@@ -31,7 +33,7 @@ for (const key of Object.values(requiredKeys)) {
 
 // Environment variables with defaults
 export const config = {
-  // bypassAuth: process.env.BYPASS_AUTH === 'true',
+  apiPort: parseInt(process.env.API_PORT!),
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   emailDisabled: process.env.EMAIL_DISABLED === 'true',
@@ -42,11 +44,13 @@ export const config = {
   emailProvider: process.env.EMAIL_PROVIDER!,
   emailUser: process.env.EMAIL_USER!,
   jwtSecretKey: process.env.JWT_SECRET_KEY!,
-  jwtAuthTokenExpiresIn:
-    (process.env.JWT_AUTH_TOKEN_EXPIRES_IN as string) || '2h',
-  jwtVerifyTokenExpiresIn:
-    (process.env.JWT_VERIFY_TOKEN_EXPIRES_IN as string) || '1h',
+  jwtAuthTokenExpiresIn: process.env.JWT_AUTH_TOKEN_EXPIRES_IN
+    ? JSON.parse(process.env.JWT_AUTH_TOKEN_EXPIRES_IN)
+    : { jwtExpiresIn: '2h', expiresInSeconds: 2 * 60 * 60 },
+  jwtVerifyTokenExpiresIn: process.env.JWT_VERIFY_TOKEN_EXPIRES_IN
+    ? JSON.parse(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
+    : { jwtExpiresIn: '1h', expiresInSeconds: 1 * 60 * 60 },
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
-  port: parseInt(process.env.PORT!),
+  webPort: parseInt(process.env.WEB_PORT!),
 } as const;

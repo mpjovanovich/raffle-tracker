@@ -1,12 +1,15 @@
-import { config } from '@/config/config.js';
 import { prisma } from '@/db.js';
 import { UserService } from '@/services/UserService.js';
-import { TOKEN_TYPE } from '@/types/TokenType.js';
 import { APIResponse } from '@/utils/APIResponse.js';
 import { asyncHandler } from '@/utils/asyncHandler.js';
-import { generateResetToken } from '@/utils/authUtility.js';
 import { sendEmail } from '@/utils/mailer.js';
 import { createValidationEmail } from '@/utils/mailFormatUtility.js';
+import {
+  generateResetToken,
+  getExpiresIn,
+  TOKEN_TYPE,
+} from '@raffle-tracker/auth';
+import { config } from '@raffle-tracker/config';
 import { CreateUserRequest } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 
@@ -34,7 +37,7 @@ class UserController {
         'Confirm your email',
         createValidationEmail(
           validateUrl,
-          config.jwtVerifyTokenExpiresIn.toString()
+          getExpiresIn(TOKEN_TYPE.VERIFY).jwtExpiresIn!.toString()
         ),
         user.email
       );

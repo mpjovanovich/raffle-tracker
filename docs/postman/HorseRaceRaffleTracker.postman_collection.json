@@ -8,30 +8,90 @@
 	},
 	"item": [
 		{
-			"name": "Dev",
+			"name": "Auth",
 			"item": [
 				{
-					"name": "SetTempToken",
+					"name": "Login",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{api_url}}/api/dev/users/5/setTempToken",
+							"raw": "{{api_url}}/api/auth/login",
 							"host": [
 								"{{api_url}}"
 							],
 							"path": [
 								"api",
-								"dev",
-								"users",
-								"5",
-								"setTempToken"
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/auth/logout/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/{{validToken}}/resetPassword",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"{{validToken}}",
+								"resetPassword"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Dev",
+			"item": []
 		},
 		{
 			"name": "Event",
@@ -553,7 +613,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"bddsddslaa\",\r\n    \"email\": \"blsddsddaa@bla.org\",\r\n    \"validateUrl\": \"http://myapp/testValidate\"\r\n}",
+							"raw": "{\r\n    \"username\": \"addaa\",\r\n    \"email\": \"adada@bla.org\",\r\n    \"validateUrl\": \"http://myapp/testValidate\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -568,55 +628,6 @@
 							"path": [
 								"api",
 								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SetTempToken",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "{{api_url}}/api/users/{{validToken}}/setTempToken",
-							"host": [
-								"{{api_url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{validToken}}",
-								"setTempToken"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ResetPassword",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"newPassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api_url}}/api/users/{{validToken}}/resetPassword",
-							"host": [
-								"{{api_url}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"{{validToken}}",
-								"resetPassword"
 							]
 						}
 					},

@@ -1,5 +1,5 @@
+import { setAccessTokenCookie } from '@/utils/cookieUtility';
 import { LoginResponse } from '@raffle-tracker/dto';
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -27,15 +27,7 @@ export async function POST(request: NextRequest) {
 
     const data = await res.json();
     const loginResponse = data.data as LoginResponse;
-
-    const cookieStore = await cookies();
-    cookieStore.set('accessToken', loginResponse.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 2 * 60 * 60, // Two hours
-      // TODO: get config to match api?
-    });
+    await setAccessTokenCookie(loginResponse.accessToken);
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,17 +1,15 @@
 {
-  "name": "@raffle-tracker/dto",
+  "name": "@raffle-tracker/config",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/config.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
-    "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
   }
 }

@@ -1,7 +1,7 @@
 import { getValidContestsByEventAction } from '@/app/actions/contests';
 import { getEventAction } from '@/app/actions/events';
 import TicketPage from '@/components/page/tickets/TicketPage';
-import { requireAuth } from '@/utils/authUtility';
+import { requireAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 
 interface PageProps {

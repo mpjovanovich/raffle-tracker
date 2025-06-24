@@ -1,21 +1,15 @@
-import { config } from '@/config/config';
+import {
+  generateAuthToken,
+  TOKEN_TYPE,
+  verifyAuthToken,
+} from '@raffle-tracker/auth';
 import { AuthenticatedUser, ROLE } from '@raffle-tracker/dto';
-import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const verifyToken = async (token: string): Promise<AuthenticatedUser> => {
-  try {
-    return jwt.verify(
-      token,
-      config.jwtSecretKey as jwt.Secret
-    ) as AuthenticatedUser;
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Authentication expired. Please login again.');
-    }
-    throw new Error('Invalid token');
-  }
+const refreshToken = async (user: AuthenticatedUser): Promise<void> => {
+  const newToken = await generateAuthToken(user, TOKEN_TYPE.AUTH);
+  await setAccessTokenCookie(newToken);
 };
 
 export async function getAccessToken(): Promise<string | null> {
@@ -36,7 +30,7 @@ export async function requireAuth(
     redirect('/login');
   }
 
-  const user = await verifyToken(accessToken);
+  const user = await verifyAuthToken(accessToken);
   if (!user.roles || user.roles.length === 0) {
     // TODO: Logging
     // User should never be in this state - someone needs to assign a role to the user.
@@ -56,5 +50,18 @@ export async function requireAuth(
     redirect('/');
   }
 
+  await refreshToken(user);
+
   return user;
+}
+
+export async function setAccessTokenCookie(token: string): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set('accessToken', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 2 * 60 * 60, // Two hours
+    // TODO: get config to match api?
+  });
 }

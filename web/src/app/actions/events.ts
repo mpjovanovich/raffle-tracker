@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/utils/authUtility';
+import { getAccessToken } from '@/utils/cookieUtility';
 import { Event } from '@raffle-tracker/dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

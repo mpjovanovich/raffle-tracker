@@ -1,8 +1,7 @@
 {
-  "name": "@raffle-tracker/dto",
+  "name": "@raffle-tracker/auth",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/authUtility.js",
   "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias",
@@ -13,5 +12,9 @@
     "@types/node": "^22.15.17",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }
