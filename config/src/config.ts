@@ -19,10 +19,8 @@ const requiredKeys = {
   webPort: 'WEB_PORT',
 } as const;
 
-// Only load .env file in development
-// if (process.env.NODE_ENV === 'development') {
+// Don't put this in for production
 dotenv.config({ path: '../.env' });
-// }
 
 // Make sure all required environment variables are set
 for (const key of Object.values(requiredKeys)) {
