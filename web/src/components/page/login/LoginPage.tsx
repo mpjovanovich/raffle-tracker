@@ -1,10 +1,10 @@
 'use client';
 
+import { loginAction } from '@/app/actions/auth';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
-import { login } from '@/services/authService';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -30,7 +30,7 @@ export default function LoginPage() {
     try {
       setError(null);
       setIsSaving(true);
-      await login(data.username, data.password);
+      await loginAction(data.username, data.password);
       console.log('Login successful');
       router.push('/');
     } catch (error) {
