@@ -18,7 +18,6 @@ function NavItem({ href, children }: NavItemProps) {
   );
 }
 
-// Create a separate component for the logout form
 function LogoutForm() {
   return (
     <form action={logoutAction}>

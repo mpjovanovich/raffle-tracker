@@ -31,7 +31,7 @@ export default function LoginPage() {
       setError(null);
       setIsSaving(true);
       await loginAction(data.username, data.password);
-      router.push('/');
+      // router.push('/');
     } catch (error) {
       setError(
         error instanceof Error
