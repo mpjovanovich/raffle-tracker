@@ -31,7 +31,6 @@ export default function LoginPage() {
       setError(null);
       setIsSaving(true);
       await loginAction(data.username, data.password);
-      console.log('Login successful');
       router.push('/');
     } catch (error) {
       setError(

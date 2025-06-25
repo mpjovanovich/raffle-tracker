@@ -23,6 +23,32 @@ export async function getAccessToken(): Promise<string | null> {
   }
 }
 
+export async function isLoggedIn(): Promise<boolean> {
+  // If no token at all, they are not logged in.
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    return false;
+  }
+
+  // If the token is invalid, they are not logged in.
+  const user = await verifyAuthToken(accessToken);
+  if (!user.roles || user.roles.length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+export async function removeAccessTokenCookie(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set('accessToken', '', {
+    httpOnly: true,
+    secure: config.nodeEnv === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+  });
+}
+
 export async function requireAuth(
   requiredRoles?: string[]
 ): Promise<AuthenticatedUser> {

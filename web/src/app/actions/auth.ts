@@ -1,6 +1,9 @@
 'use server';
 
-import { setAccessTokenCookie } from '@/utils/cookieUtility';
+import {
+  removeAccessTokenCookie,
+  setAccessTokenCookie,
+} from '@/utils/cookieUtility';
 import { config } from '@raffle-tracker/config';
 import { LoginResponse } from '@raffle-tracker/dto';
 
@@ -26,4 +29,8 @@ export async function loginAction(
   const data = await res.json();
   const loginResponse = data.data as LoginResponse;
   await setAccessTokenCookie(loginResponse.accessToken);
+}
+
+export async function logoutAction(): Promise<void> {
+  await removeAccessTokenCookie();
 }
