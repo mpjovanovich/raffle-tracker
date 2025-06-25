@@ -62,17 +62,20 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
   const onTicketSubmit = async () => {
     try {
       setError(null);
-      const createdTickets: CreateTicketsResponse[] =
+      const response: CreateTicketsResponse[] =
         await createTicketsAction(tickets);
 
-      // Wait for state update to complete
-      await new Promise<void>(resolve => {
-        setCreatedTickets(createdTickets);
-        setLatestOrderNumber(createdTickets[0]?.orderId);
-        resolve();
+      // Update both state variables
+      setCreatedTickets(response);
+      setLatestOrderNumber(response[0]?.orderId);
+
+      // Schedule print for next animation frame after DOM updates.
+      // We need to do this because the DOM won't render the new tickets immediately.
+      // If we don't we'll be "one order behind".
+      requestAnimationFrame(() => {
+        printTickets();
       });
 
-      printTickets();
       setTickets([]);
     } catch (error) {
       setError(
