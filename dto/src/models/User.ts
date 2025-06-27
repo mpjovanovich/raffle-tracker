@@ -6,7 +6,6 @@ export interface User {
   password?: string;
   email: string;
   verified: number; // 0 or 1
-  refreshTokenId?: string;
   verificationTokenId?: string;
   roles?: Role[];
 }

@@ -9,6 +9,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const refreshToken = async (user: AuthenticatedUser): Promise<void> => {
+  console.error('Refreshing token for user:', user);
   const newToken = await generateAuthToken(user, TOKEN_TYPE.AUTH);
   await setAccessTokenCookie(newToken);
 };

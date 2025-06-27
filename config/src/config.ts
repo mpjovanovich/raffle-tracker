@@ -8,7 +8,7 @@ const requiredKeys = {
   apiPort: 'API_PORT',
   apiBaseUrl: 'API_BASE_URL',
   corsOrigin: 'CORS_ORIGIN',
-  databaseUrl: 'DATABASE_URL',
+  // databaseUrl: 'DATABASE_URL', This does need set for prisma, but we're not adding a check for it since database config should be a it's a one-time setup.
   emailFrom: 'EMAIL_FROM',
   emailUser: 'EMAIL_USER',
   emailPassword: 'EMAIL_PASSWORD',
@@ -19,7 +19,7 @@ const requiredKeys = {
   webPort: 'WEB_PORT',
 } as const;
 
-// Don't put this in for production
+// Don't put this file in for production; use actual env variables.
 dotenv.config({ path: '../.env' });
 
 // Make sure all required environment variables are set

@@ -66,10 +66,19 @@ export const verifyAuthToken = async (
   token: string
 ): Promise<AuthenticatedUser> => {
   try {
-    return jwt.verify(
-      token,
-      config.jwtSecretKey as jwt.Secret
-    ) as AuthenticatedUser;
+    const decoded = jwt.verify(token, config.jwtSecretKey as jwt.Secret) as any;
+
+    // "decoded" is a JWT object, with JWT metadata.
+    // We don't want this - just extract the user data from it.
+    const user: AuthenticatedUser = {
+      id: decoded.id,
+      username: decoded.username,
+      roles: decoded.roles,
+    };
+
+    // Dammit. Didn't work...
+
+    return user;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw new Error('Authentication expired. Please login again.');

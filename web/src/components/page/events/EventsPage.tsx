@@ -5,7 +5,8 @@ import IconButton from '@/components/ui/IconButton';
 import ItemList from '@/components/ui/ItemList';
 import ItemListItem from '@/components/ui/ItemListItem';
 import SimpleButton from '@/components/ui/SimpleButton';
-import { Event } from '@raffle-tracker/dto';
+import { canAccess } from '@/utils/rolesUtility';
+import { Event, ROLE, Role } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import Link from 'next/link';
 import {
@@ -17,9 +18,23 @@ import {
 
 interface EventsPageProps {
   events: Event[];
+  userRoles: Role[];
 }
 
-export default function EventsPage({ events }: EventsPageProps) {
+export default function EventsPage({ events, userRoles }: EventsPageProps) {
+  // This is the landing page. VIEWER role can see it, but can't do anything else.
+  // Admins will have to add user roles to new users.
+  const canViewEdit = canAccess(userRoles, [ROLE.EVENT_MANAGER]);
+  const canViewCashier = canAccess(userRoles, [
+    ROLE.EVENT_MANAGER,
+    ROLE.CASHIER,
+  ]);
+  const canViewTickets = canAccess(userRoles, [
+    ROLE.EVENT_MANAGER,
+    ROLE.SELLER,
+  ]);
+  const canViewReports = canAccess(userRoles, [ROLE.EVENT_MANAGER]);
+
   return (
     <Card title="Events">
       <ItemList>
