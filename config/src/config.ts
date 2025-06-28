@@ -45,7 +45,8 @@ export const config = {
   jwtSecretKey: process.env.JWT_SECRET_KEY!,
   jwtAuthTokenExpiresIn: process.env.JWT_AUTH_TOKEN_EXPIRES_IN
     ? JSON.parse(process.env.JWT_AUTH_TOKEN_EXPIRES_IN)
-    : { jwtExpiresIn: '1h', expiresInSeconds: 1 * 60 * 60 },
+    : // Eventually we'd like to have refresh functionality, but for now leave a longer expiration.
+      { jwtExpiresIn: '8h', expiresInSeconds: 8 * 60 * 60 },
   jwtVerifyTokenExpiresIn: process.env.JWT_VERIFY_TOKEN_EXPIRES_IN
     ? JSON.parse(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
     : { jwtExpiresIn: '1h', expiresInSeconds: 1 * 60 * 60 },
