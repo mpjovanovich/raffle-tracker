@@ -8,7 +8,6 @@ import {
 } from '@raffle-tracker/auth';
 import {
   AuthenticatedUser,
-  CreateUserRequest,
   LoginResponse,
   ResetUserRequest,
   ROLE,
@@ -76,30 +75,24 @@ export class UserService extends BaseService<User, UserDTO> {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(email);
   }
 
-  public async createUser(userRequest: CreateUserRequest): Promise<UserDTO> {
-    if (!userRequest.username || !userRequest.email) {
+  public async createUser(email: string, username: string): Promise<UserDTO> {
+    if (!username || !email) {
       throw new Error('Username and email are required');
     }
 
-    if (
-      await this.checkUserExists(
-        this.prisma,
-        userRequest.username,
-        userRequest.email
-      )
-    ) {
+    if (await this.checkUserExists(this.prisma, username, email)) {
       throw new Error('Username or email already in use');
     }
 
-    if (!this.isValidEmail(userRequest.email)) {
+    if (!this.isValidEmail(email)) {
       throw new Error('Invalid email format');
     }
 
     const createdUser = await this.prisma.$transaction(async tx => {
       let user = await tx.user.create({
         data: {
-          username: userRequest.username,
-          email: userRequest.email,
+          username,
+          email,
           verified: false,
           roles: {
             connect: [

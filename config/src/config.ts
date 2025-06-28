@@ -16,6 +16,7 @@ const requiredKeys = {
   jwtSecretKey: 'JWT_SECRET_KEY',
   logDir: 'LOG_DIR',
   nodeEnv: 'NODE_ENV',
+  webBaseUrl: 'WEB_BASE_URL',
   webPort: 'WEB_PORT',
 } as const;
 
@@ -52,5 +53,6 @@ export const config = {
     : { jwtExpiresIn: '1h', expiresInSeconds: 1 * 60 * 60 },
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
+  webBaseUrl: process.env.WEB_BASE_URL!,
   webPort: parseInt(process.env.WEB_PORT!),
 } as const;

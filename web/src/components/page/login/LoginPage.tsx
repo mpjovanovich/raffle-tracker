@@ -6,6 +6,7 @@ import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -86,12 +87,31 @@ export default function LoginPage() {
           Login
         </SimpleButton>
       </form>
+      <Link
+        className={styles.link}
+        href="/signup"
+      >
+        Sign up
+      </Link>
+      <Link
+        className={styles.link}
+        href="/reset-password"
+      >
+        Forgot password?
+      </Link>
     </div>
   );
 }
 
 const styles = {
   error: clsx('text-red-500'),
-  loginFormContainer: clsx('flex', 'justify-center', 'm-20'),
-  loginForm: clsx('flex', 'flex-col', 'gap-2', 'w-80'),
+  loginFormContainer: clsx(
+    'flex',
+    'flex-col',
+    'justify-center',
+    'm-20',
+    'items-center'
+  ),
+  link: clsx('hover:text-dark-accent', 'font-bold', 'mt-2'),
+  loginForm: clsx('flex', 'flex-col', 'gap-2', 'w-80', 'mb-4'),
 };

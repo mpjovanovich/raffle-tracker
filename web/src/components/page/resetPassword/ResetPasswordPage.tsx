@@ -1,6 +1,6 @@
 'use client';
 
-import { signupAction } from '@/app/actions/auth';
+// import { signupAction } from '@/app/actions/auth';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
@@ -9,7 +9,11 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function SignupPage() {
+interface ResetPasswordPageProps {
+  token: string;
+}
+
+export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
@@ -31,9 +35,9 @@ export default function SignupPage() {
       setError(null);
       setIsSaving(true);
 
-      // Should return a success message on success.
-      const response = await signupAction(data.email, data.username);
-      setError(response);
+      //   // Should return a success message on success.
+      //   const response = await signupAction(data.email, data.username);
+      //   setError(response);
     } catch (error) {
       setError(
         error instanceof Error

@@ -2,7 +2,12 @@
 
 import { verifyAuthToken } from '@raffle-tracker/auth';
 import { config } from '@raffle-tracker/config';
-import { AuthenticatedUser, LoginResponse, ROLE } from '@raffle-tracker/dto';
+import {
+  AuthenticatedUser,
+  LoginResponse,
+  ROLE,
+  SignupRequest,
+} from '@raffle-tracker/dto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -109,4 +114,29 @@ export async function setAccessTokenCookie(token: string): Promise<void> {
     sameSite: 'lax',
     maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds,
   });
+}
+
+export async function signupAction(
+  email: string,
+  username: string
+): Promise<string> {
+  const signupRequest: SignupRequest = {
+    email,
+    username,
+    validateUrl: `${config.webBaseUrl}/resetPassword`,
+  };
+  const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(signupRequest),
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Failed to sign up');
+  }
+
+  return data.message;
 }
