@@ -1,6 +1,6 @@
 import { getEventAction } from '@/app/actions/events';
 import EventPage from '@/components/page/events/EventPage';
-import { requireAuth } from '@/utils/cookieUtility';
+import { checkAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 
 interface PageProps {
@@ -8,7 +8,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  await requireAuth([ROLE.EVENT_MANAGER]);
+  await checkAuth([ROLE.EVENT_MANAGER]);
   const { eventId } = await params;
   const eventIdNumber = parseInt(eventId);
   const event = await getEventAction(eventIdNumber, true);

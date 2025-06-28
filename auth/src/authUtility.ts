@@ -66,17 +66,15 @@ export const verifyAuthToken = async (
   token: string
 ): Promise<AuthenticatedUser> => {
   try {
-    const decoded = jwt.verify(token, config.jwtSecretKey as jwt.Secret) as any;
+    // jwt.verify returns a JWT object, with JWT metadata.
+    // It conforms to the AuthenticatedUser interface but we don't want the metadata,
+    // so we extract the user data from it.
+    const { id, username, roles } = jwt.verify(
+      token,
+      config.jwtSecretKey as jwt.Secret
+    ) as AuthenticatedUser;
 
-    // "decoded" is a JWT object, with JWT metadata.
-    // We don't want this - just extract the user data from it.
-    const user: AuthenticatedUser = {
-      id: decoded.id,
-      username: decoded.username,
-      roles: decoded.roles,
-    };
-
-    // Dammit. Didn't work...
+    const user: AuthenticatedUser = { id, username, roles };
 
     return user;
   } catch (error) {

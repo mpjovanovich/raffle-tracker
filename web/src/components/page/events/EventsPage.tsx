@@ -45,26 +45,34 @@ export default function EventsPage({ events, userRoles }: EventsPageProps) {
           >
             <span>{event.name}</span>
             <div className={styles.actionButtonContainer}>
-              <Link href={`/tickets/${event.id}`}>
-                <IconButton title="Tickets">
-                  <FaTicket />
-                </IconButton>
-              </Link>
-              <Link href={`/cashier`}>
-                <IconButton title="Cashier">
-                  <FaReceipt />
-                </IconButton>
-              </Link>
-              <Link href={`/report/${event.id}`}>
-                <IconButton title="Report">
-                  <FaFileContract />
-                </IconButton>
-              </Link>
-              <Link href={`/events/${event.id}`}>
-                <IconButton title="Edit">
-                  <FaPenToSquare />
-                </IconButton>
-              </Link>
+              {canViewTickets && (
+                <Link href={`/tickets/${event.id}`}>
+                  <IconButton title="Tickets">
+                    <FaTicket />
+                  </IconButton>
+                </Link>
+              )}
+              {canViewCashier && (
+                <Link href={`/cashier`}>
+                  <IconButton title="Cashier">
+                    <FaReceipt />
+                  </IconButton>
+                </Link>
+              )}
+              {canViewReports && (
+                <Link href={`/report/${event.id}`}>
+                  <IconButton title="Report">
+                    <FaFileContract />
+                  </IconButton>
+                </Link>
+              )}
+              {canViewEdit && (
+                <Link href={`/events/${event.id}`}>
+                  <IconButton title="Edit">
+                    <FaPenToSquare />
+                  </IconButton>
+                </Link>
+              )}
             </div>
           </ItemListItem>
         ))}

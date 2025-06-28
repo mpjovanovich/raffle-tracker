@@ -1,9 +1,9 @@
+import { checkAuth } from '@/app/actions/auth';
 import EventPage from '@/components/page/events/EventPage';
-import { requireAuth } from '@/utils/cookieUtility';
 import { Event, ROLE } from '@raffle-tracker/dto';
 
 export default async function Page() {
-  await requireAuth([ROLE.EVENT_MANAGER]);
+  await checkAuth([ROLE.EVENT_MANAGER]);
 
   const new_event: Event = {
     id: 0,

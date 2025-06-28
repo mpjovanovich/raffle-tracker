@@ -1,8 +1,8 @@
+import { checkAuth } from '@/app/actions/auth';
 import CashierPage from '@/components/page/cashier/CashierPage';
-import { requireAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 
 export default async function Page() {
-  await requireAuth([ROLE.CASHIER]);
+  await checkAuth([ROLE.CASHIER]);
   return <CashierPage />;
 }

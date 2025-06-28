@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/utils/cookieUtility';
+import { getAccessToken } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import { Event } from '@raffle-tracker/dto';
 

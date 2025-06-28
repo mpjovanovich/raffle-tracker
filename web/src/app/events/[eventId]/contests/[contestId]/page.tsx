@@ -1,6 +1,6 @@
+import { checkAuth } from '@/app/actions/auth';
 import { getContestAction } from '@/app/actions/contests';
 import ContestPage from '@/components/page/events/ContestPage';
-import { requireAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 import { notFound } from 'next/navigation';
 
@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  await requireAuth([ROLE.EVENT_MANAGER]);
+  await checkAuth([ROLE.EVENT_MANAGER]);
   const { contestId } = await params;
   const contestIdNumber = parseInt(contestId);
   if (isNaN(contestIdNumber)) {

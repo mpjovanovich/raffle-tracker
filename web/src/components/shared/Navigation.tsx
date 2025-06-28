@@ -1,5 +1,4 @@
-import { logoutAction } from '@/app/actions/auth';
-import { isLoggedIn } from '@/utils/cookieUtility';
+import { isLoggedIn, logoutAction } from '@/app/actions/auth';
 import Link from 'next/link';
 
 interface NavItemProps {
