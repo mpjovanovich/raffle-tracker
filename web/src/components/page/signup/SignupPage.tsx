@@ -31,9 +31,8 @@ export default function SignupPage() {
       setError(null);
       setIsSaving(true);
 
-      // Should return a success message on success.
-      const response = await signupAction(data.email, data.username);
-      setError(response);
+      // Should redirect to login page with success message.
+      await signupAction(data.email, data.username);
     } catch (error) {
       setError(
         error instanceof Error

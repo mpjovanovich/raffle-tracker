@@ -20,6 +20,10 @@ const getAuthUserOrRedirect = async (
   try {
     return await verifyAuthToken(accessToken);
   } catch (error) {
+    // Remove the access token cookie if the token is invalid.  Leaving this in
+    // place can cause issues. This will effectively log the user out.
+    await removeAccessTokenCookie();
+
     if (error instanceof Error && error.message === 'Token expired.') {
       redirect('/login?message=Login session expired. Please log in again.');
     }
@@ -39,6 +43,7 @@ export async function checkAuth(
   if (!user.roles || user.roles.length === 0) {
     // TODO: Logging
     // User should never be in this state - someone needs to assign a role to the user.
+    await removeAccessTokenCookie();
     redirect('/login');
   }
 
@@ -185,5 +190,5 @@ export async function signupAction(
     throw new Error(data.message || 'Failed to sign up');
   }
 
-  return data.message;
+  redirect(`/login?message=${data.message}`);
 }

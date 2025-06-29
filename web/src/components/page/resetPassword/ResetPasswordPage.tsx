@@ -6,7 +6,6 @@ import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
 import clsx from 'clsx';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface ResetPasswordPageProps {
@@ -16,7 +15,6 @@ interface ResetPasswordPageProps {
 export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const router = useRouter();
   const {
     formState: { errors },
     handleSubmit,

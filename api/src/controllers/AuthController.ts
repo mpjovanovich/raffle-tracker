@@ -75,7 +75,7 @@ class AuthController {
         new APIResponse(
           200,
           null,
-          'User created. A confirmation email has been sent to your email address.'
+          'A confirmation email has been sent to your email address. Please use this email to complete the signup process.'
         )
       );
   });
