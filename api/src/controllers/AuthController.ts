@@ -10,7 +10,11 @@ import {
   TOKEN_TYPE,
 } from '@raffle-tracker/auth';
 import { config } from '@raffle-tracker/config';
-import { LoginResponse, SignupRequest } from '@raffle-tracker/dto';
+import {
+  LoginResponse,
+  ResetPasswordRequest,
+  SignupRequest,
+} from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 
 class AuthController {
@@ -39,9 +43,11 @@ class AuthController {
   });
 
   resetPassword = asyncHandler(async (req: Request, res: Response) => {
-    const token = req.params.token;
-    const { password } = req.body;
-    const user = await this.userService.resetPassword(token, password);
+    const request: ResetPasswordRequest = req.body;
+    const user = await this.userService.resetPassword(
+      request.token,
+      request.password
+    );
     // We could log the user in here, but for now we'll have to tell the user to login with new creds.
     res.status(200).json(new APIResponse(200, user, 'User verified.'));
   });

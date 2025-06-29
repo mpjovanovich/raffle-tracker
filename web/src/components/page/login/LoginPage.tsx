@@ -7,13 +7,14 @@ import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
+  const [pageMessage, setPageMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     formState: { errors },
     handleSubmit,
@@ -26,6 +27,22 @@ export default function LoginPage() {
     },
     mode: 'onBlur',
   });
+
+  // Clean the URL of any message that was passed in
+  const cleanUrl = () => {
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.delete('message');
+    window.history.replaceState({}, '', newUrl.toString());
+  };
+
+  // Check for success message in URL on component mount
+  useEffect(() => {
+    const message = searchParams.get('message');
+    if (message) {
+      setPageMessage(message);
+      cleanUrl();
+    }
+  }, [searchParams]);
 
   const onSubmit = async (data: { username: string; password: string }) => {
     try {
@@ -54,6 +71,7 @@ export default function LoginPage() {
         onSubmit={handleSubmit(onSubmit)}
       >
         {error && <p className={styles.error}>{error}</p>}
+        {pageMessage && <p className={styles.error}>{pageMessage}</p>}
         <LabeledField
           label="Username"
           htmlFor="username"

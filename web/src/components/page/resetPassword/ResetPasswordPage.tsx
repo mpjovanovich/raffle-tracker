@@ -1,6 +1,6 @@
 'use client';
 
-// import { signupAction } from '@/app/actions/auth';
+import { resetPasswordAction } from '@/app/actions/auth';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
@@ -39,9 +39,8 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
       setError(null);
       setIsSaving(true);
 
-      //   // Should return a success message on success.
-      //   const response = await signupAction(data.email, data.username);
-      //   setError(response);
+      // Should redirect to login page with success message.
+      await resetPasswordAction(token, data.password);
     } catch (error) {
       setError(
         error instanceof Error

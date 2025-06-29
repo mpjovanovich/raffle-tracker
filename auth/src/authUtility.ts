@@ -79,7 +79,7 @@ export const verifyAuthToken = async (
     return user;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Authentication expired. Please login again.');
+      throw new Error('Token expired.');
     }
     throw new Error('Invalid token');
   }
@@ -95,7 +95,7 @@ export const verifyResetToken = async (
     ) as ResetUserRequest;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      throw new Error('Authentication expired. Please login again.');
+      throw new Error('Token expired.');
     }
     throw new Error('Invalid token');
   }
