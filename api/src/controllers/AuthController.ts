@@ -62,6 +62,7 @@ class AuthController {
       await sendEmail(
         'Confirm your email',
         createValidationEmail(
+          user.username,
           validateUrl,
           getExpiresIn(TOKEN_TYPE.VERIFY).jwtExpiresIn!.toString()
         ),
