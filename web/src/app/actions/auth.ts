@@ -43,6 +43,7 @@ export async function checkAuth(
   if (!user.roles || user.roles.length === 0) {
     // TODO: Logging
     // User should never be in this state - someone needs to assign a role to the user.
+    // User should at least have the VIEWER role.
     await removeAccessTokenCookie();
     redirect('/login');
   }
@@ -54,6 +55,8 @@ export async function checkAuth(
     requiredRoles &&
     !requiredRoles.some(role => user.roles?.some(userRole => userRole === role))
   ) {
+    // If anyone tries to hit a page they don't have access to, redirect to the root page.
+    // The root page (currently events) needs to allow VIEWER or this will loop endlessly!
     redirect('/');
   }
 

@@ -6,7 +6,12 @@ import { ROLE } from '@raffle-tracker/dto';
 export default async function Page() {
   // TODO: Viewer roles should not be able to edit stuff.
   // Probably won't have time to flush out viewer.
-  const user = await checkAuth([ROLE.CASHIER, ROLE.EVENT_MANAGER, ROLE.SELLER]);
+  const user = await checkAuth([
+    ROLE.CASHIER,
+    ROLE.EVENT_MANAGER,
+    ROLE.SELLER,
+    ROLE.VIEWER,
+  ]);
   const events = await getEventsAction();
 
   return (

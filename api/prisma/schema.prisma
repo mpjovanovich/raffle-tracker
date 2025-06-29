@@ -53,7 +53,7 @@ model Order {
 model Role {
   id            Int     @id @default(autoincrement())
   name          String  @unique
-  users         User[]
+  users         User[]  @relation("UserToRole")
 }
 
 model Ticket {
@@ -77,5 +77,5 @@ model User {
   email         String  @unique
   verified      Boolean @default(false)
   verificationTokenId String?
-  roles         Role[]
+  roles         Role[]  @relation("UserToRole")
 }

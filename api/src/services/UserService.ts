@@ -72,7 +72,9 @@ export class UserService extends BaseService<User, UserDTO> {
   }
 
   private isValidEmail(email: string): boolean {
-    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(email);
+    return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(
+      email
+    );
   }
 
   public async createUser(email: string, username: string): Promise<UserDTO> {
@@ -82,6 +84,10 @@ export class UserService extends BaseService<User, UserDTO> {
 
     if (await this.checkUserExists(this.prisma, username, email)) {
       throw new Error('Username or email already in use');
+    }
+
+    if (username.length < 5 || username.length > 20) {
+      throw new Error('Username must be between 5 and 20 characters long');
     }
 
     if (!this.isValidEmail(email)) {

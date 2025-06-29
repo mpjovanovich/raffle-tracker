@@ -81,7 +81,17 @@ export default function SignupPage() {
           error={errors.username?.message}
         >
           <Input
-            {...register('username', { required: 'Username is required' })}
+            {...register('username', {
+              required: 'Username is required',
+              minLength: {
+                value: 5,
+                message: 'Username must be at least 5 characters long',
+              },
+              maxLength: {
+                value: 20,
+                message: 'Username must be at most 20 characters long',
+              },
+            })}
             id="username"
             placeholder="Username"
             type="text"

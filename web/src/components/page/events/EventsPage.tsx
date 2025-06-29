@@ -77,14 +77,16 @@ export default function EventsPage({ events, userRoles }: EventsPageProps) {
           </ItemListItem>
         ))}
       </ItemList>
-      <Link href="/events/create">
-        <SimpleButton
-          className={styles.newButton}
-          title="New Event"
-        >
-          New Event
-        </SimpleButton>
-      </Link>
+      {canViewEdit && (
+        <Link href="/events/create">
+          <SimpleButton
+            className={styles.newButton}
+            title="New Event"
+          >
+            New Event
+          </SimpleButton>
+        </Link>
+      )}
     </Card>
   );
 }
