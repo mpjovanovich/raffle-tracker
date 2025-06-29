@@ -136,7 +136,7 @@ export class UserService extends BaseService<User, UserDTO> {
       where: { username },
     });
     if (!user) throw new Error('User not found');
-    if (!user.password) throw new Error('User password not set');
+    if (!user.password) throw new Error('User password needs reset.');
     if (!user.verified) throw new Error('User not verified');
 
     // TODO: not sure of the cleanest way to handle bad credentials.
