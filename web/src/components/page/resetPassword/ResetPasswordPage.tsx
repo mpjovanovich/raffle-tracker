@@ -22,15 +22,19 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
     handleSubmit,
     isInitialized,
     register,
+    watch,
   } = useInitializedForm({
     defaultValues: {
-      username: '',
-      email: '',
+      password: '',
+      confirmPassword: '',
     },
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: { username: string; email: string }) => {
+  const onSubmit = async (data: {
+    password: string;
+    confirmPassword: string;
+  }) => {
     try {
       setError(null);
       setIsSaving(true);
@@ -61,35 +65,54 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
       >
         {error && <p className={styles.error}>{error}</p>}
         <LabeledField
-          label="Email"
-          htmlFor="email"
-          error={errors.email?.message}
+          label="New Password"
+          htmlFor="password"
+          error={errors.password?.message}
         >
           <Input
-            {...register('email', {
-              required: 'Email is required',
-              pattern: {
-                value:
-                  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
-                message: 'Please enter a valid email address',
+            {...register('password', {
+              required: 'Password is required',
+              minLength: {
+                value: 12,
+                message: 'Password must be at least 12 characters long',
+              },
+              maxLength: {
+                value: 64,
+                message: 'Password must be at most 64 characters long',
               },
             })}
-            id="email"
-            placeholder="Email"
-            type="email"
+            id="password"
+            placeholder="Password"
+            type="password"
             disabled={isSaving}
           />
         </LabeledField>
         <LabeledField
-          label="Choose a username"
-          htmlFor="username"
-          error={errors.username?.message}
+          label="Confirm Password"
+          htmlFor="confirmPassword"
+          error={errors.confirmPassword?.message}
         >
           <Input
-            {...register('username', { required: 'Username is required' })}
-            id="username"
-            placeholder="Username"
-            type="text"
+            {...register('confirmPassword', {
+              required: 'Password is required',
+              minLength: {
+                value: 12,
+                message: 'Password must be at least 12 characters long',
+              },
+              maxLength: {
+                value: 64,
+                message: 'Password must be at most 64 characters long',
+              },
+              validate: value => {
+                if (value !== watch('password')) {
+                  return 'Passwords do not match';
+                }
+                return true;
+              },
+            })}
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            type="password"
             disabled={isSaving}
           />
         </LabeledField>
@@ -97,7 +120,7 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
           type="submit"
           disabled={isSaving}
         >
-          Sign Up
+          Reset Password
         </SimpleButton>
       </form>
     </div>
