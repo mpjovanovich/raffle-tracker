@@ -80,7 +80,7 @@ export default function LoginPage() {
           <Input
             {...register('username', { required: 'Username is required' })}
             id="username"
-            placeholder="Username"
+            autoComplete="username"
             type="text"
             disabled={isSaving}
           />
@@ -93,8 +93,8 @@ export default function LoginPage() {
           <Input
             {...register('password', { required: 'Password is required' })}
             id="password"
-            placeholder="Password"
             type="password"
+            autoComplete="current-password"
             disabled={isSaving}
           />
         </LabeledField>

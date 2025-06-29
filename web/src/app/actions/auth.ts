@@ -18,7 +18,6 @@ const getAuthUserOrRedirect = async (
   accessToken: string
 ): Promise<AuthenticatedUser> => {
   try {
-    console.log('getAuthUserOrRedirect 1');
     return await verifyAuthToken(accessToken);
   } catch (error) {
     if (error instanceof Error && error.message === 'Token expired.') {
@@ -31,11 +30,7 @@ const getAuthUserOrRedirect = async (
 export async function checkAuth(
   requiredRoles?: string[]
 ): Promise<AuthenticatedUser> {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    redirect('/login?message=Login session expired. Please log in again.');
-  }
-
+  const accessToken = await getAccessTokenOrRedirect();
   const user = await getAuthUserOrRedirect(accessToken);
   if (!user.roles || user.roles.length === 0) {
     // TODO: Logging
@@ -61,30 +56,29 @@ export async function checkAuth(
   return user;
 }
 
-export async function getAccessToken(): Promise<string | null> {
+const getAccessToken = async (): Promise<string | null> => {
   try {
-    console.log('getAccessToken');
     const cookieStore = await cookies();
     const tokenCookie = cookieStore.get('accessToken');
     return tokenCookie?.value || null;
   } catch {
     return null;
   }
+};
+
+export async function getAccessTokenOrRedirect(): Promise<string> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    redirect('/login?message=Login session expired. Please log in again.');
+  }
+  return accessToken;
 }
 
 export async function isLoggedIn(): Promise<boolean> {
-  // If no token at all, they are not logged in.
   const accessToken = await getAccessToken();
   if (!accessToken) {
     return false;
   }
-
-  // If the token is invalid, they are not logged in.
-  const user = await getAuthUserOrRedirect(accessToken);
-  if (!user.roles || user.roles.length === 0) {
-    return false;
-  }
-
   return true;
 }
 

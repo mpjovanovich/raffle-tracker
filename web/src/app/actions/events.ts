@@ -1,16 +1,13 @@
 'use server';
 
-import { getAccessToken } from '@/app/actions/auth';
+import { getAccessTokenOrRedirect } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import { Event } from '@raffle-tracker/dto';
 
 const API_BASE_URL = config.apiBaseUrl;
 
 export async function getEventsAction(): Promise<Event[]> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/events`, {
     headers: {
@@ -33,10 +30,7 @@ export async function getEventAction(
   id: number,
   includeChildren: boolean
 ): Promise<Event> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(
     `${API_BASE_URL}/events/${id}/?includeChildren=${includeChildren ? 'true' : 'false'}`,
@@ -57,10 +51,7 @@ export async function getEventAction(
 }
 
 export async function upsertEventAction(event: Event): Promise<Event> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const url =
     event.id === 0

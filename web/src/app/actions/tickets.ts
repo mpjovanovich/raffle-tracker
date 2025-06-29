@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/app/actions/auth';
+import { getAccessTokenOrRedirect } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import {
   CreateTicketsRequest,
@@ -12,10 +12,7 @@ const API_BASE_URL = config.apiBaseUrl;
 export async function createTicketsAction(
   tickets: CreateTicketsRequest[]
 ): Promise<CreateTicketsResponse[]> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/tickets`, {
     method: 'POST',

@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/app/actions/auth';
+import { getAccessTokenOrRedirect } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import { CreateHorseRequest, Horse } from '@raffle-tracker/dto';
 
@@ -10,10 +10,7 @@ export async function addHorseAction(
   contestId: number,
   number: number
 ): Promise<Horse> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const createHorseRequest: CreateHorseRequest = {
     contestId,
@@ -38,10 +35,7 @@ export async function addHorseAction(
 }
 
 export async function deleteHorseAction(id: number): Promise<void> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/horses/${id}`, {
     method: 'DELETE',
@@ -54,10 +48,7 @@ export async function deleteHorseAction(id: number): Promise<void> {
 }
 
 export async function toggleScratchAction(id: number): Promise<void> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleScratch`, {
     method: 'PATCH',
@@ -70,10 +61,7 @@ export async function toggleScratchAction(id: number): Promise<void> {
 }
 
 export async function toggleWinnerAction(id: number): Promise<void> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/horses/${id}/toggleWinner`, {
     method: 'PATCH',

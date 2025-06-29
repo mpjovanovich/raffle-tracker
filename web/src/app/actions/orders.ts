@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/app/actions/auth';
+import { getAccessTokenOrRedirect } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import { OrderStatus, UpdateOrderResponse } from '@raffle-tracker/dto';
 
@@ -10,10 +10,7 @@ export async function updateOrderAction(
   orderId: number,
   status: OrderStatus
 ): Promise<UpdateOrderResponse> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
     method: 'PUT',

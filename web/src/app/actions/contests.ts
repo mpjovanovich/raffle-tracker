@@ -1,6 +1,6 @@
 'use server';
 
-import { getAccessToken } from '@/app/actions/auth';
+import { getAccessTokenOrRedirect } from '@/app/actions/auth';
 import { config } from '@raffle-tracker/config';
 import { Contest, CreateContestRequest, Event } from '@raffle-tracker/dto';
 
@@ -11,10 +11,7 @@ export async function addContestAction(
   contestNumber: number,
   numberOfHorses: number
 ): Promise<Event> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const createContestRequest: CreateContestRequest = {
     eventId,
@@ -40,10 +37,7 @@ export async function addContestAction(
 }
 
 export async function deleteContestAction(id: number): Promise<void> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/contests/${id}`, {
     method: 'DELETE',
@@ -61,10 +55,7 @@ export async function getContestAction(
   id: number,
   includeChildren: boolean
 ): Promise<Contest> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(
     `${API_BASE_URL}/contests/${id}${includeChildren ? '?includeChildren=true' : ''}`,
@@ -83,10 +74,7 @@ export async function getContestAction(
 export async function getValidContestsByEventAction(
   eventId: number
 ): Promise<Contest[]> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error('Not authenticated');
-  }
+  const token = await getAccessTokenOrRedirect();
 
   const res = await fetch(`${API_BASE_URL}/events/${eventId}/races`, {
     headers: { Authorization: `Bearer ${token}` },
