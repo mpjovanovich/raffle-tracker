@@ -40,7 +40,15 @@ class AuthController {
       request.password
     );
     // We could log the user in here, but for now we'll have to tell the user to login with new creds.
-    res.status(200).json(new APIResponse(200, user, 'User verified.'));
+    res
+      .status(200)
+      .json(
+        new APIResponse(
+          200,
+          user,
+          'Password reset successful. Please log in with your new credentials.'
+        )
+      );
   });
 
   signup = asyncHandler(async (req: Request, res: Response) => {

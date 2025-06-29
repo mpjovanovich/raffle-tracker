@@ -18,12 +18,9 @@ const getAuthUserOrRedirect = async (
   accessToken: string
 ): Promise<AuthenticatedUser> => {
   try {
+    console.log('getAuthUserOrRedirect 1');
     return await verifyAuthToken(accessToken);
   } catch (error) {
-    // Remove the access token cookie if the token is invalid.  Leaving this in
-    // place can cause issues. This will effectively log the user out.
-    await removeAccessTokenCookie();
-
     if (error instanceof Error && error.message === 'Token expired.') {
       redirect('/login?message=Login session expired. Please log in again.');
     }
@@ -36,7 +33,7 @@ export async function checkAuth(
 ): Promise<AuthenticatedUser> {
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    redirect('/login');
+    redirect('/login?message=Login session expired. Please log in again.');
   }
 
   const user = await getAuthUserOrRedirect(accessToken);
@@ -44,8 +41,9 @@ export async function checkAuth(
     // TODO: Logging
     // User should never be in this state - someone needs to assign a role to the user.
     // User should at least have the VIEWER role.
-    await removeAccessTokenCookie();
-    redirect('/login');
+    redirect(
+      '/login?message=User has no roles. Please contact an administrator.'
+    );
   }
 
   if (
@@ -65,6 +63,7 @@ export async function checkAuth(
 
 export async function getAccessToken(): Promise<string | null> {
   try {
+    console.log('getAccessToken');
     const cookieStore = await cookies();
     const tokenCookie = cookieStore.get('accessToken');
     return tokenCookie?.value || null;
@@ -135,8 +134,8 @@ export async function resetPasswordAction(
     await verifyResetToken(token);
   } catch (error) {
     if (error instanceof Error && error.message === 'Token expired.') {
-      throw new Error(
-        'Token expired. Please request a new password reset from the login page.'
+      redirect(
+        '/login?message=Token expired. Please request a new password reset.'
       );
     }
   }
@@ -150,14 +149,12 @@ export async function resetPasswordAction(
     body: JSON.stringify(request),
   });
 
+  const data = await res.json();
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || 'Failed to reset password');
+    throw new Error(data.message || 'Failed to reset password');
   }
 
-  redirect(
-    '/login?message=Password reset successful. Please log in with your new credentials.'
-  );
+  redirect(`/login?message=${data.message}`);
 }
 
 export async function setAccessTokenCookie(token: string): Promise<void> {
