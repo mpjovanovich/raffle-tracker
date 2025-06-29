@@ -160,13 +160,6 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
-  public async logout(userId: number): Promise<void> {
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { verificationTokenId: null },
-    });
-  }
-
   public async resetPassword(
     token: string,
     password: string

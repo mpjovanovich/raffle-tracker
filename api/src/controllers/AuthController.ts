@@ -33,15 +33,6 @@ class AuthController {
     res.status(200).json(new APIResponse(200, loginResponse));
   });
 
-  logout = asyncHandler(async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.userId);
-    if (isNaN(userId)) {
-      throw new Error(`Invalid ID format: ${req.params.userId}`);
-    }
-    await this.userService.logout(userId);
-    res.status(200).json(new APIResponse(200, null, 'Logged out.'));
-  });
-
   resetPassword = asyncHandler(async (req: Request, res: Response) => {
     const request: ResetPasswordRequest = req.body;
     const user = await this.userService.resetPassword(

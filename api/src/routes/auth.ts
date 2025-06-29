@@ -5,7 +5,6 @@ const router = Router();
 
 router.route('/signup').post(authController.signup);
 router.route('/login').post(authController.login);
-router.route('/logout').post(authController.logout);
 router.route('/resetPassword').post(authController.resetPassword);
 
 export default router;
