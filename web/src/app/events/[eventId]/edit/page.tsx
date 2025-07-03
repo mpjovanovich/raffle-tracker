@@ -1,6 +1,6 @@
+import { checkAuth } from '@/app/actions/auth';
 import { getEventAction } from '@/app/actions/events';
 import EventPage from '@/components/page/events/EventPage';
-import { checkAuth } from '@/utils/cookieUtility';
 import { ROLE } from '@raffle-tracker/dto';
 
 interface PageProps {

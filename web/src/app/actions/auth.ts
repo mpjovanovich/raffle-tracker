@@ -69,6 +69,9 @@ const getAccessToken = async (): Promise<string | null> => {
 export async function getAccessTokenOrRedirect(): Promise<string> {
   const accessToken = await getAccessToken();
   if (!accessToken) {
+    // Issue: client (browser) will not send expired cookies to the server, and
+    // some browsers will clear the cookie on the client side too.
+    // How are we going to tell if the user was logged in or not?
     redirect('/login?message=Login session expired. Please log in again.');
   }
   return accessToken;
