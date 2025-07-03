@@ -1,5 +1,6 @@
 'use server';
 
+import { COOKIE_NAMES } from '@/constants/constants';
 import { verifyAuthToken, verifyResetToken } from '@raffle-tracker/auth';
 import { config } from '@raffle-tracker/config';
 import {
@@ -14,12 +15,24 @@ import { redirect } from 'next/navigation';
 
 const API_BASE_URL = config.apiBaseUrl;
 
+const getAccessToken = async (): Promise<string | null> => {
+  try {
+    const cookieStore = await cookies();
+    const tokenCookie = cookieStore.get(COOKIE_NAMES.ACCESS_TOKEN);
+    return tokenCookie?.value || null;
+  } catch {
+    return null;
+  }
+};
+
 const getAuthUserOrRedirect = async (
   accessToken: string
 ): Promise<AuthenticatedUser> => {
   try {
     return await verifyAuthToken(accessToken);
   } catch (error) {
+    // This function is only ever called on the server side. Middleware should intercept any expired access tokens,
+    // so this is one last sanity check that will boot the user to login if it gets past middleware.
     if (error instanceof Error && error.message === 'Token expired.') {
       redirect('/login?message=Login session expired. Please log in again.');
     }
@@ -56,27 +69,17 @@ export async function checkAuth(
   return user;
 }
 
-const getAccessToken = async (): Promise<string | null> => {
-  try {
-    const cookieStore = await cookies();
-    const tokenCookie = cookieStore.get('accessToken');
-    return tokenCookie?.value || null;
-  } catch {
-    return null;
-  }
-};
-
 export async function getAccessTokenOrRedirect(): Promise<string> {
   const accessToken = await getAccessToken();
   if (!accessToken) {
-    // Issue: client (browser) will not send expired cookies to the server, and
-    // some browsers will clear the cookie on the client side too.
-    // How are we going to tell if the user was logged in or not?
-    redirect('/login?message=Login session expired. Please log in again.');
+    // This function is only ever called on the server side. Middleware should intercept any expired access tokens,
+    // so this is one last sanity check that will boot the user to login if it gets past middleware.
+    redirect('/login');
   }
   return accessToken;
 }
 
+// This is the "client side version" of getAccessTokenOrRedirect.
 export async function isLoggedIn(): Promise<boolean> {
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -105,16 +108,28 @@ export async function loginAction(
   const data = await res.json();
   const loginResponse = data.data as LoginResponse;
   await setAccessTokenCookie(loginResponse.accessToken);
+  await setLoggedInCookie();
   redirect('/');
 }
 
 export async function logoutAction(): Promise<void> {
   await removeAccessTokenCookie();
+  await removeLoggedInCookie();
 }
 
 export async function removeAccessTokenCookie(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set('accessToken', '', {
+  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, '', {
+    httpOnly: true,
+    secure: config.nodeEnv === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+  });
+}
+
+export async function removeLoggedInCookie(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(COOKIE_NAMES.LOGGED_IN, '', {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
@@ -157,11 +172,23 @@ export async function resetPasswordAction(
 export async function setAccessTokenCookie(token: string): Promise<void> {
   // Can't use config object here because Next.js doesn't support it.
   const cookieStore = await cookies();
-  cookieStore.set('accessToken', token, {
+  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, token, {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
     maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds,
+  });
+}
+
+export async function setLoggedInCookie(): Promise<void> {
+  // This cookie isn't used for security. It's used to tell if the user was previously logged in,
+  // and no longer has an unexpired access token cookie.
+  const cookieStore = await cookies();
+  cookieStore.set(COOKIE_NAMES.LOGGED_IN, 'true', {
+    httpOnly: true,
+    secure: config.nodeEnv === 'production',
+    sameSite: 'lax',
+    maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds + 60 * 60 * 24, // 24 hours
   });
 }
 
