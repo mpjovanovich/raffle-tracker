@@ -51,5 +51,9 @@ docker-compose.yml
 next-env.d.ts
 *.tsbuildinfo
 
+# Prettier
+.prettier*
+
+
 # Generated files
 generated
