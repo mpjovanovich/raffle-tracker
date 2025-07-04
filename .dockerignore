@@ -46,3 +46,10 @@ README.md
 Dockerfile
 docker-compose.yml
 .dockerignore
+
+# Next.js
+next-env.d.ts
+*.tsbuildinfo
+
+# Generated files
+generated
