@@ -1,11 +1,32 @@
-# This file controls which files are not tracked by git.
-# Anything in here will not be committed to the repository.
+# Dependencies
 **/node_modules
+
+# Build outputs
 **/dist
-**/.env
+**/build
+
+# Environment files
+**/.env*
+
+# Next.js
 **/.next
 **/next-env.d.ts
+**/*.tsbuildinfo
+
+# IDE/Editor
 **/.vscode
+**/.swp
+**/.swo
+
+# Database files
 **/*.db
+
+# Generated files
 **/generated
 **/logs
+
+# OS files
+**/.DS_Store
+
+# Debug logs
+**/npm-debug.log*
