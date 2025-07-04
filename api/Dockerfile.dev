@@ -19,12 +19,13 @@ COPY . .
 # Generate workspace symlinks after copying source
 RUN npm install --workspaces
 
-
 # Build the app
 RUN npm run build --workspace=config
 RUN npm run build --workspace=dto
 RUN npm run build --workspace=auth
-RUN npm run build --workspace=api
+
+## Uncomment for prod - need to actually build the api
+# RUN npm run build --workspace=api
 
 # Generate Prisma objects
 RUN npm run prisma:generate --workspace api
@@ -37,4 +38,7 @@ EXPOSE 3001
 WORKDIR /app/api
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
+
+# Use this for prod
+# CMD ["npm", "start"]
