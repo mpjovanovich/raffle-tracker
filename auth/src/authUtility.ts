@@ -1,6 +1,6 @@
 import { config } from '@raffle-tracker/config';
 import { AuthenticatedUser, ResetUserRequest } from '@raffle-tracker/dto';
-import jwt from 'jsonwebtoken';
+import * as jose from 'jose';
 
 export const TOKEN_TYPE = {
   AUTH: 'AUTH',
@@ -14,20 +14,12 @@ export const printConfig = () => {
   console.error(config.apiPort);
 };
 
-export const getExpiresIn = (
-  type: TokenType
-): { jwtExpiresIn: jwt.SignOptions['expiresIn']; expiresInSeconds: number } => {
+export const getExpiresIn = (type: TokenType): number => {
   switch (type) {
     case TOKEN_TYPE.AUTH:
-      return {
-        jwtExpiresIn: config.jwtAuthTokenExpiresIn.jwtExpiresIn,
-        expiresInSeconds: config.jwtAuthTokenExpiresIn.expiresInSeconds,
-      };
+      return config.jwtAuthTokenExpiresIn;
     case TOKEN_TYPE.VERIFY:
-      return {
-        jwtExpiresIn: config.jwtVerifyTokenExpiresIn.jwtExpiresIn,
-        expiresInSeconds: config.jwtVerifyTokenExpiresIn.expiresInSeconds,
-      };
+      return config.jwtVerifyTokenExpiresIn;
     default:
       throw new Error('Invalid token type');
   }
@@ -36,16 +28,20 @@ export const getExpiresIn = (
 export const decodeAuthToken = async (
   token: string
 ): Promise<AuthenticatedUser> => {
-  return jwt.decode(token) as AuthenticatedUser;
+  return jose.decodeJwt(token) as AuthenticatedUser;
 };
 
 export const generateAuthToken = async (
   userData: AuthenticatedUser,
   type: TokenType
 ): Promise<string> => {
-  return jwt.sign(userData, config.jwtSecretKey as jwt.Secret, {
-    expiresIn: getExpiresIn(type).jwtExpiresIn,
-  });
+  const secret = new TextEncoder().encode(config.jwtSecretKey);
+  const expiresIn = getExpiresIn(type);
+
+  return await new jose.SignJWT(userData as any)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(Math.floor(Date.now() / 1000) + expiresIn)
+    .sign(secret);
 };
 
 export const generateTokenId = async (): Promise<string> => {
@@ -57,28 +53,31 @@ export const generateResetToken = async (
   resetUserRequest: ResetUserRequest,
   type: TokenType
 ): Promise<string> => {
-  return jwt.sign(resetUserRequest, config.jwtSecretKey as jwt.Secret, {
-    expiresIn: getExpiresIn(type).jwtExpiresIn,
-  });
+  const secret = new TextEncoder().encode(config.jwtSecretKey);
+  const expiresIn = getExpiresIn(type);
+
+  return await new jose.SignJWT(resetUserRequest as any)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(Math.floor(Date.now() / 1000) + expiresIn)
+    .sign(secret);
 };
 
 export const verifyAuthToken = async (
   token: string
 ): Promise<AuthenticatedUser> => {
   try {
-    // jwt.verify returns a JWT object, with JWT metadata.
-    // It conforms to the AuthenticatedUser interface but we don't want the metadata,
-    // so we extract the user data from it.
-    const { id, username, roles } = jwt.verify(
-      token,
-      config.jwtSecretKey as jwt.Secret
-    ) as AuthenticatedUser;
+    const secret = new TextEncoder().encode(config.jwtSecretKey);
+    const { payload } = await jose.jwtVerify(token, secret);
 
-    const user: AuthenticatedUser = { id, username, roles };
+    const user: AuthenticatedUser = {
+      id: payload.id as number,
+      username: payload.username as string,
+      roles: payload.roles as any,
+    };
 
     return user;
   } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+    if (error instanceof jose.errors.JWTExpired) {
       throw new Error('Token expired.');
     }
     throw new Error('Invalid token');
@@ -89,12 +88,17 @@ export const verifyResetToken = async (
   token: string
 ): Promise<ResetUserRequest> => {
   try {
-    return jwt.verify(
-      token,
-      config.jwtSecretKey as jwt.Secret
-    ) as ResetUserRequest;
+    const secret = new TextEncoder().encode(config.jwtSecretKey);
+    const { payload } = await jose.jwtVerify(token, secret);
+
+    const resetRequest: ResetUserRequest = {
+      userId: payload.userId as number,
+      token: payload.token as string,
+    };
+
+    return resetRequest;
   } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+    if (error instanceof jose.errors.JWTExpired) {
       throw new Error('Token expired.');
     }
     throw new Error('Invalid token');

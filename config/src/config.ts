@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-
 /* 
 DO NOT INCLUDE DOLLAR SIGNS IN ENV VARS SUCH AS SECRET KEYS
  - OMFG YOU WILL HATE YOUR LIFE
@@ -19,9 +17,6 @@ const requiredKeys = {
   webBaseUrl: 'WEB_BASE_URL',
   webPort: 'WEB_PORT',
 } as const;
-
-// Don't put this file in for production; use actual env variables.
-dotenv.config({ path: '../.env' });
 
 // Make sure all required environment variables are set
 for (const key of Object.values(requiredKeys)) {
@@ -45,12 +40,11 @@ export const config = {
   emailUser: process.env.EMAIL_USER!,
   jwtSecretKey: process.env.JWT_SECRET_KEY!,
   jwtAuthTokenExpiresIn: process.env.JWT_AUTH_TOKEN_EXPIRES_IN
-    ? JSON.parse(process.env.JWT_AUTH_TOKEN_EXPIRES_IN)
-    : // Eventually we'd like to have refresh functionality, but for now leave a longer expiration.
-      { jwtExpiresIn: '8h', expiresInSeconds: 8 * 60 * 60 },
+    ? parseInt(process.env.JWT_AUTH_TOKEN_EXPIRES_IN)
+    : 8 * 60 * 60,
   jwtVerifyTokenExpiresIn: process.env.JWT_VERIFY_TOKEN_EXPIRES_IN
-    ? JSON.parse(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
-    : { jwtExpiresIn: '1h', expiresInSeconds: 1 * 60 * 60 },
+    ? parseInt(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
+    : 1 * 60 * 60,
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
   webBaseUrl: process.env.WEB_BASE_URL!,

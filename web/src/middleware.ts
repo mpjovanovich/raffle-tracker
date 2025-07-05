@@ -1,5 +1,5 @@
-// import { verifyAuthToken } from '@raffle-tracker/auth';
 import { COOKIE_NAMES } from '@/constants/constants';
+import { verifyAuthToken } from '@raffle-tracker/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 const PUBLIC_ROUTES = [
@@ -51,7 +51,7 @@ export async function middleware(request: NextRequest) {
     // It would still be nice to define attributes on the pages - not sure of
     // Node has a way to put in meta tags for the page functions?
 
-    // const user = await verifyAuthToken(token);
+    const user = await verifyAuthToken(accessToken);
     return NextResponse.next();
   } catch {
     // Clear both tokens and redirect to login
