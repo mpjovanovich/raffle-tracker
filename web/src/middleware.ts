@@ -1,5 +1,6 @@
 import { COOKIE_NAMES } from '@/constants/constants';
 import { verifyAuthToken } from '@raffle-tracker/auth';
+import { ROLE } from '@raffle-tracker/dto';
 import { NextRequest, NextResponse } from 'next/server';
 
 const PUBLIC_ROUTES = [
@@ -11,6 +12,42 @@ const PUBLIC_ROUTES = [
   '/forgot-password',
   '/reset-password',
 ];
+
+// Define route patterns with their required roles
+const ROUTE_PERMISSIONS = [
+  {
+    pattern: /^\/cashier$/,
+    roles: [ROLE.EVENT_MANAGER, ROLE.CASHIER],
+  },
+  {
+    pattern: /^\/events$/,
+    roles: [ROLE.EVENT_MANAGER, ROLE.CASHIER, ROLE.SELLER, ROLE.VIEWER],
+  },
+  {
+    pattern: /^\/events\/[^\/]+$/,
+    roles: [ROLE.EVENT_MANAGER],
+  },
+  {
+    pattern: /^\/events\/[^\/]+\/contests\/[^\/]+$/,
+    roles: [ROLE.EVENT_MANAGER],
+  },
+  {
+    pattern: /^\/events\/[^\/]+\/edit$/,
+    roles: [ROLE.EVENT_MANAGER],
+  },
+  {
+    pattern: /^\/events\/create$/,
+    roles: [ROLE.EVENT_MANAGER],
+  },
+  {
+    pattern: /^\/reports\/[^\/]+$/,
+    roles: [ROLE.EVENT_MANAGER],
+  },
+  {
+    pattern: /^\/tickets\/[^\/]+$/,
+    roles: [ROLE.EVENT_MANAGER, ROLE.SELLER],
+  },
+] as const;
 
 export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
@@ -42,16 +79,52 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // TODO: This is currently breaking because it runs in an edge function.
-    // This means that it doesn't have access to the NodeJS environment.
-    // Currently switching to Docker container to remove the need for the dotenv
-    // dependency.  I think this will make the login patterns much cleaner.
-    // We'll be able to move all of the auth checks into middleware.
-
-    // It would still be nice to define attributes on the pages - not sure of
-    // Node has a way to put in meta tags for the page functions?
-
     const user = await verifyAuthToken(accessToken);
+
+    if (!user.roles || user.roles.length === 0) {
+      // TODO: Logging
+      // User should never be in this state - someone needs to assign a role to the user.
+      // User should at least have the VIEWER role.
+      const response = NextResponse.redirect(
+        new URL(
+          '/login?message=User has no roles. Please contact an administrator.',
+          request.url
+        )
+      );
+      response.cookies.set(COOKIE_NAMES.LOGGED_IN, '', {
+        maxAge: 0,
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
+
+      return response;
+    }
+
+    // Find matching route pattern
+    const matchingRoute = ROUTE_PERMISSIONS.find(route =>
+      route.pattern.test(request.nextUrl.pathname)
+    );
+
+    if (
+      // Admins can access all pages
+      !user.roles.includes(ROLE.ADMIN) &&
+      // User only needs to have one of the required roles if any are defined
+      matchingRoute &&
+      !matchingRoute.roles.some(role =>
+        user.roles?.some(userRole => userRole === role)
+      )
+    ) {
+      // If anyone tries to hit a page they don't have access to, redirect to the root page.
+      // The root page (currently events) needs to allow VIEWER or this will loop endlessly!
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    console.error('User:', user);
+    console.error('Pathname:', request.nextUrl.pathname);
+    console.error('Required roles:', matchingRoute?.roles);
+    console.error('User has access to this page');
+
     return NextResponse.next();
   } catch {
     // Clear both tokens and redirect to login

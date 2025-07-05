@@ -25,6 +25,15 @@ const getAccessToken = async (): Promise<string | null> => {
   }
 };
 
+export const getAuthUser = async (): Promise<AuthenticatedUser> => {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    throw new Error('No access token found');
+  }
+  return await verifyAuthToken(accessToken);
+};
+
+// DEPRECATED
 const getAuthUserOrRedirect = async (
   accessToken: string
 ): Promise<AuthenticatedUser> => {
@@ -40,6 +49,7 @@ const getAuthUserOrRedirect = async (
   }
 };
 
+// DEPRECATED - use middleware instead
 export async function checkAuth(
   requiredRoles?: string[]
 ): Promise<AuthenticatedUser> {
