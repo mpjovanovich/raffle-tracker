@@ -15,7 +15,7 @@ import {
   Event,
 } from '@raffle-tracker/dto';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TicketOrderSummary from './TicketOrderSummary';
 
 interface TicketPageProps {
@@ -24,14 +24,15 @@ interface TicketPageProps {
 }
 
 export default function TicketPage({ contests, event }: TicketPageProps) {
+  const [createdTickets, setCreatedTickets] = useState<CreateTicketsResponse[]>(
+    []
+  );
   const [error, setError] = useState<string | null>(null);
   const [latestOrderNumber, setLatestOrderNumber] = useState<string | null>(
     null
   );
+  const [isReadyForPrint, setIsReadyForPrint] = useState(false);
   const [tickets, setTickets] = useState<CreateTicketsRequest[]>([]);
-  const [createdTickets, setCreatedTickets] = useState<CreateTicketsResponse[]>(
-    []
-  );
 
   const {
     formState: { errors },
@@ -46,6 +47,13 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     },
     mode: 'onBlur',
   });
+
+  useEffect(() => {
+    if (isReadyForPrint) {
+      setIsReadyForPrint(false);
+      printTickets();
+    }
+  }, [isReadyForPrint]);
 
   const printTickets = () => {
     document.body.classList.add('print-mode');
@@ -67,17 +75,9 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
       const response: CreateTicketsResponse[] =
         await createTicketsAction(tickets);
 
-      // Update both state variables
       setCreatedTickets(response);
       setLatestOrderNumber(response[0]?.orderId);
-
-      // Schedule print for next animation frame after DOM updates.
-      // We need to do this because the DOM won't render the new tickets immediately.
-      // If we don't we'll be "one order behind".
-      requestAnimationFrame(() => {
-        printTickets();
-      });
-
+      setIsReadyForPrint(true);
       setTickets([]);
     } catch (error) {
       setError(
