@@ -11,9 +11,11 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "clean": "npm run clean --workspaces",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:workspaces": "concurrently \"npm run dev --workspace=config\" \"npm run dev --workspace=dto\" \"npm run dev --workspace=auth\""
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "prettier": "^3.5.3"
   }
 }
