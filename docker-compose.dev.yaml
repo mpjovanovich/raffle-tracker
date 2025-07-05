@@ -18,6 +18,22 @@ services:
           ignore:
             - node_modules/
 
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile.dev
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: ./web/src
+          target: /app/web/src
+          ignore:
+            - node_modules/
+
 volumes:
   db_data:
     driver: local
