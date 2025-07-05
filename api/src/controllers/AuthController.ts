@@ -6,7 +6,7 @@ import { sendEmail } from '@/utils/mailer.js';
 import { createValidationEmail } from '@/utils/mailFormatUtility.js';
 import {
   generateResetToken,
-  getExpiresIn,
+  getExpiresInString,
   TOKEN_TYPE,
 } from '@raffle-tracker/auth';
 import { config } from '@raffle-tracker/config';
@@ -72,7 +72,7 @@ class AuthController {
         createValidationEmail(
           user.username,
           validateUrl,
-          getExpiresIn(TOKEN_TYPE.VERIFY).jwtExpiresIn!.toString()
+          getExpiresInString(TOKEN_TYPE.VERIFY)
         ),
         user.email
       );

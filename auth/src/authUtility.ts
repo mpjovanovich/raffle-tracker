@@ -14,7 +14,7 @@ export const printConfig = () => {
   console.error(config.apiPort);
 };
 
-export const getExpiresIn = (type: TokenType): number => {
+export const getExpiresInSeconds = (type: TokenType): number => {
   switch (type) {
     case TOKEN_TYPE.AUTH:
       return config.jwtAuthTokenExpiresIn;
@@ -23,6 +23,22 @@ export const getExpiresIn = (type: TokenType): number => {
     default:
       throw new Error('Invalid token type');
   }
+};
+
+export const getExpiresInString = (type: TokenType): string => {
+  const expiresInSeconds = getExpiresInSeconds(type);
+  const expiresInMinutes = expiresInSeconds / 60;
+  if (expiresInMinutes < 60) {
+    return `${expiresInMinutes}m`;
+  }
+
+  const expiresInHours = expiresInMinutes / 60;
+  if (expiresInHours < 24) {
+    return `${expiresInHours.toFixed(2)}h`;
+  }
+
+  const expiresInDays = expiresInHours / 24;
+  return `${expiresInDays.toFixed(2)}d`;
 };
 
 export const decodeAuthToken = async (
@@ -36,7 +52,7 @@ export const generateAuthToken = async (
   type: TokenType
 ): Promise<string> => {
   const secret = new TextEncoder().encode(config.jwtSecretKey);
-  const expiresIn = getExpiresIn(type);
+  const expiresIn = getExpiresInSeconds(type);
 
   return await new jose.SignJWT(userData as any)
     .setProtectedHeader({ alg: 'HS256' })
@@ -54,7 +70,7 @@ export const generateResetToken = async (
   type: TokenType
 ): Promise<string> => {
   const secret = new TextEncoder().encode(config.jwtSecretKey);
-  const expiresIn = getExpiresIn(type);
+  const expiresIn = getExpiresInSeconds(type);
 
   return await new jose.SignJWT(resetUserRequest as any)
     .setProtectedHeader({ alg: 'HS256' })
