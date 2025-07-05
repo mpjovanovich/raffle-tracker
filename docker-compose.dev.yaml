@@ -9,14 +9,8 @@ services:
       - .env
     volumes:
       - db_data:/app/api/data
-    # Not needed for prod
-    develop:
-      watch:
-        - action: sync
-          path: ./api/src
-          target: /app/api/src
-          ignore:
-            - node_modules/
+      - ./api/src:/app/api/src
+      - ./node_modules:/app/node_modules
 
   web:
     build:
@@ -26,13 +20,9 @@ services:
       - '3000:3000'
     env_file:
       - .env
-    develop:
-      watch:
-        - action: sync
-          path: ./web/src
-          target: /app/web/src
-          ignore:
-            - node_modules/
+    volumes:
+      - ./web/src:/app/web/src
+      - ./node_modules:/app/node_modules
 
 volumes:
   db_data:

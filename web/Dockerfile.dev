@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy all of the package.json files needed
 COPY package*.json ./
-COPY api/package*.json ./api/
+COPY dto/package*.json ./dto/
 COPY dto/package*.json ./dto/
 
 # Install dependencies (no source code at this point)
@@ -26,7 +26,7 @@ RUN npm run build --workspace=auth
 
 EXPOSE 3000
 
-# Switch to api dir
+# Switch to web dir
 WORKDIR /app/web
 
 # Start the application

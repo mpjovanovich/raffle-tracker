@@ -1,6 +1,5 @@
 {
   "name": "@raffle-tracker/config",
-  "private": true,
   "main": "dist/config.js",
   "type": "module",
   "scripts": {

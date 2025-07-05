@@ -1,6 +1,5 @@
 {
   "name": "@raffle-tracker/auth",
-  "private": true,
   "main": "dist/authUtility.js",
   "type": "module",
   "scripts": {

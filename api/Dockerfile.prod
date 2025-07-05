@@ -24,14 +24,12 @@ RUN npm install --workspaces
 RUN npm run build --workspace=config
 RUN npm run build --workspace=dto
 RUN npm run build --workspace=auth
-
-## Uncomment for prod - need to actually build the api
-# RUN npm run build --workspace=api
+RUN npm run build --workspace=api
 
 # Generate Prisma objects
 RUN npm run prisma:generate --workspace api
 RUN npm run prisma:push --workspace api
-RUN npm run db:seed-test --workspace api
+RUN npm run db:seed-prod --workspace api
 
 # Expose port
 EXPOSE 3001
