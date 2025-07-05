@@ -120,10 +120,6 @@ export async function middleware(request: NextRequest) {
       // The root page (currently events) needs to allow VIEWER or this will loop endlessly!
       return NextResponse.redirect(new URL('/', request.url));
     }
-    console.error('User:', user);
-    console.error('Pathname:', request.nextUrl.pathname);
-    console.error('Required roles:', matchingRoute?.roles);
-    console.error('User has access to this page');
 
     return NextResponse.next();
   } catch {

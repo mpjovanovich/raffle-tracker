@@ -38,6 +38,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
     handleSubmit,
     isInitialized,
     register,
+    reset,
   } = useInitializedForm<CreateTicketsRequest>({
     defaultValues: {
       contestId: 1,
@@ -57,6 +58,7 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
   const onTicketAdd = (request: CreateTicketsRequest) => {
     setError(null);
     setTickets([...tickets, request]);
+    reset();
   };
 
   const onTicketSubmit = async () => {
