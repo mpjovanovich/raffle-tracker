@@ -125,6 +125,7 @@ export async function loginAction(
 export async function logoutAction(): Promise<void> {
   await removeAccessTokenCookie();
   await removeLoggedInCookie();
+  redirect('/login');
 }
 
 export async function removeAccessTokenCookie(): Promise<void> {
@@ -186,7 +187,7 @@ export async function setAccessTokenCookie(token: string): Promise<void> {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds,
+    maxAge: config.jwtAuthTokenExpiresIn,
   });
 }
 
@@ -198,7 +199,7 @@ export async function setLoggedInCookie(): Promise<void> {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: config.jwtAuthTokenExpiresIn.expiresInSeconds + 60 * 60 * 24, // 24 hours
+    maxAge: config.jwtAuthTokenExpiresIn + 60 * 60 * 24, // 24 hours after the auth token expires
   });
 }
 
