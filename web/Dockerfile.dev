@@ -6,8 +6,6 @@ WORKDIR /app
 
 # Copy all of the package.json files needed
 COPY package*.json ./
-COPY dto/package*.json ./dto/
-COPY dto/package*.json ./dto/
 
 # Install dependencies (no source code at this point)
 RUN npm ci
@@ -19,11 +17,6 @@ COPY . .
 # Generate workspace symlinks after copying source
 RUN npm install --workspaces
 
-# Build the app
-RUN npm run build --workspace=config
-RUN npm run build --workspace=dto
-RUN npm run build --workspace=auth
-
 EXPOSE 3000
 
 # Switch to web dir
@@ -31,6 +24,3 @@ WORKDIR /app/web
 
 # Start the application
 CMD ["npm", "run", "dev"]
-
-# Use this for prod
-# CMD ["npm", "start"]
