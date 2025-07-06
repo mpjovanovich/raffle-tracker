@@ -9,8 +9,8 @@ const PUBLIC_ROUTES = [
   '/favicon',
   '/login',
   '/signup',
-  '/forgot-password',
-  '/reset-password',
+  '/forgotPassword',
+  '/resetPassword',
 ];
 
 // Define route patterns with their required roles
