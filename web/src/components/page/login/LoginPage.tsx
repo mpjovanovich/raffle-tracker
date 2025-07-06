@@ -113,7 +113,7 @@ export default function LoginPage() {
       </Link>
       <Link
         className={styles.link}
-        href="/reset-password"
+        href="/forgot-password"
       >
         Forgot password?
       </Link>

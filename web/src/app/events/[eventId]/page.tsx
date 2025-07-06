@@ -2,7 +2,7 @@ import { getEventAction } from '@/app/actions/events';
 import EventPage from '@/components/page/events/EventPage';
 
 interface PageProps {
-  params: { eventId: string };
+  params: Promise<{ eventId: string }>;
 }
 
 export default async function Page({ params }: PageProps) {

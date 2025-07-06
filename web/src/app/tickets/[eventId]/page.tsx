@@ -5,7 +5,7 @@ import TicketPage from '@/components/page/tickets/TicketPage';
 import { ROLE } from '@raffle-tracker/dto';
 
 interface PageProps {
-  params: { eventId: string };
+  params: Promise<{ eventId: string }>;
 }
 
 export default async function Page({ params }: PageProps) {

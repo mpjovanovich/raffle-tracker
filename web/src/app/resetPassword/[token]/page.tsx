@@ -3,7 +3,7 @@ import ResetPasswordPage from '@/components/page/resetPassword/ResetPasswordPage
 import { redirect } from 'next/navigation';
 
 interface PageProps {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }
 
 export default async function Page({ params }: PageProps) {

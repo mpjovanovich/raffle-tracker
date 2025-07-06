@@ -69,9 +69,11 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
               title="Cancel"
               type="button"
               onClick={e => {
-                mode === 'create'
-                  ? router.push(`/events`)
-                  : router.push(`/events/${event.id}`);
+                if (mode === 'create') {
+                  router.push(`/events`);
+                } else {
+                  router.push(`/events/${event.id}`);
+                }
                 e.preventDefault();
               }}
               disabled={isSaving}

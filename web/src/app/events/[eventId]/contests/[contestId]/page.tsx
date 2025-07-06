@@ -3,7 +3,7 @@ import ContestPage from '@/components/page/events/ContestPage';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: { eventId: string; contestId: string };
+  params: Promise<{ contestId: string }>;
 }
 
 export default async function Page({ params }: PageProps) {
