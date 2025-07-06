@@ -24,27 +24,15 @@ const ROUTE_PERMISSIONS = [
     roles: [ROLE.EVENT_MANAGER, ROLE.CASHIER, ROLE.SELLER, ROLE.VIEWER],
   },
   {
-    pattern: /^\/events\/[^\/]+$/,
+    pattern: /^\/events\/.+$/,
     roles: [ROLE.EVENT_MANAGER],
   },
   {
-    pattern: /^\/events\/[^\/]+\/contests\/[^\/]+$/,
+    pattern: /^\/report\/.+$/,
     roles: [ROLE.EVENT_MANAGER],
   },
   {
-    pattern: /^\/events\/[^\/]+\/edit$/,
-    roles: [ROLE.EVENT_MANAGER],
-  },
-  {
-    pattern: /^\/events\/create$/,
-    roles: [ROLE.EVENT_MANAGER],
-  },
-  {
-    pattern: /^\/reports\/[^\/]+$/,
-    roles: [ROLE.EVENT_MANAGER],
-  },
-  {
-    pattern: /^\/tickets\/[^\/]+$/,
+    pattern: /^\/tickets\/.+$/,
     roles: [ROLE.EVENT_MANAGER, ROLE.SELLER],
   },
 ] as const;
