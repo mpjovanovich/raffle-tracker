@@ -21,15 +21,15 @@ COPY . .
 RUN npm install --workspaces
 
 # Build the app
-RUN npm run build --workspace=config
-RUN npm run build --workspace=dto
-RUN npm run build --workspace=auth
-RUN npm run build --workspace=api
+RUN npm run build -w config
+RUN npm run build -w dto
+RUN npm run build -w auth
+RUN npm run build -w api
 
 # Generate Prisma objects
-RUN npm run prisma:generate --workspace api
-RUN npm run prisma:push --workspace api
-RUN npm run db:seed-prod --workspace api
+RUN npm run prisma:generate -w api
+RUN npm run prisma:push -w api
+RUN npm run db:seed-prod -w api
 
 # Expose port
 EXPOSE 3001
@@ -38,4 +38,4 @@ EXPOSE 3001
 WORKDIR /app/api
 
 # Start the application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

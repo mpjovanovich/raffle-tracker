@@ -21,9 +21,9 @@ COPY . .
 RUN npm install --workspaces
 
 # Generate Prisma objects inside of the docker volume
-RUN npm run prisma:generate --workspace api
-RUN npm run prisma:push --workspace api
-RUN npm run db:seed-test --workspace api
+RUN npm run prisma:generate -w api
+RUN npm run prisma:push -w api
+RUN npm run db:seed-test -w api
 
 # Expose port
 EXPOSE 3001
