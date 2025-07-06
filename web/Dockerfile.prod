@@ -6,8 +6,6 @@ WORKDIR /app
 
 # Copy all of the package.json files needed
 COPY package*.json ./
-COPY api/package*.json ./api/
-COPY dto/package*.json ./dto/
 
 # Install dependencies (no source code at this point)
 RUN npm ci
@@ -18,6 +16,34 @@ COPY . .
 
 # Generate workspace symlinks after copying source
 RUN npm install --workspaces
+
+# Accept build-time environment variables
+ARG API_PORT
+ARG API_BASE_URL
+ARG CORS_ORIGIN
+ARG EMAIL_FROM
+ARG EMAIL_USER
+ARG EMAIL_PASSWORD
+ARG EMAIL_PROVIDER
+ARG JWT_SECRET_KEY
+ARG LOG_DIR
+ARG HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES
+ARG WEB_BASE_URL
+ARG WEB_PORT
+
+# Set environment variables for build
+ENV API_PORT=$API_PORT
+ENV API_BASE_URL=$API_BASE_URL
+ENV CORS_ORIGIN=$CORS_ORIGIN
+ENV EMAIL_FROM=$EMAIL_FROM
+ENV EMAIL_USER=$EMAIL_USER
+ENV EMAIL_PASSWORD=$EMAIL_PASSWORD
+ENV EMAIL_PROVIDER=$EMAIL_PROVIDER
+ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
+ENV LOG_DIR=$LOG_DIR
+ENV HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES=$HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES
+ENV WEB_BASE_URL=$WEB_BASE_URL
+ENV WEB_PORT=$WEB_PORT
 
 # Build the app
 RUN npm run build --workspace=config

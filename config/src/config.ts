@@ -6,14 +6,13 @@ const requiredKeys = {
   apiPort: 'API_PORT',
   apiBaseUrl: 'API_BASE_URL',
   corsOrigin: 'CORS_ORIGIN',
-  // databaseUrl: 'DATABASE_URL', This does need set for prisma, but we're not adding a check for it since database config should be a it's a one-time setup.
   emailFrom: 'EMAIL_FROM',
   emailUser: 'EMAIL_USER',
   emailPassword: 'EMAIL_PASSWORD',
   emailProvider: 'EMAIL_PROVIDER',
   jwtSecretKey: 'JWT_SECRET_KEY',
   logDir: 'LOG_DIR',
-  nodeEnv: 'NODE_ENV',
+  nodeEnv: 'HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES',
   webBaseUrl: 'WEB_BASE_URL',
   webPort: 'WEB_PORT',
 } as const;
@@ -46,7 +45,10 @@ export const config = {
     ? parseInt(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
     : 1 * 60 * 60,
   logDir: process.env.LOG_DIR!,
-  nodeEnv: process.env.NODE_ENV as 'development' | 'production' | 'test',
+  nodeEnv: process.env.HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES as
+    | 'development'
+    | 'production'
+    | 'test',
   webBaseUrl: process.env.WEB_BASE_URL!,
   webPort: parseInt(process.env.WEB_PORT!),
 } as const;

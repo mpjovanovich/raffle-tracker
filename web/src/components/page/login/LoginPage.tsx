@@ -8,9 +8,10 @@ import { useInitializedForm } from '@/hooks/useInitializedForm';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-export default function LoginPage() {
+// Separate component that uses useSearchParams
+function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [pageMessage, setPageMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -118,6 +119,14 @@ export default function LoginPage() {
         Forgot password?
       </Link>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
 
