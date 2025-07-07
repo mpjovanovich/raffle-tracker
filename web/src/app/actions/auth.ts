@@ -7,7 +7,6 @@ import {
   AuthenticatedUser,
   LoginResponse,
   ResetPasswordRequest,
-  ROLE,
   SignupRequest,
 } from '@raffle-tracker/dto';
 import { cookies } from 'next/headers';
@@ -33,52 +32,6 @@ export const getAuthUser = async (): Promise<AuthenticatedUser> => {
   return await verifyAuthToken(accessToken);
 };
 
-// DEPRECATED
-const getAuthUserOrRedirect = async (
-  accessToken: string
-): Promise<AuthenticatedUser> => {
-  try {
-    return await verifyAuthToken(accessToken);
-  } catch (error) {
-    // This function is only ever called on the server side. Middleware should intercept any expired access tokens,
-    // so this is one last sanity check that will boot the user to login if it gets past middleware.
-    if (error instanceof Error && error.message === 'Token expired.') {
-      redirect('/login?message=Login session expired. Please log in again.');
-    }
-    throw error;
-  }
-};
-
-// DEPRECATED - use middleware instead
-export async function checkAuth(
-  requiredRoles?: string[]
-): Promise<AuthenticatedUser> {
-  const accessToken = await getAccessTokenOrRedirect();
-  const user = await getAuthUserOrRedirect(accessToken);
-  if (!user.roles || user.roles.length === 0) {
-    // TODO: Logging
-    // User should never be in this state - someone needs to assign a role to the user.
-    // User should at least have the VIEWER role.
-    redirect(
-      '/login?message=User has no roles. Please contact an administrator.'
-    );
-  }
-
-  if (
-    // Admins can access all pages
-    !user.roles.includes(ROLE.ADMIN) &&
-    // User only needs to have one of the required roles if any are defined
-    requiredRoles &&
-    !requiredRoles.some(role => user.roles?.some(userRole => userRole === role))
-  ) {
-    // If anyone tries to hit a page they don't have access to, redirect to the root page.
-    // The root page (currently events) needs to allow VIEWER or this will loop endlessly!
-    redirect('/');
-  }
-
-  return user;
-}
-
 export async function getAccessTokenOrRedirect(): Promise<string> {
   const accessToken = await getAccessToken();
   if (!accessToken) {
@@ -101,7 +54,7 @@ export async function isLoggedIn(): Promise<boolean> {
 export async function loginAction(
   username: string,
   password: string
-): Promise<void> {
+): Promise<{ success: boolean; error?: string }> {
   const res = await fetch(`${API_BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -112,7 +65,10 @@ export async function loginAction(
 
   if (!res.ok) {
     const errorData = await res.json();
-    throw new Error(errorData.message || 'Failed to login');
+    return {
+      success: false,
+      error: errorData.message || 'Failed to login',
+    };
   }
 
   const data = await res.json();
@@ -151,15 +107,16 @@ export async function removeLoggedInCookie(): Promise<void> {
 export async function resetPasswordAction(
   token: string,
   password: string
-): Promise<void> {
+): Promise<{ success: boolean; error?: string; message?: string }> {
   try {
     // Verify the token is still valid. It may have expired.
     await verifyResetToken(token);
   } catch (error) {
     if (error instanceof Error && error.message === 'Token expired.') {
-      redirect(
-        '/login?message=Token expired. Please request a new password reset.'
-      );
+      return {
+        success: false,
+        error: 'Token expired. Please request a new password reset.',
+      };
     }
   }
 
@@ -174,10 +131,16 @@ export async function resetPasswordAction(
 
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || 'Failed to reset password');
+    return {
+      success: false,
+      error: data.message || 'Failed to reset password',
+    };
   }
 
-  redirect(`/login?message=${data.message}`);
+  return {
+    success: true,
+    message: data.message,
+  };
 }
 
 export async function setAccessTokenCookie(token: string): Promise<void> {
@@ -206,7 +169,7 @@ export async function setLoggedInCookie(): Promise<void> {
 export async function signupAction(
   email: string,
   username: string
-): Promise<string> {
+): Promise<{ success: boolean; error?: string; message?: string }> {
   const signupRequest: SignupRequest = {
     email,
     username,
@@ -222,8 +185,14 @@ export async function signupAction(
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.message || 'Failed to sign up');
+    return {
+      success: false,
+      error: data.message || 'Failed to sign up',
+    };
   }
 
-  redirect(`/login?message=${data.message}`);
+  return {
+    success: true,
+    message: data.message,
+  };
 }

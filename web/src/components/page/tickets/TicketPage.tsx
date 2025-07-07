@@ -72,11 +72,10 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
   const onTicketSubmit = async () => {
     try {
       setError(null);
-      const response: CreateTicketsResponse[] =
-        await createTicketsAction(tickets);
+      const result = await createTicketsAction(tickets);
 
-      setCreatedTickets(response);
-      setLatestOrderNumber(response[0]?.orderId);
+      setCreatedTickets(result.data || []);
+      setLatestOrderNumber(result.data?.[0]?.orderId || null);
       setIsReadyForPrint(true);
       setTickets([]);
     } catch (error) {

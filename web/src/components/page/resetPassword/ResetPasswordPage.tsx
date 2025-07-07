@@ -37,8 +37,14 @@ export default function ResetPasswordPage({ token }: ResetPasswordPageProps) {
       setError(null);
       setIsSaving(true);
 
-      // Should redirect to login page with success message.
-      await resetPasswordAction(token, data.password);
+      const result = await resetPasswordAction(token, data.password);
+
+      if (!result.success) {
+        setError(
+          result.error || 'An error occurred. Please contact an administrator.'
+        );
+      }
+      // If successful, the action will redirect to login page with success message
     } catch (error) {
       setError(
         error instanceof Error

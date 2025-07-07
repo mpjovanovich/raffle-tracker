@@ -1,24 +1,26 @@
-import { checkAuth } from '@/app/actions/auth';
 import { getValidContestsByEventAction } from '@/app/actions/contests';
 import { getEventAction } from '@/app/actions/events';
 import TicketPage from '@/components/page/tickets/TicketPage';
-import { ROLE } from '@raffle-tracker/dto';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: Promise<{ eventId: string }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  await checkAuth([ROLE.SELLER]);
   const { eventId } = await params;
   const eventIdNumber = parseInt(eventId);
   const event = await getEventAction(eventIdNumber, true);
   const contests = await getValidContestsByEventAction(eventIdNumber);
 
+  if (!event.success || !event.data || !contests.success || !contests.data) {
+    notFound();
+  }
+
   return (
     <TicketPage
-      event={event}
-      contests={contests}
+      event={event.data}
+      contests={contests.data}
     />
   );
 }

@@ -29,8 +29,14 @@ export default function SignupPage() {
       setError(null);
       setIsSaving(true);
 
-      // Should redirect to login page with success message.
-      await signupAction(data.email, data.username);
+      const result = await signupAction(data.email, data.username);
+
+      if (!result.success) {
+        setError(
+          result.error || 'An error occurred. Please contact an administrator.'
+        );
+      }
+      // If successful, the action will redirect to login page with success message
     } catch (error) {
       setError(
         error instanceof Error

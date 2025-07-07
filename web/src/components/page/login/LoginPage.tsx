@@ -49,7 +49,13 @@ function LoginForm() {
     try {
       setError(null);
       setIsSaving(true);
-      await loginAction(data.username, data.password);
+      const result = await loginAction(data.username, data.password);
+
+      if (!result.success) {
+        setError(
+          result.error || 'An error occurred. Please contact an administrator.'
+        );
+      }
     } catch (error) {
       setError(
         error instanceof Error

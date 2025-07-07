@@ -9,23 +9,36 @@ const API_BASE_URL = config.apiBaseUrl;
 export async function updateOrderAction(
   orderId: number,
   status: OrderStatus
-): Promise<UpdateOrderResponse> {
-  const token = await getAccessTokenOrRedirect();
+): Promise<{ success: boolean; data?: UpdateOrderResponse; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
 
-  const res = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
-    method: 'PUT',
-    body: JSON.stringify({ status }),
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+    const res = await fetch(`${API_BASE_URL}/orders/${orderId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || 'Failed to update order');
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to update order',
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      data: data.data as UpdateOrderResponse,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update order',
+    };
   }
-
-  const data = await res.json();
-  return data.data as UpdateOrderResponse;
 }

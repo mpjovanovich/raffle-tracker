@@ -35,13 +35,23 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
   });
 
   const onSubmit = async (data: EventFormData) => {
-    let updatedEvent: Event = { id, ...data };
+    const updatedEvent: Event = { id, ...data };
 
     try {
       setError(null);
       setIsSaving(true);
-      updatedEvent = await upsertEventAction(updatedEvent);
-      router.push(`/events/${updatedEvent.id}`);
+      const result = await upsertEventAction(updatedEvent);
+
+      if (!result.success) {
+        setError(
+          result.error || 'An error occurred. Please contact an administrator.'
+        );
+        return;
+      }
+
+      if (result.data) {
+        router.push(`/events/${result.data.id}`);
+      }
     } catch (error) {
       setError(
         error instanceof Error

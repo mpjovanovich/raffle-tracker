@@ -14,9 +14,9 @@ export default async function Page({ params }: PageProps) {
   }
 
   const contest = await getContestAction(contestIdNumber, true);
-  if (!contest) {
+  if (!contest.success || !contest.data) {
     notFound();
   }
 
-  return <ContestPage contest={contest} />;
+  return <ContestPage contest={contest.data} />;
 }
