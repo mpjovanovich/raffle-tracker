@@ -8,7 +8,8 @@ services:
     env_file:
       - .env
     volumes:
-      - db_data:/app/api/data
+      ## Bind mounts for local development; just point to local files
+      - ./api/data:/app/api/data
       - ./api/src:/app/api/src
       - ./config:/app/config
       - ./dto:/app/dto

@@ -19,8 +19,10 @@ COPY . .
 
 # Generate workspace symlinks after copying source
 RUN npm install --workspaces
+#
 
-# Generate Prisma objects inside of the docker volume
+# Generate Prisma objects
+RUN rm -f api/data/raffle.db
 RUN npm run prisma:generate -w api
 RUN npm run prisma:push -w api
 RUN npm run db:seed-test -w api
