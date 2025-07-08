@@ -10,8 +10,11 @@ export const sendEmail = async (subject: string, html: string, to: string) => {
       transport = nodemailer.createTransport({
         service: 'gmail',
         auth: {
+          type: 'oauth2',
           user: config.emailUser,
-          pass: config.emailPassword,
+          clientId: config.emailAuthClientId,
+          clientSecret: config.emailAuthClientSecret,
+          refreshToken: config.emailAuthRefreshToken,
         },
       });
     } else if (mailProvider === 'mailtrap') {
@@ -34,9 +37,17 @@ export const sendEmail = async (subject: string, html: string, to: string) => {
       html: html,
     };
 
-    return await transport.sendMail(mailOptions);
+    return await transport.sendMail(mailOptions, (err, info) => {
+      // TODO: Logging
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(info);
+      }
+    });
   } catch (error) {
     // TODO: Logging
+    console.error(error);
     throw new Error('Failed to send email');
   }
 };

@@ -1,3 +1,4 @@
+import { sendEmail } from '@/utils/mailer.js';
 import { config } from '@raffle-tracker/config';
 import { NextFunction, Request, Response, Router } from 'express';
 
@@ -13,6 +14,15 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     return;
   }
   next();
+});
+
+router.route('/email').get(async (req: Request, res: Response) => {
+  await sendEmail(
+    'Test Email',
+    'This is a test email',
+    'mpjovanovich@gmail.com'
+  );
+  res.status(200).json({ message: 'Email sent' });
 });
 
 export default router;
