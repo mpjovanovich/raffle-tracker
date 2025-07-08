@@ -29,7 +29,6 @@ RUN npm run build -w api
 # Generate Prisma objects
 RUN npm run prisma:generate -w api
 RUN npm run prisma:push -w api
-RUN npm run db:seed-prod -w api
 
 # Expose port
 EXPOSE 3001
@@ -38,4 +37,4 @@ EXPOSE 3001
 WORKDIR /app/api
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["sh", "-c", "sh scripts/seed-prod.sh && npm start"]

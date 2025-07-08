@@ -8,6 +8,7 @@
     "dev": "NODE_ENV=development nodemon --exec 'tsx watch' src/index.ts",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db:init": "rm -f api/data/raffle.db && npm run prisma:generate && npm run prisma:push && sh scripts/seed-test.sh",
     "db:seed-test": "sqlite3 data/raffle.db < scripts/test-data.sql",
     "db:seed-prod": "sqlite3 data/raffle.db < scripts/prod-data.sql",
     "db:reset": "rm -f data/raffle.db && npm run prisma:generate && npm run prisma:push",
