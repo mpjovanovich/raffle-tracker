@@ -10,11 +10,8 @@ export const sendEmail = async (subject: string, html: string, to: string) => {
       transport = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          type: 'oauth2',
           user: config.emailUser,
-          clientId: config.emailAuthClientId,
-          clientSecret: config.emailAuthClientSecret,
-          refreshToken: config.emailAuthRefreshToken,
+          pass: config.emailPassword,
         },
       });
     } else if (mailProvider === 'mailtrap') {
