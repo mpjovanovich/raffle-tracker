@@ -21,10 +21,7 @@ COPY . .
 RUN npm install --workspaces
 
 # Generate Prisma objects
-# RUN rm -f api/data/raffle.db
-# RUN npm run prisma:generate -w api
-# RUN npm run prisma:push -w api
-# RUN npm run db:seed-test -w api
+RUN npm run prisma:generate -w api
 
 # Expose port
 EXPOSE 3001
@@ -33,5 +30,4 @@ EXPOSE 3001
 WORKDIR /app/api
 
 # Start the application
-# CMD ["npm", "run", "dev"]
 CMD ["sh", "-c", "npm run db:init && npm run dev"]
