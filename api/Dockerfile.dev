@@ -29,5 +29,7 @@ EXPOSE 3001
 # Switch to api dir
 WORKDIR /app/api
 
+# Setup db manually
+
 # Start the application
-CMD ["sh", "-c", "npm run db:init && npm run dev"]
+CMD ["sh", "-c", "npm run dev"]

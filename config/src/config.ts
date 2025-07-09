@@ -17,10 +17,15 @@ const requiredKeys = {
   webPort: 'WEB_PORT',
 } as const;
 
-// Make sure all required environment variables are set
-for (const key of Object.values(requiredKeys)) {
-  if (!process.env[key]) {
-    throw new Error(`${key} is required`);
+// This was pulled into a function last minute to address issues with passing
+// enviroment variables to the build container. We'll just have to be dilligent
+// about checking for missing variables in the release environment.
+export function validateConfig() {
+  const missing = Object.values(requiredKeys).filter(key => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required environment variables: ${missing.join(', ')}`
+    );
   }
 }
 
