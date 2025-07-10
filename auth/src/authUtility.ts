@@ -17,9 +17,9 @@ export const printConfig = () => {
 export const getExpiresInSeconds = (type: TokenType): number => {
   switch (type) {
     case TOKEN_TYPE.AUTH:
-      return config.jwtAuthTokenExpiresIn;
+      return config.jwtAuthTokenExpiresInSeconds;
     case TOKEN_TYPE.VERIFY:
-      return config.jwtVerifyTokenExpiresIn;
+      return config.jwtVerifyTokenExpiresInSeconds;
     default:
       throw new Error('Invalid token type');
   }

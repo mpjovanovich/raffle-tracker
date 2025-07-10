@@ -44,11 +44,12 @@ export const config = {
   emailProvider: process.env.EMAIL_PROVIDER!,
   emailUser: process.env.EMAIL_USER!,
   jwtSecretKey: process.env.JWT_SECRET_KEY!,
-  jwtAuthTokenExpiresIn: process.env.JWT_AUTH_TOKEN_EXPIRES_IN
-    ? parseInt(process.env.JWT_AUTH_TOKEN_EXPIRES_IN)
+  jwtAuthTokenExpiresInSeconds: process.env.JWT_AUTH_TOKEN_EXPIRES_IN_SECONDS
+    ? parseInt(process.env.JWT_AUTH_TOKEN_EXPIRES_IN_SECONDS)
     : 8 * 60 * 60,
-  jwtVerifyTokenExpiresIn: process.env.JWT_VERIFY_TOKEN_EXPIRES_IN
-    ? parseInt(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN)
+  jwtVerifyTokenExpiresInSeconds: process.env
+    .JWT_VERIFY_TOKEN_EXPIRES_IN_SECONDS
+    ? parseInt(process.env.JWT_VERIFY_TOKEN_EXPIRES_IN_SECONDS)
     : 1 * 60 * 60,
   logDir: process.env.LOG_DIR!,
   nodeEnv: process.env.HACKED_NODE_ENV_BECAUSE_NEXT_JS_HAS_TOO_MANY_RULES as
