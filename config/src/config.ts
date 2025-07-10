@@ -31,8 +31,9 @@ export function validateConfig() {
 
 // Environment variables with defaults
 export const config = {
-  apiPort: parseInt(process.env.API_PORT!),
+  apiAuthDisabled: process.env.API_AUTH_DISABLED === 'true',
   apiBaseUrl: process.env.API_BASE_URL!,
+  apiPort: parseInt(process.env.API_PORT!),
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   emailDisabled: process.env.EMAIL_DISABLED === 'true',

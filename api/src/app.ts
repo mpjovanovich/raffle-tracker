@@ -3,6 +3,7 @@ import { config } from '@raffle-tracker/config';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
+import { authMiddleware } from './middleware/authmiddleware.js';
 
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
@@ -42,24 +43,20 @@ import ticketsRouter from './routes/tickets.js';
 // PUBLIC ROUTES
 app.use('/api/healthcheck', healthcheckRouter);
 
-// AUTHENTICATED ROUTES
-// const userService = new UserService(prisma);
-// app.use(createAuthMiddleware(userService) as RequestHandler);
-
-app.use('/api/auth', authRouter);
-app.use('/api/events', eventsRouter);
-app.use('/api/contests', contestsRouter);
-app.use('/api/horses', horsesRouter);
-app.use('/api/orders', ordersRouter);
-app.use('/api/tickets', ticketsRouter);
-
 // DEV ROUTES
 if (config.nodeEnv === 'development') {
   app.use('/api/dev', devRouter);
 }
 
+app.use('/api/auth', authRouter);
+app.use('/api/events', authMiddleware, eventsRouter);
+app.use('/api/contests', authMiddleware, contestsRouter);
+app.use('/api/horses', authMiddleware, horsesRouter);
+app.use('/api/orders', authMiddleware, ordersRouter);
+app.use('/api/tickets', authMiddleware, ticketsRouter);
+
 // Global error handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({
     error: 'Internal Server Error',
