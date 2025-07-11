@@ -52,11 +52,11 @@ export const generateAuthToken = async (
   type: TokenType
 ): Promise<string> => {
   const secret = new TextEncoder().encode(config.jwtSecretKey);
-  const expiresIn = getExpiresInSeconds(type);
+  const expiresInMilliseconds = getExpiresInSeconds(type) * 1000;
 
   return await new jose.SignJWT(userData as any)
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime(Math.floor(Date.now() / 1000) + expiresIn)
+    .setExpirationTime(new Date(Date.now() + expiresInMilliseconds))
     .sign(secret);
 };
 
@@ -70,11 +70,11 @@ export const generateResetToken = async (
   type: TokenType
 ): Promise<string> => {
   const secret = new TextEncoder().encode(config.jwtSecretKey);
-  const expiresIn = getExpiresInSeconds(type);
+  const expiresInMilliseconds = getExpiresInSeconds(type) * 1000;
 
   return await new jose.SignJWT(resetUserRequest as any)
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime(Math.floor(Date.now() / 1000) + expiresIn)
+    .setExpirationTime(new Date(Date.now() + expiresInMilliseconds))
     .sign(secret);
 };
 
