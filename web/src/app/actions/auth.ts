@@ -144,30 +144,26 @@ export async function resetPasswordAction(
 }
 
 export async function setAccessTokenCookie(token: string): Promise<void> {
-  // Can't use config object here because Next.js doesn't support it.
-  const expiresInMs = config.jwtAuthTokenExpiresInSeconds * 1000;
-
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, token, {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: expiresInMs,
+    maxAge: config.jwtAuthTokenExpiresInSeconds,
   });
 }
 
 export async function setLoggedInCookie(): Promise<void> {
   // This cookie isn't used for security. It's used to tell if the user was previously logged in,
   // and no longer has an unexpired access token cookie.
-  const expiresInMs = config.jwtAuthTokenExpiresInSeconds * 1000;
-  const oneDayInMs = 24 * 60 * 60 * 1000;
+  const oneDayInSeconds = 24 * 60 * 60;
 
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAMES.LOGGED_IN, 'true', {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
-    maxAge: expiresInMs + oneDayInMs,
+    maxAge: oneDayInSeconds + config.jwtAuthTokenExpiresInSeconds,
   });
 }
 
