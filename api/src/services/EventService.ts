@@ -17,6 +17,7 @@ export class EventService extends BaseService<Event, EventDTO> {
       location: event.location,
       startDate: event.start_date.toISOString().split('T')[0],
       endDate: event.end_date.toISOString().split('T')[0],
+      ticketPrice: event.ticket_price,
       closed: event.closed ? 1 : 0,
     };
   }
@@ -28,6 +29,7 @@ export class EventService extends BaseService<Event, EventDTO> {
       location: event.location,
       start_date: new Date(event.startDate),
       end_date: new Date(event.endDate),
+      ticket_price: event.ticketPrice,
       closed: event.closed === 1,
     };
   }
