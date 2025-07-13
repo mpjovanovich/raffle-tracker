@@ -10,12 +10,12 @@ services:
       - .env
     volumes:
       ## Bind mounts for local development; just point to local files
+      - ./node_modules:/app/node_modules
       - ./api/data:/app/api/data
       - ./api/src:/app/api/src
+      - ./auth:/app/auth
       - ./config:/app/config
       - ./dto:/app/dto
-      - ./auth:/app/auth
-      - ./node_modules:/app/node_modules
 
   web:
     build:
