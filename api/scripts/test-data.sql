@@ -1,5 +1,5 @@
-INSERT INTO Event (name, location, start_date, end_date)
-VALUES ('Clinton County Fair', 'Clinton County Fairgrounds', '2024-07-01T00:00:00.000Z', '2024-07-03T00:00:00.000Z');
+INSERT INTO Event (name, location, start_date, end_date, ticket_price)
+VALUES ('Clinton County Fair', 'Clinton County Fairgrounds', '2024-07-01T00:00:00.000Z', '2024-07-03T00:00:00.000Z', 5.00);
 
 INSERT INTO Contest (event_id, number, closed)
 VALUES 

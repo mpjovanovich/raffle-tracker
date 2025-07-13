@@ -36,11 +36,11 @@ EXPOSE 3001
 WORKDIR /app/api
 
 # chmod the scripts
-RUN chmod +x scripts/db-init.sh
+RUN chmod +x scripts/db-init-prod.sh
 
 # We will have to manually run the db-init script in the container prior to first run.
 # I have no idea why and don't have time for it right now.
 
 # Start the application
 CMD ["sh", "-c", "npm start"]
-# CMD ["sh", "-c", "sh scripts/db-init.sh && npm start"]
+# CMD ["sh", "-c", "sh scripts/db-init-prod.sh && npm start"]

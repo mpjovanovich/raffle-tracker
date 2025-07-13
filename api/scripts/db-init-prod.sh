@@ -7,8 +7,8 @@ if [ ! -f "data/raffle.db" ]; then
     # Create data directory if it doesn't exist
     mkdir -p data
     
-    # Run Prisma push to create the database and tables
-    npx prisma db push
+    # Initial migration
+    npx prisma migrate dev --name init
     
     # Seed the database
     sqlite3 data/raffle.db < scripts/prod-data.sql 
