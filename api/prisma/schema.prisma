@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../node_modules/.prisma/client"
+  output        = "../../node_modules/.prisma/client"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -15,7 +15,7 @@ model Event {
   location   String
   start_date DateTime
   end_date   DateTime
-  ticket_price Int
+  ticket_price Float
   closed     Boolean  @default(false)
   contest    Contest[]
   ticket     Ticket[]

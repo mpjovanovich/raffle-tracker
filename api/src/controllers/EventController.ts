@@ -56,6 +56,7 @@ class EventController {
   insert = asyncHandler(async (req: Request, res: Response) => {
     const event: EventDTO = req.body;
     const item = await this.eventService.insert(event);
+
     res.status(200).json(new APIResponse(200, item));
   });
 

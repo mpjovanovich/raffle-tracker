@@ -74,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"email\": \"dsf@bla.org\",\r\n    \"validateUrl\": \"http://localhost:3000/\"\r\n}",
+							"raw": "{\r\n    \"username\": \"blaaa\",\r\n    \"email\": \"mpjovanovich@gmail.com\",\r\n    \"validateUrl\": \"http://localhost:3000/\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -99,7 +99,27 @@
 		},
 		{
 			"name": "Dev",
-			"item": []
+			"item": [
+				{
+					"name": "SendEmail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/dev/email",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"dev",
+								"email"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Event",
@@ -119,6 +139,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{validToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
