@@ -5,6 +5,13 @@ import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { authMiddleware } from './middleware/authmiddleware.js';
 
+// Patch BigInt to Number for JSON serialization.
+// This app doesn't need heavy math, so this is fine.
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return Number(this);
+};
+
 const logFormat = ':remote-addr :method :url :status :response-time ms';
 
 // App and middleware

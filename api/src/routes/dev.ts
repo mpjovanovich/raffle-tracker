@@ -1,4 +1,7 @@
+import { getTicketCounts } from '@/sql/getEventTicketCounts.js';
+import { APIResponse } from '@/utils/APIResponse.js';
 import { sendEmail } from '@/utils/mailer.js';
+import { PrismaClient } from '@prisma/client';
 import { config } from '@raffle-tracker/config';
 import { NextFunction, Request, Response, Router } from 'express';
 
@@ -23,6 +26,13 @@ router.route('/email').get(async (req: Request, res: Response) => {
     'mpjovanovich@gmail.com'
   );
   res.status(200).json({ message: 'Email sent' });
+});
+
+router.route('/test').get(async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+  const ticketCounts = await getTicketCounts(prisma, 1);
+  console.log(ticketCounts);
+  res.status(200).json(new APIResponse(200, ticketCounts));
 });
 
 export default router;

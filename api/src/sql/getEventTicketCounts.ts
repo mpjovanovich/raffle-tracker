@@ -1,7 +1,17 @@
 import { PrismaClient } from '@prisma/client';
 
-export async function getTicketCounts(prisma: PrismaClient, eventId: number) {
-  return await prisma.$queryRaw`
+interface TicketCountResult {
+  contest_number: number;
+  total_ticket_count: number;
+  winning_ticket_count: number;
+  unclaimed_winning_ticket_count: number;
+}
+
+export async function getTicketCounts(
+  prisma: PrismaClient,
+  eventId: number
+): Promise<TicketCountResult[]> {
+  return await prisma.$queryRaw<TicketCountResult[]>`
 WITH ValidTickets AS (
   SELECT
     c.number as contest_number,
