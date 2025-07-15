@@ -30,7 +30,8 @@ const TicketOrderSummary = ({
           </li>
         ))}
       </ul>
-      <div className={styles.footer}>footer</div>
+      {/* TODO: Never heard back on what was supposed to go here. */}
+      <div className={styles.footer}></div>
     </div>
   );
 };
