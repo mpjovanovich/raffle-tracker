@@ -31,7 +31,6 @@ router.route('/email').get(async (req: Request, res: Response) => {
 router.route('/test').get(async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
   const ticketCounts = await getTicketCounts(prisma, 1);
-  console.log(ticketCounts);
   res.status(200).json(new APIResponse(200, ticketCounts));
 });
 

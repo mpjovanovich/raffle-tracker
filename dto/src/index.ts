@@ -5,6 +5,7 @@ export * from './models/CreateHorseRequest.js';
 export * from './models/CreateTicketsRequest.js';
 export * from './models/CreateTicketsResponse.js';
 export * from './models/Event.js';
+export * from './models/EventSalesReport.js';
 export * from './models/Horse.js';
 export * from './models/LoginResponse.js';
 export * from './models/Order.js';
