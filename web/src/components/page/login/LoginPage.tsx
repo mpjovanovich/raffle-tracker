@@ -6,7 +6,6 @@ import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -112,7 +111,7 @@ function LoginForm() {
           Login
         </SimpleButton>
       </form>
-      <Link
+      {/*<Link
         className={styles.link}
         href="/signup"
       >
@@ -123,7 +122,7 @@ function LoginForm() {
         href="/forgotPassword"
       >
         Forgot password?
-      </Link>
+      </Link>*/}
     </div>
   );
 }
