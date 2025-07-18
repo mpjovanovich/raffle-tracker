@@ -11,7 +11,7 @@ export async function getTicketCounts(
   prisma: PrismaClient,
   eventId: number
 ): Promise<TicketCountsResult[]> {
-  return await prisma.$queryRaw<TicketCountsResult[]>`
+  const results = await prisma.$queryRaw<TicketCountsResult[]>`
 WITH ValidTickets AS (
   SELECT
     c.number as contest_number,
@@ -70,4 +70,13 @@ FROM
   JOIN WinningTicketCounts w ON t.contest_number = w.contest_number
   JOIN UnclaimedWinningTicketCounts u ON t.contest_number = u.contest_number
 `;
+
+  return results.map(result => ({
+    contest_number: Number(result.contest_number),
+    total_ticket_count: Number(result.total_ticket_count),
+    winning_ticket_count: Number(result.winning_ticket_count),
+    unclaimed_winning_ticket_count: Number(
+      result.unclaimed_winning_ticket_count
+    ),
+  }));
 }

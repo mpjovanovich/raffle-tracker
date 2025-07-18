@@ -10,16 +10,6 @@ const logFormat = ':remote-addr :method :url :status :response-time ms';
 // App and middleware
 const app = express();
 
-// This is a workaround to convert bigints (from Prisma) to strings in the JSON response.
-// See: https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types#serializing-bigint
-// Express will use this function when it calls JSON.stringify() on the response if provided.
-app.set('json replacer', (_: string, value: any) => {
-  if (typeof value === 'bigint') {
-    return value.toString();
-  }
-  return value;
-});
-
 app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
