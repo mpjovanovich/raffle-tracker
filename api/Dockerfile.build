@@ -21,7 +21,7 @@ COPY . .
 RUN npm install --workspaces
 
 # Generate Prisma objects
-RUN npx prisma generate --env-file ../.env
+RUN npm run prisma:generate -w api
 
 # Build the app
 RUN npm run build -w config
@@ -35,7 +35,7 @@ EXPOSE 3001
 # Switch to api dir
 WORKDIR /app/api
 
-# chmod the scripts
+# chmod scripts
 RUN chmod +x scripts/db-init-prod.sh
 
 # Start the application
