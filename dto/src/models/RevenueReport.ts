@@ -1,4 +1,4 @@
-export interface EventSalesReportContest {
+export interface RevenueReportContest {
   contestNumber: number;
   totalTicketCount: number;
   totalTicketDollarAmount: number;
@@ -9,12 +9,12 @@ export interface EventSalesReportContest {
   netTicketDollarAmount: number;
 }
 
-export interface EventSalesReport {
+export interface RevenueReport {
   eventName: string;
   ticketPrice: number;
   totalTicketDollarAmount: number;
   totalWinningTicketDollarAmount: number;
   totalUnclaimedWinningTicketDollarAmount: number;
   netTicketDollarAmount: number;
-  contests: EventSalesReportContest[];
+  contests: RevenueReportContest[];
 }

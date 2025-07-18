@@ -1,24 +1,24 @@
 'use client';
 
 import Card from '@/components/ui/Card';
-import { EventSalesReport } from '@raffle-tracker/dto';
+import { RevenueReport } from '@raffle-tracker/dto';
 
-interface EventSalesReportPageProps {
-  eventSalesReport: EventSalesReport;
+interface RevenueReportPageProps {
+  revenueReport: RevenueReport;
 }
 
-export default function EventSalesReportPage({
-  eventSalesReport,
-}: EventSalesReportPageProps) {
+export default function RevenueReportPage({
+  revenueReport,
+}: RevenueReportPageProps) {
   return (
     <div className="space-y-8">
       {/* Event Header */}
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">
-          {eventSalesReport.eventName}
+          {revenueReport.eventName}
         </h1>
         <p className="text-lg text-gray-600">
-          Ticket Price: ${eventSalesReport.ticketPrice.toFixed(2)}
+          Ticket Price: ${revenueReport.ticketPrice.toFixed(2)}
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function EventSalesReportPage({
               Total Ticket Revenue
             </span>
             <span className="text-xl font-bold text-gray-900">
-              ${eventSalesReport.totalTicketDollarAmount.toFixed(2)}
+              ${revenueReport.totalTicketDollarAmount.toFixed(2)}
             </span>
           </div>
 
@@ -43,7 +43,7 @@ export default function EventSalesReportPage({
               Total Winning Ticket Payout
             </span>
             <span className="text-xl font-bold text-green-700">
-              ${eventSalesReport.totalWinningTicketDollarAmount.toFixed(2)}
+              ${revenueReport.totalWinningTicketDollarAmount.toFixed(2)}
             </span>
           </div>
 
@@ -53,9 +53,7 @@ export default function EventSalesReportPage({
             </span>
             <span className="text-xl font-bold text-orange-700">
               $
-              {eventSalesReport.totalUnclaimedWinningTicketDollarAmount.toFixed(
-                2
-              )}
+              {revenueReport.totalUnclaimedWinningTicketDollarAmount.toFixed(2)}
             </span>
           </div>
 
@@ -64,7 +62,7 @@ export default function EventSalesReportPage({
               Net Revenue
             </span>
             <span className="text-2xl font-bold text-gray-900">
-              ${eventSalesReport.netTicketDollarAmount.toFixed(2)}
+              ${revenueReport.netTicketDollarAmount.toFixed(2)}
             </span>
           </div>
         </div>
@@ -75,7 +73,7 @@ export default function EventSalesReportPage({
         Contest Breakdown
       </h2>
 
-      {eventSalesReport.contests.map(contest => (
+      {revenueReport.contests.map(contest => (
         <Card key={contest.contestNumber}>
           <h3 className="text-xl font-semibold text-gray-900 mb-4">
             Contest #{contest.contestNumber}

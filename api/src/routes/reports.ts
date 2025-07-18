@@ -3,8 +3,6 @@ import { Router } from 'express';
 
 const router = Router();
 
-router
-  .route('/eventSalesReport/:eventId')
-  .get(reportController.getEventSalesReport);
+router.route('/revenueReport/:eventId').get(reportController.getRevenueReport);
 
 export default router;

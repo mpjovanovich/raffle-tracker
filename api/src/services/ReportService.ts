@@ -1,16 +1,16 @@
 import { getTicketCounts } from '@/sql/getEventTicketCounts.js';
 import { PrismaClient } from '@prisma/client';
-import { EventSalesReport } from '@raffle-tracker/dto';
+import { RevenueReport } from '@raffle-tracker/dto';
 import { EventService } from './EventService.js';
 
 export class ReportService {
   constructor(private prisma: PrismaClient) {}
 
-  async eventSalesReport(eventId: number): Promise<EventSalesReport> {
+  async revenueReport(eventId: number): Promise<RevenueReport> {
     const eventService = new EventService(this.prisma);
     const event = await eventService.getById(eventId);
 
-    let eventSalesReport: EventSalesReport = {
+    let revenueReport: RevenueReport = {
       eventName: event.name,
       ticketPrice: event.ticketPrice,
       totalTicketDollarAmount: 0,
@@ -21,7 +21,7 @@ export class ReportService {
     };
 
     const ticketCounts = await getTicketCounts(this.prisma, eventId);
-    eventSalesReport.contests = ticketCounts.map(ticketCount => ({
+    revenueReport.contests = ticketCounts.map(ticketCount => ({
       contestNumber: ticketCount.contest_number,
       totalTicketCount: ticketCount.total_ticket_count,
       totalTicketDollarAmount:
@@ -37,27 +37,27 @@ export class ReportService {
         ticketCount.winning_ticket_count * event.ticketPrice,
     }));
 
-    eventSalesReport.totalTicketDollarAmount = eventSalesReport.contests.reduce(
+    revenueReport.totalTicketDollarAmount = revenueReport.contests.reduce(
       (acc, contest) => acc + contest.totalTicketDollarAmount,
       0
     );
 
-    eventSalesReport.totalWinningTicketDollarAmount =
-      eventSalesReport.contests.reduce(
+    revenueReport.totalWinningTicketDollarAmount =
+      revenueReport.contests.reduce(
         (acc, contest) => acc + contest.winningTicketDollarAmount,
         0
       );
 
-    eventSalesReport.totalUnclaimedWinningTicketDollarAmount =
-      eventSalesReport.contests.reduce(
+    revenueReport.totalUnclaimedWinningTicketDollarAmount =
+      revenueReport.contests.reduce(
         (acc, contest) => acc + contest.unclaimedWinningTicketDollarAmount,
         0
       );
 
-    eventSalesReport.netTicketDollarAmount =
-      eventSalesReport.totalTicketDollarAmount -
-      eventSalesReport.totalWinningTicketDollarAmount;
+    revenueReport.netTicketDollarAmount =
+      revenueReport.totalTicketDollarAmount -
+      revenueReport.totalWinningTicketDollarAmount;
 
-    return eventSalesReport;
+    return revenueReport;
   }
 }
