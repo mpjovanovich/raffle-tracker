@@ -5,12 +5,11 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "clean": "rm -rf dist",
-    "dev": "nodemon --exec 'tsx watch --env-file ../.env' src/index.ts",
+    "dev": "dotenv -e ../.env -- nodemon --exec 'tsx watch' src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "db:reset": "sh scripts/db-init-dev.sh",
-    "db:studio": "npx prisma studio",
-    "prisma:generate": "npx prisma generate"
+    "db:reset:dev": "dotenv -e ../.env -- sh scripts/db-init-dev.sh",
+    "db:reset:prod": "dotenv -e ../.env -- sh scripts/db-init-prod.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",

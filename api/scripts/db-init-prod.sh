@@ -8,7 +8,7 @@ if [ ! -f "data/raffle.db" ]; then
     mkdir -p data
     
     # Initial migration
-    npx prisma migrate dev --name init
+    npx prisma migrate dev --name init --env-file ../../.env
     
     # Seed the database
     sqlite3 data/raffle.db < scripts/prod-data.sql 

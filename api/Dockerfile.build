@@ -21,7 +21,7 @@ COPY . .
 RUN npm install --workspaces
 
 # Generate Prisma objects
-RUN npm run prisma:generate -w api
+RUN npx prisma generate --env-file ../.env
 
 # Build the app
 RUN npm run build -w config
@@ -38,9 +38,9 @@ WORKDIR /app/api
 # chmod the scripts
 RUN chmod +x scripts/db-init-prod.sh
 
-# We will have to manually run the db-init script in the container prior to first run.
-# I have no idea why and don't have time for it right now.
-
 # Start the application
 CMD ["sh", "-c", "npm start"]
-# CMD ["sh", "-c", "sh scripts/db-init-prod.sh && npm start"]
+
+# We will have to manually run the db-init script in the container prior to first run.
+# We do not want this to be part of the regular build process; it is a one-time process:
+# npm run db:reset:prod -w api
