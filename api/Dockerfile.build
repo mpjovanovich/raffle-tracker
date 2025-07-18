@@ -20,14 +20,14 @@ COPY . .
 # Generate workspace symlinks after copying source
 RUN npm install --workspaces
 
+# Generate Prisma objects
+RUN npm run prisma:generate -w api
+
 # Build the app
 RUN npm run build -w config
 RUN npm run build -w dto
 RUN npm run build -w auth
 RUN npm run build -w api
-
-# Generate Prisma objects
-RUN npm run prisma:generate -w api
 
 # Expose port
 EXPOSE 3001

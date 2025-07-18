@@ -8,6 +8,7 @@ export default async function Page() {
     location: '',
     startDate: '',
     endDate: '',
+    ticketPrice: 0,
     closed: 0,
   };
   return (
