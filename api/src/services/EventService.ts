@@ -78,4 +78,23 @@ export class EventService extends BaseService<Event, EventDTO> {
 
     return contests;
   }
+
+  public async update(id: number, event: EventDTO): Promise<EventDTO> {
+    // Don't allow updating a closed event
+    const existingEvent = await this.getById(id);
+    if (existingEvent.closed === 1) {
+      throw new Error('Cannot update closed event');
+    }
+
+    // Don't allow updating an event that has tickets
+    const ticketCount = await this.prisma.ticket.count({
+      where: { event_id: id },
+    });
+    if (ticketCount > 0) {
+      throw new Error('Cannot update event that has tickets');
+    }
+
+    const updatedEvent = await super.update(id, event);
+    return updatedEvent;
+  }
 }
