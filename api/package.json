@@ -8,6 +8,7 @@
     "dev": "dotenv -e ../.env -- nodemon --exec 'tsx watch' src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
+    "start:prod": "sh scripts/db-init-prod.sh && npm start",
     "prisma:generate": "dotenv -e ../.env -- npx prisma generate",
     "db:reset:dev": "dotenv -e ../.env -- sh scripts/db-init-dev.sh",
     "db:reset:prod": "dotenv -e ../.env -- sh scripts/db-init-prod.sh"
