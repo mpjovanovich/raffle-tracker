@@ -8,7 +8,7 @@ RUN apk add --no-cache sqlite
 WORKDIR /app
 
 # Copy all of the package.json files needed
-COPY package*.json ./
+COPY package.json ./
 
 # Install dependencies (no source code at this point)
 RUN npm ci
@@ -41,6 +41,5 @@ RUN chmod +x scripts/db-init-prod.sh
 # Start the application
 CMD ["sh", "-c", "npm start"]
 
-# We will have to manually run the db-init script in the container prior to first run.
-# We do not want this to be part of the regular build process; it is a one-time process:
-# npm run db:reset:prod -w api
+# TODO: figure out how to make this work with the volume mount.
+# RUN npm run db:reset:prod -w api
