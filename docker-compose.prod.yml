@@ -1,3 +1,4 @@
+# Use this to bring up the services in prod.
 services:
   api:
     image: ghcr.io/mpjovanovich/raffle-tracker-api:latest

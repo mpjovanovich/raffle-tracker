@@ -1,3 +1,4 @@
+# Use this to bring up supporting services for local development.
 services:
   # password = admin
   # database = /data/raffle.db

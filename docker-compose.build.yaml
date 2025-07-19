@@ -1,3 +1,5 @@
+# Use this to build the images that will go out to prod.
+# This can also be used to bring up the services locally for QA testing.
 services:
   api:
     build:
