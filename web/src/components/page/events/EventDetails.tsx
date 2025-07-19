@@ -162,6 +162,24 @@ export default function EventDetails({ mode, event }: EventDetailsProps) {
             readOnly={isReadOnly}
           />
         </LabeledField>
+        <LabeledField
+          label="Ticket Price ($)"
+          htmlFor="ticketPrice"
+          error={errors.ticketPrice?.message}
+        >
+          <Input
+            {...register('ticketPrice', {
+              required: 'Ticket price is required',
+              valueAsNumber: true,
+              min: 0,
+            })}
+            id="ticketPrice"
+            type="number"
+            step="0.01"
+            placeholder="Ticket Price"
+            readOnly={isReadOnly}
+          />
+        </LabeledField>
       </div>
     );
   };
