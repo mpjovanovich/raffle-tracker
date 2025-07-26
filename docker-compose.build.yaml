@@ -8,10 +8,12 @@ services:
     ports:
       - '3001:3001'
     env_file:
-      - .env
+      - .env.build
     volumes:
       - db_data:/app/api/data
     image: mpjovanovich/raffle-tracker-api:latest
+    networks:
+      - app-network
 
   web:
     build:
@@ -20,9 +22,17 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      - .env
+      - .env.build
     image: mpjovanovich/raffle-tracker-web:latest
+    networks:
+      - app-network
+    depends_on:
+      - api
 
 volumes:
   db_data:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge
