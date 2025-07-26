@@ -39,12 +39,12 @@ RUN adduser -S raffle-api -u 1001
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY api/package*.json ./api/
-COPY auth/package*.json ./auth/
-COPY config/package*.json ./config/
-COPY dto/package*.json ./dto/
+# Copy package.json for root, project, and all workspaces
+COPY --from=builder --chown=raffle-api:raffle-api /app/package.json ./package.json
+COPY --from=builder --chown=raffle-api:raffle-api /app/api/package.json ./api/package.json
+COPY --from=builder --chown=raffle-api:raffle-api /app/auth/package.json ./auth/package.json
+COPY --from=builder --chown=raffle-api:raffle-api /app/config/package.json ./config/package.json
+COPY --from=builder --chown=raffle-api:raffle-api /app/dto/package.json ./dto/package.json
 
 # Copy node_modules for project and workspace dependencies
 COPY --from=builder --chown=raffle-api:raffle-api /app/node_modules ./node_modules
@@ -59,13 +59,12 @@ COPY --from=builder --chown=raffle-api:raffle-api /app/auth/dist ./auth/dist
 COPY --from=builder --chown=raffle-api:raffle-api /app/config/dist ./config/dist
 COPY --from=builder --chown=raffle-api:raffle-api /app/dto/dist ./dto/dist
 
-# Copy package.json for all workspaces
-COPY --from=builder --chown=raffle-api:raffle-api /app/auth/package.json ./auth/package.json
-COPY --from=builder --chown=raffle-api:raffle-api /app/config/package.json ./config/package.json
-COPY --from=builder --chown=raffle-api:raffle-api /app/dto/package.json ./dto/package.json
-
 # Switch to api directory
 WORKDIR /app/api
+
+# Create logs directory and set proper permissions; otherwise it will blow up
+# when it tries to create the log file/dir
+RUN mkdir -p /app/api/logs && chown -R raffle-api:raffle-api /app/api/logs
 
 # Make scripts executable
 RUN chmod +x scripts/db-init-prod.sh
