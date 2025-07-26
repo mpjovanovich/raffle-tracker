@@ -1,20 +1,22 @@
 # Use this to bring up the services in prod.
 services:
   api:
-    image: ghcr.io/mpjovanovich/raffle-tracker-api:latest
+    image: ghcr.io/mpjovanovich/raffle-tracker-api:${API_VERSION}
     expose:
       - '3001'
     env_file:
       - .env
+      - versions.env
     volumes:
       - db_data:/app/api/data
 
   web:
-    image: ghcr.io/mpjovanovich/raffle-tracker-web:latest
+    image: ghcr.io/mpjovanovich/raffle-tracker-web:${WEB_VERSION}
     expose:
       - '3000'
     env_file:
       - .env
+      - versions.env
 
 volumes:
   db_data:
