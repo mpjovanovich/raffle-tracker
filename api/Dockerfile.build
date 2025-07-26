@@ -62,9 +62,10 @@ COPY --from=builder --chown=raffle-api:raffle-api /app/dto/dist ./dto/dist
 # Switch to api directory
 WORKDIR /app/api
 
-# Create logs directory and set proper permissions; otherwise it will blow up
-# when it tries to create the log file/dir
+# Create logs and data directory and set proper permissions; otherwise it will
+# blow up when it tries to create them
 RUN mkdir -p /app/api/logs && chown -R raffle-api:raffle-api /app/api/logs
+RUN mkdir -p /app/api/data && chown -R raffle-api:raffle-api /app/api/data
 
 # Make scripts executable
 RUN chmod +x scripts/db-init-prod.sh

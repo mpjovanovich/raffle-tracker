@@ -13,11 +13,11 @@ if [ ! -f "data/raffle.db" ]; then
     # Apply the migration
     npx prisma migrate deploy
     
-    # Seed the database
-    sqlite3 data/raffle.db < scripts/prod-data.sql 
-    
     # Set proper permissions on the database file
     chmod 666 data/raffle.db
+
+    # Seed the database
+    sqlite3 data/raffle.db < scripts/prod-data.sql 
     
     echo "Database initialized successfully"
 else

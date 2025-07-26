@@ -10,8 +10,7 @@
     "start": "node dist/index.js",
     "start:prod": "sh scripts/db-init-prod.sh && npm start",
     "prisma:generate": "dotenv -e ../.env -- npx prisma generate",
-    "db:reset:dev": "dotenv -e ../.env -- sh scripts/db-init-dev.sh",
-    "db:reset:prod": "dotenv -e ../.env -- sh scripts/db-init-prod.sh"
+    "db:reset:dev": "dotenv -e ../.env -- sh scripts/db-init-dev.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
