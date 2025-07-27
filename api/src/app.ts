@@ -63,7 +63,11 @@ app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({
     error: 'Internal Server Error',
-    message: config.nodeEnv === 'development' ? err.message : undefined,
+    // TODO: We really should have a dedicated way to handle "expected" errors
+    // and return those, but still not expose unexpected errors. Don't have time
+    // for it now.
+    // message: config.nodeEnv === 'development' ? err.message : undefined,
+    message: err.message,
   });
 });
 
