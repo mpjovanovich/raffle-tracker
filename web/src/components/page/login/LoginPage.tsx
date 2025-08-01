@@ -111,18 +111,6 @@ function LoginForm() {
           Login
         </SimpleButton>
       </form>
-      {/*<Link
-        className={styles.link}
-        href="/signup"
-      >
-        Sign up
-      </Link>
-      <Link
-        className={styles.link}
-        href="/forgotPassword"
-      >
-        Forgot password?
-      </Link>*/}
     </div>
   );
 }

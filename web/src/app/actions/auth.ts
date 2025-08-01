@@ -1,14 +1,9 @@
 'use server';
 
 import { COOKIE_NAMES } from '@/constants/constants';
-import { verifyAuthToken, verifyResetToken } from '@raffle-tracker/auth';
+import { verifyAuthToken } from '@raffle-tracker/auth';
 import { config } from '@raffle-tracker/config';
-import {
-  AuthenticatedUser,
-  LoginResponse,
-  ResetPasswordRequest,
-  SignupRequest,
-} from '@raffle-tracker/dto';
+import { AuthenticatedUser, LoginResponse } from '@raffle-tracker/dto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -104,44 +99,44 @@ export async function removeLoggedInCookie(): Promise<void> {
   });
 }
 
-export async function resetPasswordAction(
-  token: string,
-  password: string
-): Promise<{ success: boolean; error?: string; message?: string }> {
-  try {
-    // Verify the token is still valid. It may have expired.
-    await verifyResetToken(token);
-  } catch (error) {
-    if (error instanceof Error && error.message === 'Token expired.') {
-      return {
-        success: false,
-        error: 'Token expired. Please request a new password reset.',
-      };
-    }
-  }
+// export async function resetPasswordAction(
+//   token: string,
+//   password: string
+// ): Promise<{ success: boolean; error?: string; message?: string }> {
+//   try {
+//     // Verify the token is still valid. It may have expired.
+//     await verifyResetToken(token);
+//   } catch (error) {
+//     if (error instanceof Error && error.message === 'Token expired.') {
+//       return {
+//         success: false,
+//         error: 'Token expired. Please request a new password reset.',
+//       };
+//     }
+//   }
 
-  const request: ResetPasswordRequest = { token, password };
-  const res = await fetch(`${API_BASE_URL}/auth/resetPassword`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(request),
-  });
+//   const request: ResetPasswordRequest = { token, password };
+//   const res = await fetch(`${API_BASE_URL}/auth/resetPassword`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(request),
+//   });
 
-  const data = await res.json();
-  if (!res.ok) {
-    return {
-      success: false,
-      error: data.message || 'Failed to reset password',
-    };
-  }
+//   const data = await res.json();
+//   if (!res.ok) {
+//     return {
+//       success: false,
+//       error: data.message || 'Failed to reset password',
+//     };
+//   }
 
-  return {
-    success: true,
-    message: data.message,
-  };
-}
+//   return {
+//     success: true,
+//     message: data.message,
+//   };
+// }
 
 export async function setAccessTokenCookie(token: string): Promise<void> {
   const cookieStore = await cookies();
@@ -165,35 +160,4 @@ export async function setLoggedInCookie(): Promise<void> {
     sameSite: 'lax',
     maxAge: oneDayInSeconds + config.jwtAuthTokenExpiresInSeconds,
   });
-}
-
-export async function signupAction(
-  email: string,
-  username: string
-): Promise<{ success: boolean; error?: string; message?: string }> {
-  const signupRequest: SignupRequest = {
-    email,
-    username,
-    validateUrl: `${config.webBaseUrl}/resetPassword`,
-  };
-  const res = await fetch(`${API_BASE_URL}/auth/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(signupRequest),
-  });
-  const data = await res.json();
-
-  if (!res.ok) {
-    return {
-      success: false,
-      error: data.message || 'Failed to sign up',
-    };
-  }
-
-  return {
-    success: true,
-    message: data.message,
-  };
 }
