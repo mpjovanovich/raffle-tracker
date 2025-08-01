@@ -79,6 +79,13 @@ export async function middleware(request: NextRequest) {
           request.url
         )
       );
+      response.cookies.set(COOKIE_NAMES.ACCESS_TOKEN, '', {
+        maxAge: 0,
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
       response.cookies.set(COOKIE_NAMES.LOGGED_IN, '', {
         maxAge: 0,
         path: '/',

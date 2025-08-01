@@ -55,7 +55,7 @@ model Order {
 model Role {
   id            Int     @id @default(autoincrement())
   name          String  @unique
-  users         User[]  @relation("UserToRole")
+  users         UserRole[]
 }
 
 model Ticket {
@@ -80,5 +80,14 @@ model User {
   latestLoginDate     DateTime?
   failedLoginAttempts Int @default(0)
   lockedUntil   DateTime?
-  roles         Role[]  @relation("UserToRole")
+  roles         UserRole[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+  user   User   @relation(fields: [userId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
 }

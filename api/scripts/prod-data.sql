@@ -10,7 +10,6 @@ INSERT INTO User (username, password)
 VALUES 
     ('RT_Admin', '$2y$10$b1qZ0292xxkEBE2ryGaVpe1J.bzuHV7ZYjaAdHCZJSCS3V8ygiNfe');
 
--- Prisma will auto-generate a junction table with this name
-INSERT INTO "_UserToRole" ("A", "B")
+INSERT INTO UserRole (userId, roleId)
 VALUES 
     (1, 1);

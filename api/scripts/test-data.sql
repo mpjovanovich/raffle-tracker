@@ -73,13 +73,14 @@ VALUES
     ('cashier', '$2b$10$Pi2bhp2RvfZ7dxBB0hQQ1Okfa6yQqSHn/EZ2tC.u037llLyfYWvB2'),
     ('manager', '$2b$10$OPPLKayHEVNkNgWEZZTVyO646xRDTfWcRfNSZUc3HUiyh0DYKm4wm'),
     ('seller', '$2b$10$qiPakzEEySRthInEZLXKHOteuDrjClc1Joiw8v0WDMWJbp6xkbHdm'),
-    ('viewer', '$2y$10$IHIsfAaAh4ksYhQpg/SMb.j0FIdW2piTVp9QOzNWwYgBnV2AZhiTK');
+    ('viewer', '$2y$10$IHIsfAaAh4ksYhQpg/SMb.j0FIdW2piTVp9QOzNWwYgBnV2AZhiTK'),
+    ('test', '$2y$10$/QDfUp0L.EwqTMKBsY6FuOzSTnCgAaZ06mU7GSLF0AVoDTMhJr6Ke');
 
--- Prisma will auto-generate a junction table with this name
-INSERT INTO "_UserToRole" ("A", "B")
+INSERT INTO UserRole (userId, roleId)
 VALUES 
     (1, 1),
     (2, 2),
     (3, 3),
     (4, 4),
-    (5, 5);
+    (5, 5),
+    (6, 5);

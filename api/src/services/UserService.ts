@@ -1,10 +1,9 @@
 import { hashPassword, verifyPassword } from '@/utils/passwordUtility.js';
-import { PrismaClient, Role, User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { generateAuthToken, TOKEN_TYPE } from '@raffle-tracker/auth';
 import {
   AuthenticatedUser,
   LoginResponse,
-  ROLE,
   Role as RoleDTO,
   User as UserDTO,
 } from '@raffle-tracker/dto';
@@ -81,13 +80,21 @@ export class UserService extends BaseService<User, UserDTO> {
           username: userRequest.username,
           password: await hashPassword(userRequest.password),
           active: true,
-          roles: {
-            connect: [
-              {
-                name: ROLE.VIEWER,
-              },
-            ],
-          },
+        },
+      });
+
+      const viewerRole = await tx.role.findUnique({
+        where: { name: 'VIEWER' },
+      });
+
+      if (!viewerRole) {
+        throw new Error('VIEWER role not found in database');
+      }
+
+      await tx.userRole.create({
+        data: {
+          userId: user.id,
+          roleId: viewerRole.id,
         },
       });
 
@@ -100,12 +107,13 @@ export class UserService extends BaseService<User, UserDTO> {
   public async fetchUserWithRoles(userId: number): Promise<UserDTO> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { roles: true },
+      include: { roles: { include: { role: true } } },
     });
     if (!user) throw new Error('User not found');
+
     return {
       ...UserService.toDTO(user),
-      roles: user.roles.map((role: Role) => role.name) as RoleDTO[],
+      roles: user.roles.map(userRole => userRole.role.name) as RoleDTO[],
     };
   }
 

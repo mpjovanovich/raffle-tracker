@@ -1,7 +1,14 @@
 # Use this to bring up supporting services for local development.
+
+# Need to run these in shell before running docker-compose up
+# export MY_UID=$(id -u)
+# export MY_GID=$(id -g)
+
+# Adminer:
+# password = admin
+# database = /data/raffle.db
+
 services:
-  # password = admin
-  # database = /data/raffle.db
   adminer:
     image: adminer
     restart: always
@@ -12,3 +19,4 @@ services:
     volumes:
       - ./api/data:/data
       - ./api/adminer_plugins:/var/www/html/plugins-enabled
+    user: '${MY_UID}:${MY_GID}'
