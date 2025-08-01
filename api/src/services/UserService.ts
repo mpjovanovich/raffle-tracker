@@ -4,6 +4,7 @@ import { generateAuthToken, TOKEN_TYPE } from '@raffle-tracker/auth';
 import {
   AuthenticatedUser,
   LoginResponse,
+  ROLE,
   Role as RoleDTO,
   User as UserDTO,
 } from '@raffle-tracker/dto';
@@ -61,61 +62,39 @@ export class UserService extends BaseService<User, UserDTO> {
     return false;
   }
 
-  public async createUser(
-    username: string,
-    password: string
-  ): Promise<UserDTO> {
-    // if (!username || !password) {
-    //   throw new Error('Username and password are required');
-    // }
+  public async createUser(userRequest: UserDTO): Promise<UserDTO> {
+    if (!userRequest.username || !userRequest.password) {
+      throw new Error('Username and password are required');
+    }
 
-    // if (await this.checkUserExists(this.prisma, username)) {
-    //   throw new Error('Username already in use');
-    // }
+    if (await this.checkUserExists(this.prisma, userRequest.username)) {
+      throw new Error('Username already in use');
+    }
 
-    // if (username.length < 5 || username.length > 20) {
-    //   throw new Error('Username must be between 5 and 20 characters long');
-    // }
+    if (userRequest.username.length < 5 || userRequest.username.length > 20) {
+      throw new Error('Username must be between 5 and 20 characters long');
+    }
 
-    // if (!this.isValidEmail(email)) {
-    //   throw new Error('Invalid email format');
-    // }
+    const createdUser = await this.prisma.$transaction(async tx => {
+      let user = await tx.user.create({
+        data: {
+          username: userRequest.username,
+          password: userRequest.password,
+          active: true,
+          roles: {
+            connect: [
+              {
+                name: ROLE.VIEWER,
+              },
+            ],
+          },
+        },
+      });
 
-    // const createdUser = await this.prisma.$transaction(async tx => {
-    //   let user = await tx.user.create({
-    //     data: {
-    //       username,
-    //       email,
-    //       verified: false,
-    //       roles: {
-    //         connect: [
-    //           {
-    //             name: ROLE.VIEWER,
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   });
+      return user;
+    });
 
-    //   const verificationTokenId = await generateTokenId();
-    //   user = await tx.user.update({
-    //     where: { id: user.id },
-    //     data: { verificationTokenId },
-    //   });
-
-    //   return user;
-    // });
-
-    // return UserService.toDTO(createdUser);
-    // Dummy return for now
-    return {
-      id: 1,
-      username: username,
-      password: password,
-      active: 1,
-      latestLoginDate: new Date().toISOString().split('T')[0],
-      failedLoginAttempts: 0,
-    };
+    return UserService.toDTO(createdUser);
   }
 
   public async fetchUserWithRoles(userId: number): Promise<UserDTO> {

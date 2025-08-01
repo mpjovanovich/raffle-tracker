@@ -41,6 +41,7 @@ import horsesRouter from './routes/horses.js';
 import ordersRouter from './routes/orders.js';
 import reportsRouter from './routes/reports.js';
 import ticketsRouter from './routes/tickets.js';
+import usersRouter from './routes/users.js';
 
 // PUBLIC ROUTES
 app.use('/api/healthcheck', healthcheckRouter);
@@ -57,6 +58,7 @@ app.use('/api/horses', authMiddleware, horsesRouter);
 app.use('/api/orders', authMiddleware, ordersRouter);
 app.use('/api/reports', authMiddleware, reportsRouter);
 app.use('/api/tickets', authMiddleware, ticketsRouter);
+app.use('/api/users', authMiddleware, usersRouter);
 
 // Global error handler
 app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
