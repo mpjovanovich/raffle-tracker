@@ -14,10 +14,13 @@ class UserController {
 
   createUser = asyncHandler(async (req: Request, res: Response) => {
     const userRequest: User = req.body;
-    console.log('userRequest', userRequest);
-
     const user = await this.userService.createUser(userRequest);
     res.status(200).json(new APIResponse(200, user));
+  });
+
+  getAllForList = asyncHandler(async (req: Request, res: Response) => {
+    const items = await this.userService.getAllForList();
+    res.status(200).json(new APIResponse(200, items));
   });
 }
 

@@ -6,6 +6,7 @@ import {
   LoginResponse,
   Role as RoleDTO,
   User as UserDTO,
+  UserListItem,
 } from '@raffle-tracker/dto';
 import { BaseService } from './BaseService.js';
 
@@ -115,6 +116,14 @@ export class UserService extends BaseService<User, UserDTO> {
       ...UserService.toDTO(user),
       roles: user.roles.map(userRole => userRole.role.name) as RoleDTO[],
     };
+  }
+
+  public async getAllForList(): Promise<UserListItem[]> {
+    let users = await super.getAll();
+    return users.map(user => ({
+      id: user.id,
+      username: user.username,
+    }));
   }
 
   public async login(

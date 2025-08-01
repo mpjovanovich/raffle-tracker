@@ -35,6 +35,10 @@ const ROUTE_PERMISSIONS = [
     pattern: /^\/tickets\/.+$/,
     roles: [ROLE.EVENT_MANAGER, ROLE.SELLER],
   },
+  {
+    pattern: /^\/users$/,
+    roles: [ROLE.ADMIN],
+  },
 ] as const;
 
 export async function middleware(request: NextRequest) {

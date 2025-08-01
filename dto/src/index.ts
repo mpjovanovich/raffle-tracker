@@ -17,3 +17,4 @@ export * from './models/SignupRequest.js';
 export * from './models/Ticket.js';
 export * from './models/UpdateOrderResponse.js';
 export * from './models/User.js';
+export * from './models/UserListItem.js';
