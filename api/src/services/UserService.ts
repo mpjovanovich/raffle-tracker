@@ -1,4 +1,4 @@
-import { verifyPassword } from '@/utils/passwordUtility.js';
+import { hashPassword, verifyPassword } from '@/utils/passwordUtility.js';
 import { PrismaClient, Role, User } from '@prisma/client';
 import { generateAuthToken, TOKEN_TYPE } from '@raffle-tracker/auth';
 import {
@@ -79,7 +79,7 @@ export class UserService extends BaseService<User, UserDTO> {
       let user = await tx.user.create({
         data: {
           username: userRequest.username,
-          password: userRequest.password,
+          password: await hashPassword(userRequest.password),
           active: true,
           roles: {
             connect: [
