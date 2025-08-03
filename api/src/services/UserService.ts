@@ -49,6 +49,17 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
+  public async addRoleToUser(userId: number, roleId: number): Promise<UserDTO> {
+    await this.prisma.userRole.create({
+      data: {
+        userId,
+        roleId,
+      },
+    });
+
+    return await this.fetchUserWithRoles(userId);
+  }
+
   private async checkUserExists(
     tx: PrismaClient,
     username: string
