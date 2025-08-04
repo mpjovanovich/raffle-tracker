@@ -153,7 +153,7 @@ export class UserService extends BaseService<User, UserDTO> {
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) throw new Error('Invalid password');
 
-    // // Get user data and convert to authenticated user
+    // Get user data and convert to authenticated user
     const authenticatedUser = UserService.toAuthenticatedUser(
       await this.fetchUserWithRoles(user.id)
     );
