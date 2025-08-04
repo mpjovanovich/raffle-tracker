@@ -166,35 +166,4 @@ export class UserService extends BaseService<User, UserDTO> {
       accessToken: authToken,
     };
   }
-
-  // public async resetPassword(
-  //   token: string,
-  //   password: string
-  // ): Promise<UserDTO> {
-  //   const decoded = (await verifyResetToken(token)) as ResetUserRequest;
-  //   const userId = decoded.userId;
-  //   const user = await this.prisma.user.findFirst({
-  //     where: {
-  //       id: userId,
-  //       verificationTokenId: decoded.token,
-  //     },
-  //   });
-
-  //   if (!user) throw new Error('User not found');
-  //   if (user.verified)
-  //     // TODO: Logging
-  //     throw new Error('Please request a new password reset.');
-
-  //   const hashedPassword = await hashPassword(password);
-  //   const updatedUser = await this.prisma.user.update({
-  //     where: { id: userId },
-  //     data: {
-  //       password: hashedPassword,
-  //       verified: true,
-  //       verificationTokenId: null,
-  //     },
-  //   });
-
-  //   return UserService.toDTO(updatedUser);
-  // }
 }

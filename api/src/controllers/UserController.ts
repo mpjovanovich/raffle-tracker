@@ -43,7 +43,7 @@ class UserController {
       throw new Error(`Invalid ID format: ${req.params.userId}`);
     }
 
-    const user = await this.userService.getById(userId);
+    const user = await this.userService.fetchUserWithRoles(userId);
     res.status(200).json(new APIResponse(200, user));
   });
 }

@@ -1,12 +1,45 @@
 'use server';
 
 import { config } from '@raffle-tracker/config';
-import { UserListItem } from '@raffle-tracker/dto';
+import { User, UserListItem } from '@raffle-tracker/dto';
 import { getAccessTokenOrRedirect } from './auth';
 
 const API_BASE_URL = config.apiBaseUrl;
 
-export async function getUsers(): Promise<{
+export async function getUserAction(
+  id: number
+): Promise<{ success: boolean; data?: User; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const res = await fetch(`${API_BASE_URL}/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to fetch user',
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      data: data.data as User,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch user',
+    };
+  }
+}
+
+export async function getUsersAction(): Promise<{
   success: boolean;
   data?: UserListItem[];
   error?: string;
