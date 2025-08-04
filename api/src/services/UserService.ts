@@ -19,7 +19,6 @@ export class UserService extends BaseService<User, UserDTO> {
     return {
       id: user.id,
       username: user.username,
-      password: user.password,
       active: user.active ? 1 : 0,
       latestLoginDate: user.latestLoginDate?.toISOString().split('T')[0],
       failedLoginAttempts: user.failedLoginAttempts,
@@ -27,11 +26,11 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
-  protected static toPrisma(user: UserDTO): User {
+  protected static toPrisma(user: UserDTO, password: string): User {
     return {
       id: user.id,
       username: user.username,
-      password: user.password ?? null,
+      password: password,
       active: user.active === 1,
       latestLoginDate: user.latestLoginDate
         ? new Date(user.latestLoginDate)
@@ -73,24 +72,27 @@ export class UserService extends BaseService<User, UserDTO> {
     return false;
   }
 
-  public async createUser(userRequest: UserDTO): Promise<UserDTO> {
-    if (!userRequest.username || !userRequest.password) {
+  public async createUser(
+    username: string,
+    password: string
+  ): Promise<UserDTO> {
+    if (!username || !password) {
       throw new Error('Username and password are required');
     }
 
-    if (await this.checkUserExists(this.prisma, userRequest.username)) {
+    if (await this.checkUserExists(this.prisma, username)) {
       throw new Error('Username already in use');
     }
 
-    if (userRequest.username.length < 5 || userRequest.username.length > 20) {
+    if (username.length < 5 || username.length > 20) {
       throw new Error('Username must be between 5 and 20 characters long');
     }
 
     const createdUser = await this.prisma.$transaction(async tx => {
       let user = await tx.user.create({
         data: {
-          username: userRequest.username,
-          password: await hashPassword(userRequest.password),
+          username: username,
+          password: await hashPassword(password),
           active: true,
         },
       });

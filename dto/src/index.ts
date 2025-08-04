@@ -9,8 +9,6 @@ export * from './models/Horse.js';
 export * from './models/LoginResponse.js';
 export * from './models/Order.js';
 export * from './models/OrderStatus.js';
-export * from './models/ResetPasswordRequest.js';
-export * from './models/ResetUserRequest.js';
 export * from './models/RevenueReport.js';
 export * from './models/Role.js';
 export * from './models/SignupRequest.js';

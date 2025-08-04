@@ -2,7 +2,6 @@ import { prisma } from '@/db.js';
 import { UserService } from '@/services/UserService.js';
 import { APIResponse } from '@/utils/APIResponse.js';
 import { asyncHandler } from '@/utils/asyncHandler.js';
-import { User } from '@raffle-tracker/dto';
 import { Request, Response } from 'express';
 
 class UserController {
@@ -28,14 +27,24 @@ class UserController {
   });
 
   createUser = asyncHandler(async (req: Request, res: Response) => {
-    const userRequest: User = req.body;
-    const user = await this.userService.createUser(userRequest);
+    const { username, password } = req.body;
+    const user = await this.userService.createUser(username, password);
     res.status(200).json(new APIResponse(200, user));
   });
 
   getAllForList = asyncHandler(async (req: Request, res: Response) => {
     const items = await this.userService.getAllForList();
     res.status(200).json(new APIResponse(200, items));
+  });
+
+  getById = asyncHandler(async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId);
+    if (isNaN(userId)) {
+      throw new Error(`Invalid ID format: ${req.params.userId}`);
+    }
+
+    const user = await this.userService.getById(userId);
+    res.status(200).json(new APIResponse(200, user));
   });
 }
 
