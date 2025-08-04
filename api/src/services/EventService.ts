@@ -18,7 +18,7 @@ export class EventService extends BaseService<Event, EventDTO> {
       startDate: event.start_date.toISOString().split('T')[0],
       endDate: event.end_date.toISOString().split('T')[0],
       ticketPrice: event.ticket_price,
-      closed: event.closed ? 1 : 0,
+      closed: event.closed,
     };
   }
 
@@ -30,7 +30,7 @@ export class EventService extends BaseService<Event, EventDTO> {
       start_date: new Date(event.startDate),
       end_date: new Date(event.endDate),
       ticket_price: event.ticketPrice,
-      closed: event.closed === 1,
+      closed: event.closed,
     };
   }
 
@@ -65,9 +65,9 @@ export class EventService extends BaseService<Event, EventDTO> {
     const contests =
       event.contests?.filter(
         contest =>
-          contest.closed === 0 &&
+          !contest.closed &&
           contest.horses &&
-          contest.horses.some(h => h.scratch === 0)
+          contest.horses.some(h => !h.scratch)
       ) ?? [];
 
     // Currently no use cases require horses, so we can just return the contests.
@@ -82,7 +82,7 @@ export class EventService extends BaseService<Event, EventDTO> {
   public async update(id: number, event: EventDTO): Promise<EventDTO> {
     // Don't allow updating a closed event
     const existingEvent = await this.getById(id);
-    if (existingEvent.closed === 1) {
+    if (existingEvent.closed) {
       throw new Error('Cannot update closed event');
     }
 

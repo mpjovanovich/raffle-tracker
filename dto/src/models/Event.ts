@@ -7,6 +7,6 @@ export interface Event {
   startDate: string;
   endDate: string;
   ticketPrice: number;
-  closed: number; // 0 or 1
+  closed: boolean;
   contests?: Contest[];
 }

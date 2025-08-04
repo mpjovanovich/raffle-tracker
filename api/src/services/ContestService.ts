@@ -20,7 +20,7 @@ export class ContestService extends BaseService<Contest, ContestDTO> {
       id: contest.id,
       eventId: contest.event_id,
       number: contest.number,
-      closed: contest.closed ? 1 : 0,
+      closed: contest.closed,
     };
   }
 
@@ -29,7 +29,7 @@ export class ContestService extends BaseService<Contest, ContestDTO> {
       id: contest.id,
       event_id: contest.eventId,
       number: contest.number,
-      closed: contest.closed === 1,
+      closed: contest.closed,
     };
   }
 
@@ -41,7 +41,7 @@ export class ContestService extends BaseService<Contest, ContestDTO> {
       id: 0,
       eventId: createContestRequest.eventId,
       number: createContestRequest.contestNumber,
-      closed: 0,
+      closed: false,
     };
 
     return this.prisma.$transaction(async tx => {

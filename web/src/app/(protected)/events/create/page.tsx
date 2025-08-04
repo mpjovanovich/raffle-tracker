@@ -9,7 +9,7 @@ export default async function Page() {
     startDate: '',
     endDate: '',
     ticketPrice: 0,
-    closed: 0,
+    closed: false,
   };
   return (
     <EventPage

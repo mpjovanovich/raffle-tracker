@@ -20,7 +20,10 @@ interface UserDetailsProps {
 // Right now there is nothing you can edit on this control.
 // Eventually we will add some more view fields, active toggle, etc.
 export default function UserDetails({ mode, user }: UserDetailsProps) {
-  const { id, roles, ...defaultValues } = user;
+  // This is a nasty workaround; in future we can set the linter config to
+  // ignore _ named vars.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, roles: _, ...defaultValues } = user;
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
@@ -40,9 +43,6 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
     const updatedUser: User = { id, ...data };
 
     try {
-      // DEBUG
-      console.log(updatedUser);
-
       setError(null);
       setIsSaving(true);
       const result = await upsertUserAction(updatedUser);

@@ -13,8 +13,8 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
       id: horse.id,
       contestId: horse.contest_id,
       number: horse.number,
-      winner: horse.winner ? 1 : 0,
-      scratch: horse.scratch ? 1 : 0,
+      winner: horse.winner,
+      scratch: horse.scratch,
     };
   }
 
@@ -23,8 +23,8 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
       id: horse.id,
       contest_id: horse.contestId,
       number: horse.number,
-      winner: horse.winner === 1,
-      scratch: horse.scratch === 1,
+      winner: horse.winner,
+      scratch: horse.scratch,
     };
   }
 
@@ -35,8 +35,8 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
       id: 0,
       contestId: createHorseRequest.contestId,
       number: createHorseRequest.number,
-      winner: 0,
-      scratch: 0,
+      winner: false,
+      scratch: false,
     });
     return horse;
   }
@@ -50,10 +50,10 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
     if (!horse) {
       throw new Error('Horse not found');
     }
-    if (horse.winner === 1) {
+    if (horse.winner) {
       throw new Error('Winner horse cannot be scratched');
     }
-    horse.scratch = horse.scratch === 0 ? 1 : 0;
+    horse.scratch = !horse.scratch;
     horse = await this.update(id, horse);
     return horse;
   }
@@ -63,7 +63,7 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
     if (!horse) {
       throw new Error('Horse not found');
     }
-    if (horse.scratch === 1) {
+    if (horse.scratch) {
       throw new Error('Scratched horse cannot be winner');
     }
 

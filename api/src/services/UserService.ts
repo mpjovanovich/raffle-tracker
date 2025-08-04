@@ -19,7 +19,7 @@ export class UserService extends BaseService<User, UserDTO> {
     return {
       id: user.id,
       username: user.username,
-      active: user.active ? 1 : 0,
+      active: user.active,
       latestLoginDate: user.latestLoginDate?.toISOString().split('T')[0],
       failedLoginAttempts: user.failedLoginAttempts ?? 0,
       lockedUntil: user.lockedUntil?.toISOString().split('T')[0],
@@ -31,7 +31,7 @@ export class UserService extends BaseService<User, UserDTO> {
       id: user.id,
       username: user.username,
       password: password,
-      active: user.active === 1,
+      active: user.active,
       latestLoginDate: user.latestLoginDate
         ? new Date(user.latestLoginDate)
         : null,
@@ -188,15 +188,10 @@ export class UserService extends BaseService<User, UserDTO> {
       user.roles = [...(user.roles || []), 'VIEWER'];
     }
 
-    // DEBUG
-    console.log(user);
-
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: {
-        // active: user.active === 1,
-        // Tmp hack solution
-        active: user.active == 1,
+        active: user.active,
         // Just delete all roles and add the new ones.
         roles: {
           deleteMany: {},

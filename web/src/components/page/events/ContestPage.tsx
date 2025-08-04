@@ -166,7 +166,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
                   <IconButton
                     title="Winner"
                     className={clsx(horse.winner && styles.winner)}
-                    disabled={horse.scratch === 1}
+                    disabled={horse.scratch}
                     onClick={() => {
                       handleToggleWinner(horse);
                     }}
@@ -175,7 +175,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
                   </IconButton>
                   <IconButton
                     title="Scratch"
-                    disabled={horse.winner === 1}
+                    disabled={horse.winner}
                     className={clsx(horse.scratch && styles.scratch)}
                     onClick={() => {
                       handleToggleScratch(horse);
