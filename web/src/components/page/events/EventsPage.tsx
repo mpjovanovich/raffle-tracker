@@ -37,6 +37,16 @@ export default function EventsPage({ events, userRoles }: EventsPageProps) {
 
   return (
     <Card title="Events">
+      {canViewEdit && (
+        <Link href="/events/create">
+          <SimpleButton
+            className={styles.addButton}
+            title="Add Event"
+          >
+            Add Event
+          </SimpleButton>
+        </Link>
+      )}
       <ItemList>
         {events.map(event => (
           <ItemListItem
@@ -77,22 +87,12 @@ export default function EventsPage({ events, userRoles }: EventsPageProps) {
           </ItemListItem>
         ))}
       </ItemList>
-      {canViewEdit && (
-        <Link href="/events/create">
-          <SimpleButton
-            className={styles.newButton}
-            title="New Event"
-          >
-            New Event
-          </SimpleButton>
-        </Link>
-      )}
     </Card>
   );
 }
 
 const styles = {
   actionButtonContainer: clsx('flex', 'flex-row'),
+  addButton: clsx('my-4', 'mx-4', 'cursor-pointer'),
   itemListLink: clsx('w-full', 'px-6', 'py-1'),
-  newButton: clsx('my-4', 'mx-4', 'cursor-pointer'),
 };
