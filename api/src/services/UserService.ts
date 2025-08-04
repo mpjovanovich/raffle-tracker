@@ -164,9 +164,22 @@ export class UserService extends BaseService<User, UserDTO> {
       TOKEN_TYPE.AUTH
     );
 
+    await this.updateLoginSuccess(user.id);
+
     return {
       accessToken: authToken,
     };
+  }
+
+  private async updateLoginSuccess(userId: number): Promise<void> {
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        latestLoginDate: new Date(),
+        failedLoginAttempts: 0,
+        lockedUntil: null,
+      },
+    });
   }
 
   public async updateUser(user: UserDTO): Promise<UserDTO> {
@@ -175,10 +188,15 @@ export class UserService extends BaseService<User, UserDTO> {
       user.roles = [...(user.roles || []), 'VIEWER'];
     }
 
+    // DEBUG
+    console.log(user);
+
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: {
-        active: user.active === 1,
+        // active: user.active === 1,
+        // Tmp hack solution
+        active: user.active == 1,
         // Just delete all roles and add the new ones.
         roles: {
           deleteMany: {},

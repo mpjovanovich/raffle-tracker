@@ -40,6 +40,9 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
     const updatedUser: User = { id, ...data };
 
     try {
+      // DEBUG
+      console.log(updatedUser);
+
       setError(null);
       setIsSaving(true);
       const result = await upsertUserAction(updatedUser);
@@ -112,18 +115,22 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
   const FormContent = () => {
     return (
       <div className={styles.formContent}>
-        {/* <LabeledField
+        <LabeledField
           label="Active"
           htmlFor="active"
           error={errors.active?.message}
+          className={clsx('flex-row', 'justify-between', 'w-3xs', 'mb-4')}
         >
           <Input
             {...register('active')}
             id="active"
             type="checkbox"
-            readOnly={isReadOnly || mode === 'edit'}
+            disabled={isReadOnly}
+            className={
+              isReadOnly ? 'cursor-not-allowed' : 'accent-[var(--dark-accent)]'
+            }
           />
-        </LabeledField> */}
+        </LabeledField>
         <LabeledField
           label="Username"
           htmlFor="username"
@@ -138,7 +145,7 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
             readOnly={isReadOnly || mode === 'edit'}
           />
         </LabeledField>
-        {/* <LabeledField
+        <LabeledField
           label="Latest Login Date"
           htmlFor="latestLoginDate"
         >
@@ -150,7 +157,7 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
             readOnly={true}
           />
         </LabeledField>
-        <LabeledField
+        {/* <LabeledField
           label="Failed Login Attempts"
           htmlFor="failedLoginAttempts"
           error={errors.failedLoginAttempts?.message}
