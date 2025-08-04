@@ -1,6 +1,7 @@
 'use client';
 
-import { isLoggedIn, logoutAction } from '@/app/actions/auth';
+import { getAuthUser, isLoggedIn, logoutAction } from '@/app/actions/auth';
+import { ROLE } from '@raffle-tracker/dto';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -36,6 +37,7 @@ function LogoutForm() {
 
 export default function Navigation() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Pathname is the current path of the page.  The Nav component will persist
   // across pages since it's in the top level layout, and by default will not
@@ -43,10 +45,17 @@ export default function Navigation() {
   // the pathname (page) changes.
   const pathname = usePathname();
 
+  // We need to know if the user is logged in and if user is admin to show /
+  // hide nav items selectively.
   useEffect(() => {
     const checkLoggedIn = async () => {
       const loggedIn = await isLoggedIn();
       setLoggedIn(loggedIn);
+
+      if (loggedIn) {
+        const user = await getAuthUser();
+        setIsAdmin(user.roles?.includes(ROLE.ADMIN) ?? false);
+      }
     };
     checkLoggedIn();
   }, [pathname]);
@@ -57,6 +66,7 @@ export default function Navigation() {
         <>
           <ul className="flex gap-4 mx-4">
             <NavItem href="/events">Events</NavItem>
+            {isAdmin && <NavItem href="/users">Users</NavItem>}
           </ul>
           <ul className="flex gap-4 mx-4">
             <li>
