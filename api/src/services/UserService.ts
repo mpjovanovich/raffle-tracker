@@ -148,6 +148,8 @@ export class UserService extends BaseService<User, UserDTO> {
     });
     if (!user) throw new Error('User not found');
 
+    if (!user.active) throw new Error('User is not active');
+
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) throw new Error('Invalid password');
 
