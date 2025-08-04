@@ -77,3 +77,44 @@ export async function getUsersAction(): Promise<{
     };
   }
 }
+
+export async function upsertUserAction(
+  user: User
+): Promise<{ success: boolean; data?: User; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const url =
+      user.id === 0
+        ? `${API_BASE_URL}/users`
+        : `${API_BASE_URL}/users/${user.id}`;
+
+    const res = await fetch(url, {
+      method: user.id === 0 ? 'POST' : 'PUT',
+      body: JSON.stringify(user),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to save user',
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      data: data.data as User,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to save user',
+    };
+  }
+}

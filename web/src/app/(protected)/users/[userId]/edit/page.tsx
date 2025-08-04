@@ -21,7 +21,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <UserPage
       user={user.data}
-      mode="view"
+      mode="edit"
     />
   );
 }
