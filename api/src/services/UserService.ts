@@ -1,4 +1,4 @@
-import { verifyPassword } from '@/utils/passwordUtility.js';
+import { hashPassword, verifyPassword } from '@/utils/passwordUtility.js';
 import { PrismaClient, User } from '@prisma/client';
 import { generateAuthToken, TOKEN_TYPE } from '@raffle-tracker/auth';
 import {
@@ -21,7 +21,7 @@ export class UserService extends BaseService<User, UserDTO> {
       username: user.username,
       active: user.active ? 1 : 0,
       latestLoginDate: user.latestLoginDate?.toISOString().split('T')[0],
-      failedLoginAttempts: user.failedLoginAttempts,
+      failedLoginAttempts: user.failedLoginAttempts ?? 0,
       lockedUntil: user.lockedUntil?.toISOString().split('T')[0],
     };
   }
@@ -35,7 +35,7 @@ export class UserService extends BaseService<User, UserDTO> {
       latestLoginDate: user.latestLoginDate
         ? new Date(user.latestLoginDate)
         : null,
-      failedLoginAttempts: user.failedLoginAttempts,
+      failedLoginAttempts: user.failedLoginAttempts ?? 0,
       lockedUntil: user.lockedUntil ? new Date(user.lockedUntil) : null,
     };
   }
@@ -72,52 +72,51 @@ export class UserService extends BaseService<User, UserDTO> {
     return false;
   }
 
-  // To be replaced with upsert
-  // public async createUser(
-  //   username: string,
-  //   password: string
-  // ): Promise<UserDTO> {
-  //   if (!username || !password) {
-  //     throw new Error('Username and password are required');
-  //   }
+  public async createUser(
+    username: string,
+    password: string
+  ): Promise<UserDTO> {
+    if (!username || !password) {
+      throw new Error('Username and password are required');
+    }
 
-  //   if (await this.checkUserExists(this.prisma, username)) {
-  //     throw new Error('Username already in use');
-  //   }
+    if (await this.checkUserExists(this.prisma, username)) {
+      throw new Error('Username already in use');
+    }
 
-  //   if (username.length < 5 || username.length > 20) {
-  //     throw new Error('Username must be between 5 and 20 characters long');
-  //   }
+    if (username.length < 5 || username.length > 20) {
+      throw new Error('Username must be between 5 and 20 characters long');
+    }
 
-  //   const createdUser = await this.prisma.$transaction(async tx => {
-  //     let user = await tx.user.create({
-  //       data: {
-  //         username: username,
-  //         password: await hashPassword(password),
-  //         active: true,
-  //       },
-  //     });
+    const createdUser = await this.prisma.$transaction(async tx => {
+      let user = await tx.user.create({
+        data: {
+          username: username,
+          password: await hashPassword(password),
+          active: true,
+        },
+      });
 
-  //     const viewerRole = await tx.role.findUnique({
-  //       where: { name: 'VIEWER' },
-  //     });
+      const viewerRole = await tx.role.findUnique({
+        where: { name: 'VIEWER' },
+      });
 
-  //     if (!viewerRole) {
-  //       throw new Error('VIEWER role not found in database');
-  //     }
+      if (!viewerRole) {
+        throw new Error('VIEWER role not found in database');
+      }
 
-  //     await tx.userRole.create({
-  //       data: {
-  //         userId: user.id,
-  //         roleId: viewerRole.id,
-  //       },
-  //     });
+      await tx.userRole.create({
+        data: {
+          userId: user.id,
+          roleId: viewerRole.id,
+        },
+      });
 
-  //     return user;
-  //   });
+      return user;
+    });
 
-  //   return UserService.toDTO(createdUser);
-  // }
+    return UserService.toDTO(createdUser);
+  }
 
   public async fetchUserWithRoles(userId: number): Promise<UserDTO> {
     const user = await this.prisma.user.findUnique({
@@ -166,5 +165,32 @@ export class UserService extends BaseService<User, UserDTO> {
     return {
       accessToken: authToken,
     };
+  }
+
+  public async updateUser(user: UserDTO): Promise<UserDTO> {
+    // Make sure VIEWER role is always present.
+    if (!user.roles?.includes('VIEWER')) {
+      user.roles = [...(user.roles || []), 'VIEWER'];
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        active: user.active === 1,
+        // Just delete all roles and add the new ones.
+        roles: {
+          deleteMany: {},
+          create: user.roles?.map(role => ({
+            role: {
+              connect: {
+                name: role,
+              },
+            },
+          })),
+        },
+      },
+    });
+
+    return await this.fetchUserWithRoles(user.id);
   }
 }

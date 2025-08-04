@@ -4,8 +4,10 @@ import { Router } from 'express';
 const router = Router();
 
 router.route('/').get(userController.getAllForList);
-// To be replaced with upsert
-// router.route('/').post(userController.createUser);
+// TODO: update password
+// TODO: update user
+router.route('/').post(userController.createUser);
+router.route('/:userId').put(userController.updateUser);
 router.route('/:userId').get(userController.getById);
 router.route('/:userId/roles').post(userController.addRoleToUser);
 

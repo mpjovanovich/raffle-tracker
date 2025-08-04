@@ -17,6 +17,8 @@ interface UserDetailsProps {
   user: User;
 }
 
+// Right now there is nothing you can edit on this control.
+// Eventually we will add some more view fields, active toggle, etc.
 export default function UserDetails({ mode, user }: UserDetailsProps) {
   const { id, roles, ...defaultValues } = user;
   const [error, setError] = useState<string | null>(null);

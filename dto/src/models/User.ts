@@ -5,7 +5,7 @@ export interface User {
   username: string;
   active: number; // 0 or 1
   latestLoginDate?: string;
-  failedLoginAttempts: number;
+  failedLoginAttempts?: number;
   lockedUntil?: string;
   roles?: Role[];
 }
