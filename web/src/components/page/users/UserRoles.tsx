@@ -1,12 +1,13 @@
 'use client';
 
-// import { addRoleAction, deleteRoleAction } from '@/app/actions/roles';
+import { toggleRoleAction } from '@/app/actions/users';
 import Card from '@/components/ui/Card';
 import IconButton from '@/components/ui/IconButton';
 import ItemList from '@/components/ui/ItemList';
 import ItemListItem from '@/components/ui/ItemListItem';
 import { RoleListItem, User } from '@raffle-tracker/dto';
 import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaCheck, FaCircleCheck } from 'react-icons/fa6';
 
@@ -18,10 +19,23 @@ interface UserRolesProps {
 export default function UserRoles({ user, roles }: UserRolesProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const router = useRouter();
   const rolesHad = roles.filter(role =>
     user.roles?.some(userRole => userRole === role.name)
   );
 
+  const handleToggleRole = async (userId: number, roleId: number) => {
+    try {
+      await toggleRoleAction(userId, roleId);
+      router.push(`/users/${userId}`);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred. Please contact an administrator.'
+      );
+    }
+  };
   return (
     <div className={styles.contestContainer}>
       <Card title="Roles">
@@ -35,8 +49,9 @@ export default function UserRoles({ user, roles }: UserRolesProps) {
                   title="Enabled"
                   className={clsx(rolesHad.includes(role) && styles.hasRole)}
                   onClick={() => {
-                    //   handleToggleRole(horse);
+                    handleToggleRole(user.id, role.id);
                   }}
+                  disabled={role.name === 'VIEWER'}
                 >
                   {rolesHad.includes(role) ? <FaCircleCheck /> : <FaCheck />}
                 </IconButton>

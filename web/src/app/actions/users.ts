@@ -117,6 +117,43 @@ export async function getUsersAction(): Promise<{
   }
 }
 
+export async function toggleRoleAction(
+  userId: number,
+  roleId: number
+): Promise<{ success: boolean; data?: User; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const url = `${API_BASE_URL}/users/${userId}/roles/${roleId}`;
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to toggle role',
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      data: data.data as User,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to toggle role',
+    };
+  }
+}
 export async function updateUserAction(
   user: User
 ): Promise<{ success: boolean; data?: User; error?: string }> {

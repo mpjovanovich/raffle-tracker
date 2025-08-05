@@ -182,6 +182,14 @@ export class UserService extends BaseService<User, UserDTO> {
     });
 
     if (userRole) {
+      // We do not allow the VIEWER role to be removed as a business rule.
+      const role = await this.prisma.role.findUnique({
+        where: { id: roleId },
+      });
+      if (role?.name === 'VIEWER') {
+        throw new Error('Cannot remove VIEWER role');
+      }
+
       await this.prisma.userRole.delete({
         where: { userId_roleId: { userId, roleId } },
       });
