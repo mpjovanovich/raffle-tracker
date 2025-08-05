@@ -18,10 +18,5 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <UserPage
-      user={user.data}
-      mode="view"
-    />
-  );
+  return <UserPage user={user.data} />;
 }

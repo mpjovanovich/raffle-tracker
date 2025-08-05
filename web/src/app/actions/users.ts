@@ -78,19 +78,16 @@ export async function getUsersAction(): Promise<{
   }
 }
 
-export async function upsertUserAction(
+export async function updateUserAction(
   user: User
 ): Promise<{ success: boolean; data?: User; error?: string }> {
   try {
     const token = await getAccessTokenOrRedirect();
 
-    const url =
-      user.id === 0
-        ? `${API_BASE_URL}/users`
-        : `${API_BASE_URL}/users/${user.id}`;
+    const url = `${API_BASE_URL}/users/${user.id}`;
 
     const res = await fetch(url, {
-      method: user.id === 0 ? 'POST' : 'PUT',
+      method: 'PUT',
       body: JSON.stringify(user),
       headers: {
         Authorization: `Bearer ${token}`,

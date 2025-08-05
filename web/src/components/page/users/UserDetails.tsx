@@ -1,7 +1,6 @@
 'use client';
 
-import { upsertUserAction } from '@/app/actions/users';
-import IconButton from '@/components/ui/IconButton';
+import { updateUserAction } from '@/app/actions/users';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
@@ -9,17 +8,15 @@ import { User } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FaPenToSquare, FaRegFloppyDisk, FaXmark } from 'react-icons/fa6';
-type UserFormData = Omit<User, 'id' | 'roles'>;
+type UserFormData = Omit<User, 'id'>;
 
 interface UserDetailsProps {
-  mode: 'create' | 'edit' | 'view';
   user: User;
 }
 
 // Right now there is nothing you can edit on this control.
 // Eventually we will add some more view fields, active toggle, etc.
-export default function UserDetails({ mode, user }: UserDetailsProps) {
+export default function UserDetails({ user }: UserDetailsProps) {
   // This is a nasty workaround; in future we can set the linter config to
   // ignore _ named vars.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,15 +24,16 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
-  const isReadOnly = mode === 'view';
 
   const {
     formState: { errors },
-    handleSubmit,
     isInitialized,
     register,
+    handleSubmit,
+    getValues,
+    setValue,
   } = useInitializedForm<UserFormData>({
-    defaultValues: defaultValues,
+    defaultValues: user,
     mode: 'onBlur',
   });
 
@@ -45,8 +43,8 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
     try {
       setError(null);
       setIsSaving(true);
-      const result = await upsertUserAction(updatedUser);
 
+      const result = await updateUserAction(updatedUser);
       if (!result.success) {
         setError(
           result.error || 'An error occurred. Please contact an administrator.'
@@ -68,50 +66,6 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
     }
   };
 
-  const EditButtons = () => {
-    return (
-      <div className={styles.editButtons}>
-        {mode === 'edit' || mode === 'create' ? (
-          <>
-            <IconButton
-              title="Save"
-              type="submit"
-              disabled={isSaving}
-            >
-              <FaRegFloppyDisk />
-            </IconButton>
-            <IconButton
-              title="Cancel"
-              type="button"
-              onClick={e => {
-                if (mode === 'create') {
-                  router.push(`/users`);
-                } else {
-                  router.push(`/users/${user.id}`);
-                }
-                e.preventDefault();
-              }}
-              disabled={isSaving}
-            >
-              <FaXmark />
-            </IconButton>
-          </>
-        ) : (
-          <IconButton
-            title="Edit"
-            type="button"
-            disabled={isSaving}
-            onClick={() => {
-              router.push(`/users/${user.id}/edit`);
-            }}
-          >
-            <FaPenToSquare />
-          </IconButton>
-        )}
-      </div>
-    );
-  };
-
   const FormContent = () => {
     return (
       <div className={styles.formContent}>
@@ -125,10 +79,14 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
             {...register('active')}
             id="active"
             type="checkbox"
-            disabled={isReadOnly}
-            className={
-              isReadOnly ? 'cursor-not-allowed' : 'accent-[var(--dark-accent)]'
-            }
+            className="accent-[var(--dark-accent)]"
+            onChange={e => {
+              setValue('active', e.target.checked);
+              const form = e.target.form;
+              if (form) {
+                form.requestSubmit();
+              }
+            }}
           />
         </LabeledField>
         <LabeledField
@@ -141,8 +99,7 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
             id="username"
             placeholder="Username"
             type="text"
-            // Only allow editing if the user is creating a new user
-            readOnly={isReadOnly || mode === 'edit'}
+            readOnly={true}
           />
         </LabeledField>
         <LabeledField
@@ -157,32 +114,6 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
             readOnly={true}
           />
         </LabeledField>
-        {/* <LabeledField
-          label="Failed Login Attempts"
-          htmlFor="failedLoginAttempts"
-          error={errors.failedLoginAttempts?.message}
-        >
-          <Input
-            {...register('failedLoginAttempts')}
-            id="failedLoginAttempts"
-            type="number"
-            placeholder="Failed Login Attempts"
-            readOnly={true}
-          />
-        </LabeledField>
-        <LabeledField
-          label="Locked Until"
-          htmlFor="lockedUntil"
-          error={errors.lockedUntil?.message}
-        >
-          <Input
-            {...register('lockedUntil')}
-            id="ticketPrice"
-            type="date"
-            placeholder="Locked Until"
-            readOnly={true}
-          />
-        </LabeledField> */}
       </div>
     );
   };
@@ -194,7 +125,6 @@ export default function UserDetails({ mode, user }: UserDetailsProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {error && <p className={styles.error}>{error}</p>}
-      <EditButtons />
       <FormContent />
     </form>
   );

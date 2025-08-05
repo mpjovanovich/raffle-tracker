@@ -48,17 +48,6 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
-  public async addRoleToUser(userId: number, roleId: number): Promise<UserDTO> {
-    await this.prisma.userRole.create({
-      data: {
-        userId,
-        roleId,
-      },
-    });
-
-    return await this.fetchUserWithRoles(userId);
-  }
-
   private async checkUserExists(
     tx: PrismaClient,
     username: string
@@ -171,6 +160,29 @@ export class UserService extends BaseService<User, UserDTO> {
     };
   }
 
+  public async toggleRole(userId: number, roleId: number): Promise<UserDTO> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) throw new Error('User not found');
+
+    const userRole = await this.prisma.userRole.findUnique({
+      where: { userId_roleId: { userId, roleId } },
+    });
+
+    if (userRole) {
+      await this.prisma.userRole.delete({
+        where: { userId_roleId: { userId, roleId } },
+      });
+    } else {
+      await this.prisma.userRole.create({
+        data: { userId, roleId },
+      });
+    }
+
+    return await this.fetchUserWithRoles(user.id);
+  }
+
   private async updateLoginSuccess(userId: number): Promise<void> {
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
@@ -183,26 +195,11 @@ export class UserService extends BaseService<User, UserDTO> {
   }
 
   public async updateUser(user: UserDTO): Promise<UserDTO> {
-    // Make sure VIEWER role is always present.
-    if (!user.roles?.includes('VIEWER')) {
-      user.roles = [...(user.roles || []), 'VIEWER'];
-    }
-
+    // Currently the only field that we allow to be updated is active.
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: {
         active: user.active,
-        // Just delete all roles and add the new ones.
-        roles: {
-          deleteMany: {},
-          create: user.roles?.map(role => ({
-            role: {
-              connect: {
-                name: role,
-              },
-            },
-          })),
-        },
       },
     });
 

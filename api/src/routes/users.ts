@@ -5,10 +5,9 @@ const router = Router();
 
 router.route('/').get(userController.getAllForList);
 // TODO: update password
-// TODO: update user
 router.route('/').post(userController.createUser);
 router.route('/:userId').put(userController.updateUser);
 router.route('/:userId').get(userController.getById);
-router.route('/:userId/roles').post(userController.addRoleToUser);
+router.route('/:userId/roles/:roleId').put(userController.toggleRole);
 
 export default router;
