@@ -18,7 +18,6 @@ interface UserRolesProps {
 
 export default function UserRoles({ user, roles }: UserRolesProps) {
   const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const rolesHad = roles.filter(role =>
     user.roles?.some(userRole => userRole === role.name)

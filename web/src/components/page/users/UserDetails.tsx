@@ -22,7 +22,6 @@ export default function UserDetails({ user }: UserDetailsProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, roles: _, ...defaultValues } = user;
   const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   const {
@@ -30,7 +29,6 @@ export default function UserDetails({ user }: UserDetailsProps) {
     isInitialized,
     register,
     handleSubmit,
-    getValues,
     setValue,
   } = useInitializedForm<UserFormData>({
     defaultValues: user,
@@ -42,7 +40,6 @@ export default function UserDetails({ user }: UserDetailsProps) {
 
     try {
       setError(null);
-      setIsSaving(true);
 
       const result = await updateUserAction(updatedUser);
       if (!result.success) {
@@ -61,8 +58,6 @@ export default function UserDetails({ user }: UserDetailsProps) {
           ? error.message
           : 'An error occurred. Please contact an administrator.'
       );
-    } finally {
-      setIsSaving(false);
     }
   };
 
