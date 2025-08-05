@@ -11,6 +11,7 @@ export * from './models/Order.js';
 export * from './models/OrderStatus.js';
 export * from './models/RevenueReport.js';
 export * from './models/Role.js';
+export * from './models/RoleListItem.js';
 export * from './models/SignupRequest.js';
 export * from './models/Ticket.js';
 export * from './models/UpdateOrderResponse.js';

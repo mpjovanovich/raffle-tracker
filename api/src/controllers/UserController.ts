@@ -22,6 +22,11 @@ class UserController {
     res.status(200).json(new APIResponse(200, items));
   });
 
+  getAllRoles = asyncHandler(async (_: Request, res: Response) => {
+    const items = await this.userService.getAllRoles();
+    res.status(200).json(new APIResponse(200, items));
+  });
+
   getById = asyncHandler(async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     if (isNaN(userId)) {

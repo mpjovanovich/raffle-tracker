@@ -5,6 +5,7 @@ import {
   AuthenticatedUser,
   LoginResponse,
   Role as RoleDTO,
+  RoleListItem,
   User as UserDTO,
   UserListItem,
 } from '@raffle-tracker/dto';
@@ -126,6 +127,16 @@ export class UserService extends BaseService<User, UserDTO> {
       id: user.id,
       username: user.username,
     }));
+  }
+
+  public async getAllRoles(): Promise<RoleListItem[]> {
+    const roles = await this.prisma.role.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return roles;
   }
 
   public async login(

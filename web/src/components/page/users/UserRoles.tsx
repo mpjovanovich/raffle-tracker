@@ -15,34 +15,6 @@ export default function UserRoles({ user }: UserRolesProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  //   const {
-  //     formState: { errors },
-  //     isInitialized,
-  //     register,
-  //     setValue,
-  //   } = useInitializedForm<{
-  //     /* TODO: Type */
-  //   }>({
-  //     mode: 'onBlur',
-  //   });
-
-  //   const handleToggleRole = async (role: Role) => {
-  //     try {
-  //       await toggleRoleAction(role);
-  //       router.push(`/users/${user.id}/roles/${role.id}`);
-  //     } catch (error) {
-  //       setError(
-  //         error instanceof Error
-  //           ? error.message
-  //           : 'An error occurred. Please contact an administrator.'
-  //       );
-  //     }
-  //   };
-
-  //   if (!isInitialized) {
-  //     return <div>Loading...</div>;
-  //   }
-
   return (
     <div className={styles.contestContainer}>
       <Card title="Roles">

@@ -1,10 +1,49 @@
 'use server';
 
 import { config } from '@raffle-tracker/config';
-import { User, UserListItem } from '@raffle-tracker/dto';
+import { RoleListItem, User, UserListItem } from '@raffle-tracker/dto';
 import { getAccessTokenOrRedirect } from './auth';
 
 const API_BASE_URL = config.apiBaseUrl;
+
+export async function getRolesAction(): Promise<{
+  success: boolean;
+  data?: RoleListItem[];
+  error?: string;
+}> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const res = await fetch(`${API_BASE_URL}/users/roles`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to fetch roles',
+      };
+    }
+
+    const data = await res.json();
+
+    const sortedData = data.data.sort((a: RoleListItem, b: RoleListItem) =>
+      a.name.localeCompare(b.name)
+    ) as RoleListItem[];
+    return {
+      success: true,
+      data: sortedData,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch roles',
+    };
+  }
+}
 
 export async function getUserAction(
   id: number
