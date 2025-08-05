@@ -2,41 +2,47 @@
 
 // import { addRoleAction, deleteRoleAction } from '@/app/actions/roles';
 import Card from '@/components/ui/Card';
+import IconButton from '@/components/ui/IconButton';
 import ItemList from '@/components/ui/ItemList';
-import { User } from '@raffle-tracker/dto';
+import ItemListItem from '@/components/ui/ItemListItem';
+import { RoleListItem, User } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { FaCheck, FaCircleCheck } from 'react-icons/fa6';
 
 interface UserRolesProps {
   user: User;
+  roles: RoleListItem[];
 }
 
-export default function UserRoles({ user }: UserRolesProps) {
+export default function UserRoles({ user, roles }: UserRolesProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const rolesHad = roles.filter(role =>
+    user.roles?.some(userRole => userRole === role.name)
+  );
 
   return (
     <div className={styles.contestContainer}>
       <Card title="Roles">
         {error && <p className={styles.error}>{error}</p>}
         <ItemList>
-          {/* {user.roles?.map(role => (
-              <ItemListItem key={role}>
-                <span>{role}</span>
-                <div className={styles.actionButtonContainer}>
-                  <IconButton
-                    title="Enabled"
-                    className={clsx(role.winner && styles.winner)}
-                    disabled={mode === "view"}
-                    onClick={() => {
+          {roles.map(role => (
+            <ItemListItem key={role.id}>
+              <span>{role.name}</span>
+              <div className={styles.actionButtonContainer}>
+                <IconButton
+                  title="Enabled"
+                  className={clsx(rolesHad.includes(role) && styles.hasRole)}
+                  onClick={() => {
                     //   handleToggleRole(horse);
-                    }}
-                  >
-                    {horse.winner ? <FaCircleCheck /> : <FaCheck />}
-                  </IconButton>
-                </div>
-              </ItemListItem>
-            ))} */}
+                  }}
+                >
+                  {rolesHad.includes(role) ? <FaCircleCheck /> : <FaCheck />}
+                </IconButton>
+              </div>
+            </ItemListItem>
+          ))}
         </ItemList>
       </Card>
     </div>
@@ -64,4 +70,5 @@ const styles = {
     'rounded-sm',
     'm-6'
   ),
+  hasRole: clsx('text-green-500', 'text-xl'),
 };

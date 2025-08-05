@@ -1,4 +1,4 @@
-import { getUserAction } from '@/app/actions/users';
+import { getRolesAction, getUserAction } from '@/app/actions/users';
 import UserPage from '@/components/page/users/UserPage';
 import { notFound } from 'next/navigation';
 
@@ -18,5 +18,15 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return <UserPage user={user.data} />;
+  const roles = await getRolesAction();
+  if (!roles.success || !roles.data) {
+    notFound();
+  }
+
+  return (
+    <UserPage
+      user={user.data}
+      roles={roles.data}
+    />
+  );
 }
