@@ -6,6 +6,45 @@ import { getAccessTokenOrRedirect } from './auth';
 
 const API_BASE_URL = config.apiBaseUrl;
 
+export async function createUserAction(
+  username: string,
+  password: string
+): Promise<{ success: boolean; data?: User; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const url = `${API_BASE_URL}/users`;
+
+    const res = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to create user',
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      data: data.data as User,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create user',
+    };
+  }
+}
+
 export async function getRolesAction(): Promise<{
   success: boolean;
   data?: RoleListItem[];
@@ -154,6 +193,45 @@ export async function toggleRoleAction(
     };
   }
 }
+
+export async function updatePasswordAction(
+  userId: number,
+  password: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const url = `${API_BASE_URL}/users/${userId}/password`;
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({ password }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to update password',
+      };
+    }
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'Failed to update password',
+    };
+  }
+}
+
 export async function updateUserAction(
   user: User
 ): Promise<{ success: boolean; data?: User; error?: string }> {

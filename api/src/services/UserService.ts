@@ -213,6 +213,13 @@ export class UserService extends BaseService<User, UserDTO> {
     });
   }
 
+  public async updatePassword(userId: number, password: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: await hashPassword(password) },
+    });
+  }
+
   public async updateUser(user: UserDTO): Promise<UserDTO> {
     // Currently the only field that we allow to be updated is active.
     const updatedUser = await this.prisma.user.update({

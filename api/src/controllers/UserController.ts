@@ -50,6 +50,17 @@ class UserController {
     res.status(200).json(new APIResponse(200, user));
   });
 
+  updatePassword = asyncHandler(async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId);
+    if (isNaN(userId)) {
+      throw new Error(`Invalid ID format: ${req.params.userId}`);
+    }
+
+    const password = req.body.password;
+    await this.userService.updatePassword(userId, password);
+    res.status(200).json(new APIResponse(200, { message: 'Password updated' }));
+  });
+
   updateUser = asyncHandler(async (req: Request, res: Response) => {
     const user = await this.userService.updateUser(req.body);
     res.status(200).json(new APIResponse(200, user));
