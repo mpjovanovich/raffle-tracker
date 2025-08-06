@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Toaster } from 'react-hot-toast';
 import Navigation from '../components/shared/Navigation';
 import { mainFont } from './fonts';
 import './globals.css';
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body
         className={`${mainFont.className} antialiased min-h-screen flex flex-col bg-light-primary text-dark-primary`}
       >
+        <Toaster />
         <div className="flex flex-col h-screen">
           <Navigation />
           <main className="flex-1 flex justify-center px-8 py-4">

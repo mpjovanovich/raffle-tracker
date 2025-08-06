@@ -74,9 +74,8 @@ export class UserService extends BaseService<User, UserDTO> {
       throw new Error('Username already in use');
     }
 
-    if (username.length < 5 || username.length > 20) {
-      throw new Error('Username must be between 5 and 20 characters long');
-    }
+    this.validateUsername(username);
+    this.validatePassword(password);
 
     const createdUser = await this.prisma.$transaction(async tx => {
       let user = await tx.user.create({
@@ -230,5 +229,19 @@ export class UserService extends BaseService<User, UserDTO> {
     });
 
     return await this.fetchUserWithRoles(user.id);
+  }
+
+  // TODO: Should be moved to a shared validation utility So that frontend and backend use the same validation rules.
+  private validateUsername(username: string): void {
+    if (username.length < 5 || username.length > 20) {
+      throw new Error('Username must be between 5 and 20 characters long');
+    }
+  }
+
+  // TODO: Should be moved to a shared validation utility So that frontend and backend use the same validation rules.
+  private validatePassword(password: string): void {
+    if (password.length < 8) {
+      throw new Error('Password must be at least 8 characters long');
+    }
   }
 }

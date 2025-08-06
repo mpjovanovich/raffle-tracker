@@ -9,6 +9,9 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { eventId } = await params;
   const eventIdNumber = parseInt(eventId);
+  if (isNaN(eventIdNumber)) {
+    notFound();
+  }
 
   const event = await getEventAction(eventIdNumber, true);
   if (!event.success || !event.data) {

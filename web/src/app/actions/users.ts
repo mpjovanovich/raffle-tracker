@@ -6,6 +6,43 @@ import { getAccessTokenOrRedirect } from './auth';
 
 const API_BASE_URL = config.apiBaseUrl;
 
+export async function changePasswordAction(
+  userId: number,
+  password: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const token = await getAccessTokenOrRedirect();
+
+    const url = `${API_BASE_URL}/users/${userId}/password`;
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify({ password }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        success: false,
+        error: errorData.message || 'Failed to update password',
+      };
+    }
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'Failed to update password',
+    };
+  }
+}
 export async function createUserAction(
   username: string,
   password: string
@@ -190,44 +227,6 @@ export async function toggleRoleAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to toggle role',
-    };
-  }
-}
-
-export async function updatePasswordAction(
-  userId: number,
-  password: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const token = await getAccessTokenOrRedirect();
-
-    const url = `${API_BASE_URL}/users/${userId}/password`;
-
-    const res = await fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify({ password }),
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      return {
-        success: false,
-        error: errorData.message || 'Failed to update password',
-      };
-    }
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : 'Failed to update password',
     };
   }
 }
