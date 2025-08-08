@@ -186,12 +186,15 @@ const styles = {
     'border-t-2',
     'border-light-accent2',
     'flex',
-    'flex-row',
+    'flex-col',
+    'sm:flex-row',
     'justify-end',
+    'sm:items-center',
     'gap-4',
-    'px-8'
+    'px-8',
+    'py-2'
   ),
-  itemAddButton: clsx('my-2', 'h-fit'),
+  itemAddButton: clsx('h-fit'),
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-20'),
   contestContainer: clsx(
