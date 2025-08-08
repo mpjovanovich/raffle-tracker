@@ -70,7 +70,19 @@ export default function EventContests({ event }: EventContestsProps) {
     try {
       setIsSaving(true);
       setError(null);
-      await addContestAction(event.id, data.contestNumber, data.numberOfHorses);
+
+      const result = await addContestAction(
+        event.id,
+        data.contestNumber,
+        data.numberOfHorses
+      );
+
+      console.log(result);
+
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
       router.push(`/events/${event.id}`);
     } catch (error) {
       setError(
