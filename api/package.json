@@ -9,7 +9,8 @@
     "dev:reset-db": "dotenv -e ../.env.dev -- sh scripts/db-init-dev.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "start:prod": "sh scripts/db-init-prod.sh && npm start"
+    "start:prod": "sh scripts/db-init-prod.sh && npm start",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",

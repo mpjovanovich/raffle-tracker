@@ -1,4 +1,5 @@
 # Use this to bring up the services in prod.
+# Make sure to update git version numbers in the ENV file.
 services:
   api:
     image: ghcr.io/mpjovanovich/raffle-tracker-api:${API_VERSION}

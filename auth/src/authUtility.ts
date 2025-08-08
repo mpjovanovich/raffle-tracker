@@ -1,5 +1,5 @@
 import { config } from '@raffle-tracker/config';
-import { AuthenticatedUser, ResetUserRequest } from '@raffle-tracker/dto';
+import { AuthenticatedUser } from '@raffle-tracker/dto';
 import * as jose from 'jose';
 
 export const TOKEN_TYPE = {
@@ -64,20 +64,6 @@ export const generateTokenId = async (): Promise<string> => {
   return crypto.randomUUID();
 };
 
-// This is used for both initial verification and password reset.
-export const generateResetToken = async (
-  resetUserRequest: ResetUserRequest,
-  type: TokenType
-): Promise<string> => {
-  const secret = new TextEncoder().encode(config.jwtSecretKey);
-  const expiresInMilliseconds = getExpiresInSeconds(type) * 1000;
-
-  return await new jose.SignJWT(resetUserRequest as any)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime(new Date(Date.now() + expiresInMilliseconds))
-    .sign(secret);
-};
-
 export const verifyAuthToken = async (
   token: string
 ): Promise<AuthenticatedUser> => {
@@ -92,27 +78,6 @@ export const verifyAuthToken = async (
     };
 
     return user;
-  } catch (error) {
-    if (error instanceof jose.errors.JWTExpired) {
-      throw new Error('Token expired.');
-    }
-    throw new Error('Invalid token');
-  }
-};
-
-export const verifyResetToken = async (
-  token: string
-): Promise<ResetUserRequest> => {
-  try {
-    const secret = new TextEncoder().encode(config.jwtSecretKey);
-    const { payload } = await jose.jwtVerify(token, secret);
-
-    const resetRequest: ResetUserRequest = {
-      userId: payload.userId as number,
-      token: payload.token as string,
-    };
-
-    return resetRequest;
   } catch (error) {
     if (error instanceof jose.errors.JWTExpired) {
       throw new Error('Token expired.');

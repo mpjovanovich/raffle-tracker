@@ -1,7 +1,16 @@
 # Use this to build the images that will go out to prod.
 # This can also be used to bring up the services locally for QA testing.
+
 # Commands to push:
-#
+#   docker compose -f docker-compose.build.yaml build --no-cache
+#   docker tag mpjovanovich/raffle-tracker-api:latest ghcr.io/mpjovanovich/raffle-tracker-api:$(git rev-parse --short HEAD)
+#   docker tag mpjovanovich/raffle-tracker-web:latest ghcr.io/mpjovanovich/raffle-tracker-web:$(git rev-parse --short HEAD)
+#   docker push ghcr.io/mpjovanovich/raffle-tracker-api:$(git rev-parse --short HEAD)
+#   docker push ghcr.io/mpjovanovich/raffle-tracker-web:$(git rev-parse --short HEAD)
+
+# On server:
+#   update .env.prod with the new version numbers
+#   docker compose -f docker-compose.release.yaml up -d
 services:
   api:
     build:
