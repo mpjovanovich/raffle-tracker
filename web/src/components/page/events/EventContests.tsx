@@ -199,7 +199,7 @@ export default function EventContests({ event }: EventContestsProps) {
 
 const styles = {
   actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
-  error: clsx('text-red-500'),
+  error: clsx('text-red-500', 'mx-6', 'mb-2'),
   itemAdd: clsx(
     'border-t-2',
     'border-light-accent2',

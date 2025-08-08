@@ -42,6 +42,9 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
   }
 
   public async delete(id: number): Promise<void> {
+    if (await this.hasTickets(id)) {
+      throw new Error('Cannot delete horse that has tickets');
+    }
     await this.prisma.horse.delete({ where: { id } });
   }
 
@@ -56,6 +59,13 @@ export class HorseService extends BaseService<Horse, HorseDTO> {
     horse.scratch = !horse.scratch;
     horse = await this.update(id, horse);
     return horse;
+  }
+
+  private async hasTickets(horseId: number): Promise<boolean> {
+    const ticketCount = await this.prisma.ticket.count({
+      where: { horse_id: horseId },
+    });
+    return ticketCount > 0;
   }
 
   public async toggleWinner(id: number): Promise<HorseDTO> {

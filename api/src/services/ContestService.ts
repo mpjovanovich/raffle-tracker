@@ -68,10 +68,13 @@ export class ContestService extends BaseService<Contest, ContestDTO> {
   }
 
   public async delete(id: number): Promise<void> {
+    if (await this.hasTickets(id)) {
+      throw new Error('Cannot delete contest that has tickets');
+    }
     await this.prisma.contest.delete({ where: { id } });
   }
 
-  async getWithChildren(id: number): Promise<ContestDTO | null> {
+  public async getWithChildren(id: number): Promise<ContestDTO | null> {
     const contestWithHorses = await this.prisma.contest.findUnique({
       where: { id },
       include: { horse: true },
@@ -87,5 +90,12 @@ export class ContestService extends BaseService<Contest, ContestDTO> {
         ...(HorseService.toDTO(horse) ?? []),
       })),
     };
+  }
+
+  private async hasTickets(contestId: number): Promise<boolean> {
+    const ticketCount = await this.prisma.ticket.count({
+      where: { contest_id: contestId },
+    });
+    return ticketCount > 0;
   }
 }

@@ -34,6 +34,13 @@ export class EventService extends BaseService<Event, EventDTO> {
     };
   }
 
+  public async delete(id: number): Promise<void> {
+    if (await this.hasTickets(id)) {
+      throw new Error('Cannot delete event that has tickets');
+    }
+    await this.prisma.event.delete({ where: { id } });
+  }
+
   public async getWithChildren(id: number): Promise<EventDTO | null> {
     const eventWithContests = await this.prisma.event.findUnique({
       where: { id },
@@ -79,6 +86,13 @@ export class EventService extends BaseService<Event, EventDTO> {
     return contests;
   }
 
+  private async hasTickets(eventId: number): Promise<boolean> {
+    const ticketCount = await this.prisma.ticket.count({
+      where: { event_id: eventId },
+    });
+    return ticketCount > 0;
+  }
+
   public async update(id: number, event: EventDTO): Promise<EventDTO> {
     // Don't allow updating a closed event
     const existingEvent = await this.getById(id);
@@ -87,10 +101,7 @@ export class EventService extends BaseService<Event, EventDTO> {
     }
 
     // Don't allow updating an event that has tickets
-    const ticketCount = await this.prisma.ticket.count({
-      where: { event_id: id },
-    });
-    if (ticketCount > 0) {
+    if (await this.hasTickets(id)) {
       throw new Error('Cannot update event that has tickets');
     }
 

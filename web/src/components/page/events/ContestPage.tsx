@@ -58,7 +58,11 @@ export default function ContestPage({ contest }: ContestPageProps) {
   const handleDeleteHorse = async (horse: Horse) => {
     if (confirm(`Are you sure you want to delete Horse ${horse.number}?`)) {
       try {
-        await deleteHorseAction(horse.id);
+        const result = await deleteHorseAction(horse.id);
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
         router.push(`/events/${contest.eventId}/contests/${contest.id}`);
       } catch (error) {
         setError(
@@ -72,7 +76,11 @@ export default function ContestPage({ contest }: ContestPageProps) {
 
   const handleToggleScratch = async (horse: Horse) => {
     try {
-      await toggleScratchAction(horse.id);
+      const result = await toggleScratchAction(horse.id);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
       router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
@@ -85,7 +93,11 @@ export default function ContestPage({ contest }: ContestPageProps) {
 
   const handleToggleWinner = async (horse: Horse) => {
     try {
-      await toggleWinnerAction(horse.id);
+      const result = await toggleWinnerAction(horse.id);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
       router.push(`/events/${contest.eventId}/contests/${contest.id}`);
     } catch (error) {
       setError(
@@ -206,7 +218,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
 
 const styles = {
   actionButtonContainer: clsx('flex', 'flex-row', 'gap-1'),
-  error: clsx('text-red-500'),
+  error: clsx('text-red-500', 'mx-6', 'mb-2'),
   itemAdd: clsx(
     'border-t-2',
     'border-light-accent2',
@@ -223,7 +235,12 @@ const styles = {
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-1/4'),
   itemList: clsx('mb-4'),
-  horseContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
+  horseContainer: clsx(
+    'border-2',
+    'border-light-accent2',
+    'rounded-sm',
+    'my-6'
+  ),
   scratch: clsx('text-red-500'),
   winner: clsx('text-green-500', 'text-xl'),
 };

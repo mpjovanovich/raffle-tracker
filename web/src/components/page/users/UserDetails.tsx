@@ -8,6 +8,7 @@ import { User } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 type UserFormData = Omit<User, 'id'>;
 
 interface UserDetailsProps {
@@ -48,8 +49,10 @@ export default function UserDetails({ user }: UserDetailsProps) {
         );
         return;
       }
-
       if (result.data) {
+        toast.success(
+          `User is now ${result.data.active ? 'active' : 'inactive'}!`
+        );
         router.push(`/users/${result.data.id}`);
       }
     } catch (error) {

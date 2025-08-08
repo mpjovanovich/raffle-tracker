@@ -105,5 +105,5 @@ export default function CreateUserPage() {
 }
 
 const styles = {
-  error: clsx('text-red-500'),
+  error: clsx('text-red-500', 'mb-4'),
 };
