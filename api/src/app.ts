@@ -51,6 +51,7 @@ if (config.nodeEnv === 'development') {
   app.use('/api/dev', devRouter);
 }
 
+// APPLICATION ROUTES
 app.use('/api/auth', authRouter);
 app.use('/api/events', authMiddleware, eventsRouter);
 app.use('/api/contests', authMiddleware, contestsRouter);
