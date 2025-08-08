@@ -2,8 +2,12 @@ import { getUserAction } from '@/app/actions/users';
 import ChangePasswordPage from '@/components/page/users/ChangePasswordPage';
 import { notFound } from 'next/navigation';
 
-export default async function Page({ params }: { params: { userId: string } }) {
-  let { userId } = await params;
+interface PageProps {
+  params: Promise<{ userId: string }>;
+}
+
+export default async function Page({ params }: PageProps) {
+  const { userId } = await params;
   const userIdNumber = parseInt(userId);
   if (isNaN(userIdNumber)) {
     notFound();
