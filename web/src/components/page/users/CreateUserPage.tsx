@@ -1,23 +1,18 @@
 'use client';
 
-import { changePasswordAction } from '@/app/actions/users';
+import { createUserAction } from '@/app/actions/users';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import LabeledField from '@/components/ui/LabeledField';
 import SimpleButton from '@/components/ui/SimpleButton';
 import { useInitializedForm } from '@/hooks/useInitializedForm';
 import { userValidationRules } from '@/utils/validationUtility';
-import { User } from '@raffle-tracker/dto';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-interface ChangePasswordPageProps {
-  user: User;
-}
-
-export default function ChangePasswordPage({ user }: ChangePasswordPageProps) {
+export default function CreateUserPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -25,14 +20,14 @@ export default function ChangePasswordPage({ user }: ChangePasswordPageProps) {
     formState: { errors },
     handleSubmit,
     register,
-  } = useInitializedForm<{ newPassword: string }>({
+  } = useInitializedForm<{ username: string; password: string }>({
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: { newPassword: string }) => {
+  const onSubmit = async (data: { username: string; password: string }) => {
     try {
       setError(null);
-      const result = await changePasswordAction(user.id, data.newPassword);
+      const result = await createUserAction(data.username, data.password);
       if (!result.success) {
         setError(
           result.error || 'An error occurred. Please contact an administrator.'
@@ -40,8 +35,10 @@ export default function ChangePasswordPage({ user }: ChangePasswordPageProps) {
         return;
       }
 
-      toast.success('Password changed successfully!');
-      router.push(`/users/${user.id}`);
+      toast.success('User created!');
+      if (result.data) {
+        router.push(`/users/${result.data.id}`);
+      }
     } catch (error) {
       setError(
         error instanceof Error
@@ -53,24 +50,43 @@ export default function ChangePasswordPage({ user }: ChangePasswordPageProps) {
 
   return (
     <>
-      <Card title={`User: ${user.username}`}>
+      <Card title="Create User">
         {error && <p className={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <LabeledField
-            label="New Password"
-            htmlFor="newPassword"
-            error={errors.newPassword?.message}
+            label="Username"
+            htmlFor="username"
+            error={errors.username?.message}
           >
             <Input
-              {...register('newPassword', {
+              {...register('username', {
+                required: userValidationRules.username.required,
+                minLength: {
+                  value: userValidationRules.username.minLength.value,
+                  message: userValidationRules.username.minLength.message,
+                },
+              })}
+              id="username"
+              placeholder="Username"
+              type="text"
+              autoComplete="username"
+            />
+          </LabeledField>
+          <LabeledField
+            label="Password"
+            htmlFor="password"
+            error={errors.password?.message}
+          >
+            <Input
+              {...register('password', {
                 required: userValidationRules.password.required,
                 minLength: {
                   value: userValidationRules.password.minLength.value,
                   message: userValidationRules.password.minLength.message,
                 },
               })}
-              id="newPassword"
-              placeholder="New Password"
+              id="password"
+              placeholder="Password"
               type="password"
               autoComplete="new-password"
             />
@@ -80,7 +96,7 @@ export default function ChangePasswordPage({ user }: ChangePasswordPageProps) {
             title="Submit"
             type="submit"
           >
-            Change Password
+            Create User
           </SimpleButton>
         </form>
       </Card>
