@@ -68,8 +68,7 @@ export default function RevenueReportPage({
         </div>
       </Card>
 
-      {/* Contest Details */}
-      <h2 className="px-6 mb-2 text-2xl font-semibold text-gray-900">
+      <h2 className="mb-4 text-2xl font-semibold text-gray-900">
         Contest Breakdown
       </h2>
 
