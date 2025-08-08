@@ -42,6 +42,10 @@ export default function CashierPage() {
     const orderId = parseInt(getValues('orderId'));
     try {
       const response = await updateOrderAction(orderId, status);
+      if (response.error) {
+        setError(response.error);
+        return;
+      }
       setResults(response.data?.refs || []);
     } catch (error) {
       setError(
