@@ -54,7 +54,14 @@ export default function EventContests({ event }: EventContestsProps) {
   const handleDeleteContest = async (contest: Contest) => {
     if (confirm(`Are you sure you want to delete Contest ${contest.number}?`)) {
       try {
-        await deleteContestAction(contest.id);
+        setIsSaving(true);
+        setError(null);
+
+        const result = await deleteContestAction(contest.id);
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
         router.push(`/events/${event.id}`);
       } catch (error) {
         setError(
@@ -62,6 +69,8 @@ export default function EventContests({ event }: EventContestsProps) {
             ? error.message
             : 'An error occurred. Please contact an administrator.'
         );
+      } finally {
+        setIsSaving(false);
       }
     }
   };
@@ -76,9 +85,6 @@ export default function EventContests({ event }: EventContestsProps) {
         data.contestNumber,
         data.numberOfHorses
       );
-
-      console.log(result);
-
       if (result.error) {
         setError(result.error);
         return;
