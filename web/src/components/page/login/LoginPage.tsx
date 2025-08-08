@@ -133,5 +133,5 @@ const styles = {
     'items-center'
   ),
   link: clsx('hover:text-dark-accent', 'font-bold', 'mt-2'),
-  loginForm: clsx('flex', 'flex-col', 'gap-2', 'w-80', 'mb-4'),
+  loginForm: clsx('flex', 'flex-col', 'gap-2', 'sm:w-80', 'mb-4'),
 };

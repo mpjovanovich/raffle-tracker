@@ -17,5 +17,5 @@ export default function Card({ children, title, className }: CardProps) {
 }
 
 const styles = {
-  card: clsx('bg-light-primary', 'p-8', 'min-w-[720px]'),
+  card: clsx('bg-light-primary'),
 };

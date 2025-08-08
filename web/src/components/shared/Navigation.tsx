@@ -61,10 +61,10 @@ export default function Navigation() {
   }, [pathname]);
 
   return (
-    <nav className="flex justify-between bg-light-accent w-full border-b-1 border-light-accent2">
+    <nav className="flex flex-col sm:flex-row justify-between bg-light-accent w-full border-b-1 border-light-accent2">
       {loggedIn && (
         <>
-          <ul className="flex gap-4 mx-4">
+          <ul className="flex flex-col sm:flex-row sm:gap-4 mx-4">
             <NavItem href="/events">Events</NavItem>
             {isAdmin && <NavItem href="/users">Users</NavItem>}
           </ul>

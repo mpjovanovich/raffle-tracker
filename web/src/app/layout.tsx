@@ -22,12 +22,12 @@ export default function RootLayout({
         className={`${mainFont.className} antialiased min-h-screen flex flex-col bg-light-primary text-dark-primary`}
       >
         <Toaster />
-        <div className="flex flex-col h-screen">
-          <Navigation />
-          <main className="flex-1 flex justify-center px-8 py-4">
-            <div className="max-w-4xl">{children}</div>
-          </main>
-        </div>
+        <Navigation />
+        <main className="flex-1 flex justify-center p-4">
+          <div className="min-w-full sm:min-w-[600px] md:min-w-[720px]">
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );

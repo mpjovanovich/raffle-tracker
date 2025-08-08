@@ -82,7 +82,7 @@ const styles = {
     'border-2',
     'border-light-accent2',
     'rounded-sm',
-    'm-6'
+    'my-6'
   ),
   hasRole: clsx('text-green-500', 'text-xl'),
 };

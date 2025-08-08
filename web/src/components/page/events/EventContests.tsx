@@ -198,6 +198,6 @@ const styles = {
     'border-2',
     'border-light-accent2',
     'rounded-sm',
-    'm-6'
+    'my-6'
   ),
 };
