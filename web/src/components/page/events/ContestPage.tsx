@@ -158,7 +158,7 @@ export default function ContestPage({ contest }: ContestPageProps) {
       <Card title="Horses">
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
-          <ItemList>
+          <ItemList className={styles.itemList}>
             {contest.horses?.map(horse => (
               <ItemListItem key={horse.id}>
                 <span>Horse {horse.number}</span>
@@ -211,14 +211,18 @@ const styles = {
     'border-t-2',
     'border-light-accent2',
     'flex',
-    'flex-row',
+    'flex-col',
+    'sm:flex-row',
+    'justify-end',
+    'sm:items-center',
     'gap-4',
     'px-8',
-    'justify-end'
+    'py-2'
   ),
-  itemAddButton: clsx('my-2', 'h-fit'),
+  itemAddButton: clsx('h-fit', 'px-8', 'py-2'),
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-1/4'),
+  itemList: clsx('mb-4'),
   horseContainer: clsx('border-2', 'border-light-accent2', 'rounded-sm', 'm-6'),
   scratch: clsx('text-red-500'),
   winner: clsx('text-green-500', 'text-xl'),

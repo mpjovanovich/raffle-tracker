@@ -193,18 +193,18 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
         <h2 className={styles.addTicketsTitle}>Shopping Cart</h2>
 
         <div className={styles.orderScreen}>
-          <div className={styles.itemListContainer}>
-            <span className={styles.itemListHeader}>Contest</span>
-            <span className={styles.itemListHeader}>Quantity</span>
+          <div className={styles.ticketListContainer}>
+            <span className={styles.ticketListHeader}>Contest</span>
+            <span className={styles.ticketListHeader}>Quantity</span>
           </div>
-          <ItemList className={styles.itemList}>
+          <ItemList className={styles.ticketList}>
             {tickets.map((ticket, index) => {
               const contest = contests.find(c => c.id === ticket.contestId);
               return (
                 <div
                   // This is here so that react doesn't complain if the same contest is added to the list multiple times.
                   key={`${ticket.contestId}-${index}`}
-                  className={styles.itemListContainer}
+                  className={styles.ticketListContainer}
                 >
                   <span>{contest?.number || ticket.contestId}</span>
                   <span>{ticket.quantity}</span>
@@ -212,9 +212,9 @@ export default function TicketPage({ contests, event }: TicketPageProps) {
               );
             })}
           </ItemList>
-          <div className={styles.itemListContainer}>
-            <span className={styles.itemListSpacer}></span>
-            <div className={styles.itemListTotal}>
+          <div className={styles.ticketListContainer}>
+            <span className={styles.ticketListSpacer}></span>
+            <div className={styles.ticketListTotal}>
               <span>Total</span>
               <span>{tickets.length}</span>
             </div>
@@ -249,19 +249,23 @@ const styles = {
   card: clsx('flex', 'flex-col', 'gap-4'),
   error: clsx('text-red-500'),
   itemAdd: clsx(
+    'border-t-2',
+    'border-light-accent2',
     'flex',
-    'flex-row',
+    'flex-col',
+    'sm:flex-row',
     'justify-end',
-    'items-center',
+    'sm:items-center',
     'gap-4',
-    'w-full'
+    'px-2',
+    'py-2'
   ),
-  itemAddButton: clsx('my-2', 'h-fit'),
-  itemAddLabeledField: clsx('flex', 'flex-row', 'items-center', 'm-0'),
+  itemAddButton: clsx('h-fit', 'px-8', 'py-2'),
+  itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-20'),
-  itemList: clsx('w-full', 'flex-grow', 'overflow-y-auto'),
-  itemListContainer: clsx('flex', 'flex-row', 'justify-around', 'w-full'),
-  itemListHeader: clsx(
+  ticketList: clsx('w-full', 'flex-grow', 'overflow-y-auto'),
+  ticketListContainer: clsx('flex', 'flex-row', 'justify-around', 'w-full'),
+  ticketListHeader: clsx(
     'w-24',
     'px-4',
     'pb-2',
@@ -269,8 +273,8 @@ const styles = {
     'border-b-2',
     'border-light-accent2'
   ),
-  itemListSpacer: clsx('w-24', 'px-4', 'mb-2'),
-  itemListTotal: clsx(
+  ticketListSpacer: clsx('w-24', 'px-4', 'mb-2'),
+  ticketListTotal: clsx(
     'px-4',
     'pt-2',
     'flex',
@@ -304,5 +308,5 @@ const styles = {
     'print:bg-white',
     'print:size-auto'
   ),
-  submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4'),
+  submitContainer: clsx('flex', 'flex-row', 'justify-end', 'gap-4', 'px-2'),
 };

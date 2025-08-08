@@ -24,7 +24,8 @@ export default function RootLayout({
         <Toaster />
         <Navigation />
         <main className="flex-1 flex justify-center p-4">
-          <div className="min-w-full sm:min-w-[600px] md:min-w-[720px]">
+          {/* <div className="min-w-full sm:min-w-[600px] md:min-w-[720px]"> */}
+          <div className="min-w-full sm:min-w-[600px] md:min-w-[650px]">
             {children}
           </div>
         </main>

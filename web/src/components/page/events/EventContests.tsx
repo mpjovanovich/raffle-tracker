@@ -148,7 +148,7 @@ export default function EventContests({ event }: EventContestsProps) {
       <Card title="Contests">
         {error && <p className={styles.error}>{error}</p>}
         {isInitialized ? (
-          <ItemList>
+          <ItemList className={styles.itemList}>
             {event.contests?.map(contest => (
               <ItemListItem key={contest.id}>
                 <span>Contest {contest.number}</span>
@@ -194,9 +194,10 @@ const styles = {
     'px-8',
     'py-2'
   ),
-  itemAddButton: clsx('h-fit'),
+  itemAddButton: clsx('h-fit', 'px-8', 'py-2'),
   itemAddLabeledField: clsx('flex-row', 'items-center', 'justify-end', 'm-0'),
   itemAddLabeledFieldNumber: clsx('w-20'),
+  itemList: clsx('mb-4'),
   contestContainer: clsx(
     'border-2',
     'border-light-accent2',
