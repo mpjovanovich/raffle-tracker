@@ -30,6 +30,7 @@ export const config = {
   apiAuthDisabled: process.env.API_AUTH_DISABLED === 'true',
   apiBaseUrl: process.env.API_BASE_URL!,
   apiPort: parseInt(process.env.API_PORT!),
+  cookieDomain: process.env.COOKIE_DOMAIN,
   corsOrigin: process.env.CORS_ORIGIN!,
   databaseUrl: process.env.DATABASE_URL!,
   jwtSecretKey: process.env.JWT_SECRET_KEY!,

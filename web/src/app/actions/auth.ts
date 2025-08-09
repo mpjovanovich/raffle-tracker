@@ -99,53 +99,29 @@ export async function removeLoggedInCookie(): Promise<void> {
   });
 }
 
-// export async function resetPasswordAction(
-//   token: string,
-//   password: string
-// ): Promise<{ success: boolean; error?: string; message?: string }> {
-//   try {
-//     // Verify the token is still valid. It may have expired.
-//     await verifyResetToken(token);
-//   } catch (error) {
-//     if (error instanceof Error && error.message === 'Token expired.') {
-//       return {
-//         success: false,
-//         error: 'Token expired. Please request a new password reset.',
-//       };
-//     }
-//   }
-
-//   const request: ResetPasswordRequest = { token, password };
-//   const res = await fetch(`${API_BASE_URL}/auth/resetPassword`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(request),
-//   });
-
-//   const data = await res.json();
-//   if (!res.ok) {
-//     return {
-//       success: false,
-//       error: data.message || 'Failed to reset password',
-//     };
-//   }
-
-//   return {
-//     success: true,
-//     message: data.message,
-//   };
-// }
-
 export async function setAccessTokenCookie(token: string): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, token, {
+
+  const cookieOptions: {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: 'lax' | 'strict' | 'none';
+    maxAge: number;
+    path: string;
+    domain?: string;
+  } = {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
     maxAge: config.jwtAuthTokenExpiresInSeconds,
-  });
+    path: '/',
+  };
+
+  if (config.cookieDomain) {
+    cookieOptions.domain = config.cookieDomain;
+  }
+
+  cookieStore.set(COOKIE_NAMES.ACCESS_TOKEN, token, cookieOptions);
 }
 
 export async function setLoggedInCookie(): Promise<void> {
@@ -154,10 +130,25 @@ export async function setLoggedInCookie(): Promise<void> {
   const oneDayInSeconds = 24 * 60 * 60;
 
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAMES.LOGGED_IN, 'true', {
+
+  const cookieOptions: {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: 'lax' | 'strict' | 'none';
+    maxAge: number;
+    path: string;
+    domain?: string;
+  } = {
     httpOnly: true,
     secure: config.nodeEnv === 'production',
     sameSite: 'lax',
     maxAge: oneDayInSeconds + config.jwtAuthTokenExpiresInSeconds,
-  });
+    path: '/',
+  };
+
+  if (config.cookieDomain) {
+    cookieOptions.domain = config.cookieDomain;
+  }
+
+  cookieStore.set(COOKIE_NAMES.LOGGED_IN, 'true', cookieOptions);
 }
